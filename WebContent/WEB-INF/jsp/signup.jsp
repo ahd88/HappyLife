@@ -20,7 +20,7 @@
 	    <link href="${pageContext.request.contextPath}/css/floating-labels.css" rel="stylesheet">
 	</head>
 	<body>
-		<form action="${pageContext.request.contextPath}/signup" method="post" enctype="multipart/form-data" class="form-signup" style="box-shadow: 0 0 black;">
+		<form action="${pageContext.request.contextPath}/signup" method="post" enctype="multipart/form-data" commandName="user" class="form-signup" style="box-shadow: 0 0 black;">
 		    
 			<div class="col-md-12 col-md-push-3">
 				<div class="text-center mb-4">

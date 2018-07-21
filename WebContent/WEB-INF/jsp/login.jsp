@@ -26,23 +26,23 @@
 
   <body>
   	<label align="center" style="color: red;">${error_msg}</label>
-    <form:form action="${pageContext.request.contextPath}/login" method="post" commandName="user" class="form-signin" style="box-shadow: 0 0 black;">
+    <form action="${pageContext.request.contextPath}/login" method="post"  class="form-signin" style="box-shadow: 0 0 black;">
       <div class="text-center mb-4">
         <h1 class="h3 mb-3 font-weight-normal">Login Here</h1>
       </div>
 
       <div class="form-label-group">
         <label for="inputEmail">Email address</label>
-        <form:input type="email" path="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus=""/>
+        <input type="email" path="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus=""/>
         <br>
-		<form:errors path="username" style="color:red;"></form:errors>
+		
       </div>
 
       <div class="form-label-group">
         <label for="inputPassword">Password</label>
-        <form:input type="password" path="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required=""/>
+        <input type="password" path="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required=""/>
         <br>
-		<form:errors path="password" style="color:red;"></form:errors>
+		
       </div>
 
       <div class="checkbox mb-3">
@@ -52,6 +52,6 @@
       </div>
       <button class="btn btn-lg btn-primary btn-block" type="submit" value="Login">Sign in</button>
       <p class="mt-5 mb-3 text-muted text-center">© 2017-2018</p>
-    </form:form>
+    </form>
   </body>
 </html>

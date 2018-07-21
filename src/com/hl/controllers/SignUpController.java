@@ -97,7 +97,7 @@ public class SignUpController {
 				}else{
 					message = "Password does not match..please try again";
 					
-					return "login";
+					return "signup";
 				}
 				
 			}catch(Exception e){
@@ -107,7 +107,7 @@ public class SignUpController {
 		} // if(multipart)
 		
 		md.addAttribute("error_msg", message);
-		return "login";
+		return "signup";
 	}
 	
 	@RequestMapping(value="/dynamic/{message}" , method=RequestMethod.GET)
