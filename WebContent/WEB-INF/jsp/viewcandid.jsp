@@ -7,14 +7,15 @@
 		<title>My Profile</title>
 		
 		<!-- Bootstrap core CSS -->
-    	<!--link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet"-->
-    	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap337.min.css">
+    	<link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
+    	
     	<!-- specific -->
     	
     	<link href="${pageContext.request.contextPath}/css/grid.css" rel="stylesheet">
     	<link href="${pageContext.request.contextPath}/css/profile.css" rel="stylesheet">
     	
     	<meta name="viewport" content="width=device-width, initial-scale=1">
+  		<link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap337.min.css">
     	
     	<!-- Side navigation menu -->
     	<link href="${pageContext.request.contextPath}/css/sidnavpush.css" rel="stylesheet">
@@ -31,7 +32,7 @@
 	</head>
 	<body>
 		<header>
-	    	<!-- nav class="navbar navbar-light navbar-expand-md bg-dark fixed-top justify-content-center">
+	    	<nav class="navbar navbar-light navbar-expand-md bg-dark fixed-top justify-content-center">
     			
     			<div class="navbar-brand d-flex w-50 mr-auto">
     				<span href="javascript:void(0)" style="cursor:pointer;" id="nav_title" onclick="openNav()">&#9776; Happy Life</span>
@@ -39,29 +40,6 @@
     				<span id="hiUser">welcome ${username}&nbsp; <a href="${pageContext.request.contextPath}/logout">Logout</a></span>
     				
     			</div>
-    		</nav-->
-    		
-    		<!-- Fixed navbar -->
-		    <nav class="navbar navbar-inverse navbar-fixed-top">
-		      <div class="container">
-		        <div class="navbar-header">
-		          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-		            <span class="sr-only">Toggle navigation</span>
-		            <span class="icon-bar"></span>
-		            <span class="icon-bar"></span>
-		            <span class="icon-bar"></span>
-		          </button>
-		          <a class="navbar-brand" href="javascript:void(0)" style="cursor:pointer;" id="nav_title" onclick="openNav()">&#9776; Happy Life</a>
-		        </div>
-		        <div id="navbar" class="navbar-collapse collapse">
-		          <ul class="nav navbar-nav navbar-right">
-		            <li><a>welcome ${username}</a></li>
-		            <li class="active"><a href="${pageContext.request.contextPath}/logout">Logout</a></li>
-		          </ul>
-		        </div><!--/.nav-collapse -->
-		      </div>
-		    </nav>
-    		
 	    </header>
 	
 		<div id="mySidenav" class="sidenav">
@@ -85,34 +63,33 @@
 		
 			<div class="tab-content">
 			    <div id="home" class="tab-pane fade in active">
-			    	<div id="user-block" class="grid-container container">
-			    		<div class="row">
-							<div class="profile-image col-xs-12 col-md-2">
-								<div>
-									<!-- src="http://placehold.it/119/00F/FFF" -->
-									<p><a id="mainfullimage" href="http://placehold.it/400/00F/FFF"><img src="${pageContext.request.contextPath}/img/usrphotos/${usrImage}" alt="click to see larger photo" title="click to see larger photo"></a></p>
-									<p><a href="#createphotoprofilepage"><button>Change Photo</button></a></p>
-								</div>
-								<!-- <div><p><a href="#createphotoprofilepage"><button>Change Photo</button></a></p></div> -->
+			    	<div id="user-block" class="grid-container">
+			    		
+						<div class="profile-image">
+							<div>
+								<!-- src="http://placehold.it/119/00F/FFF" -->
+								<p><a id="mainfullimage" href="http://placehold.it/400/00F/FFF"><img src="${pageContext.request.contextPath}/img/usrphotos/${usrImage}" alt="click to see larger photo" title="click to see larger photo"></a></p>
+								<p><a href="#createphotoprofilepage"><button>Change Photo</button></a></p>
 							</div>
-							
-							<div class="item3 col-xs-12 col-md-5">
-								<ul class="summary">
-				    				<li><label>Username:</label></li>
-				    				<li><label>Last Login:</label></li>
-				    			</ul>
-							</div>  
-							<div class="item4 col-xs-12 col-md-5">
-								<ul class="primary">
-				    				<li id="updateli"><a href="#prfprofile.php">Edit my profile</a></li>
-				    				<li id="findexactli"><a href="#purematches.php">Find my exact </a></li>
-				    				<li id="findli"><a href="#bestmatch.php">Members I am looking for</a></li>
-				    				<li id="lookformeli"><a href="#lookingforme.php">Members looking for me</a></li>
-				    				<li id="myfavli"><a href="#favourites.php">My Favourites</a></li>
-				    				<li id="youtubeli"><a href="" target="_blank">Watch our Quick Start video</a></li>
-				    			</ul>
-							</div>
-						</div> <!-- END .row -->
+							<!-- <div><p><a href="#createphotoprofilepage"><button>Change Photo</button></a></p></div> -->
+						</div>
+						
+						<div class="item3">
+							<ul class="summary">
+			    				<li><label>Username:</label></li>
+			    				<li><label>Last Login:</label></li>
+			    			</ul>
+						</div>  
+						<div class="item4">
+							<ul class="primary">
+			    				<li id="updateli"><a href="#prfprofile.php">Edit my profile</a></li>
+			    				<li id="findexactli"><a href="#purematches.php">Find my exact </a></li>
+			    				<li id="findli"><a href="#bestmatch.php">Members I am looking for</a></li>
+			    				<li id="lookformeli"><a href="#lookingforme.php">Members looking for me</a></li>
+			    				<li id="myfavli"><a href="#favourites.php">My Favourites</a></li>
+			    				<li id="youtubeli"><a href="" target="_blank">Watch our Quick Start video</a></li>
+			    			</ul>
+						</div>
 			    	</div>	<!-- user-block -->
 			    	<br>
 			    	<div id="myIdeal" class="grid-container">
@@ -153,39 +130,37 @@
 	  				<p>How others see me</p>
 	  				
 	  				<br>
-	  				<div id="user-block" class="grid-container container">
-	  					<div class="row">
-							<div class="profile-image col-xs-12 col-md-2">
-								<div>
-									<!-- src="http://placehold.it/119/00F/FFF" -->
-									<p><a id="mainfullimage" href="http://placehold.it/400/00F/FFF"><img src="${pageContext.request.contextPath}/img/publicphotos/${usrPublicPhoto}" alt="click to see larger photo" title="click to see larger photo"></a></p>
-									<p><a href="#createphotoprofilepage"><button>Change Photo</button></a></p>
-								</div>
-								<!-- <div><p><a href="#createphotoprofilepage"><button>Change Photo</button></a></p></div> -->
+	  				<div id="user-block" class="grid-container">
+						<div class="profile-image">
+							<div>
+								<!-- src="http://placehold.it/119/00F/FFF" -->
+								<p><a id="mainfullimage" href="http://placehold.it/400/00F/FFF"><img src="${pageContext.request.contextPath}/img/publicphotos/${usrPublicPhoto}" alt="click to see larger photo" title="click to see larger photo"></a></p>
+								<p><a href="#createphotoprofilepage"><button>Change Photo</button></a></p>
 							</div>
-							
-							<div class="item3 col-xs-12 col-md-5">
-								<ul class="summary">
-				    				<li><label>Age:</label></li>
-				    				<li><label>Location:</label></li>
-				    				<li><label>Last Login:</label></li>
-				    				<li><label>I am currently available for communication:</label></li>
-				    				<li><label>Message response rate:</label></li>
-				    			</ul>
-							</div>  
-							<div class="item4 col-xs-12 col-md-5">
-								<ul class="primary">
-				    				<li id="morelikeli"><a href="#prfprofile.php">More like ${username}</a></li>
-				    				<li id="messagetoli"><a href="#purematches.php">send them a message </a></li>
-				    				<li id="addfavli"><a href="#bestmatch.php">Add them to My Favourites</a></li>
-				    				<li id="inviteli"><a href="#lookingforme.php">Invite them to view my profile</a></li>
-				    				<li id="myfavli"><a href="#favourites.php">Your notes on them</a></li>
-				    				<li id="historyli"><a href="" target="_blank">Your history with them</a></li>
-				    				<li id="dontshowmeli"><a href="" target="_blank">Don't show me again</a></li>
-				    				<li id="blockedli"><a href="" target="_blank">Block them</a></li>
-				    			</ul>
-							</div>
-						</div> <!-- END .row -->
+							<!-- <div><p><a href="#createphotoprofilepage"><button>Change Photo</button></a></p></div> -->
+						</div>
+						
+						<div class="item3">
+							<ul class="summary">
+			    				<li><label>Age:</label></li>
+			    				<li><label>Location:</label></li>
+			    				<li><label>Last Login:</label></li>
+			    				<li><label>I am currently available for communication:</label></li>
+			    				<li><label>Message response rate:</label></li>
+			    			</ul>
+						</div>  
+						<div class="item4">
+							<ul class="primary">
+			    				<li id="morelikeli"><a href="#prfprofile.php">More like ${username}</a></li>
+			    				<li id="messagetoli"><a href="#purematches.php">send them a message </a></li>
+			    				<li id="addfavli"><a href="#bestmatch.php">Add them to My Favourites</a></li>
+			    				<li id="inviteli"><a href="#lookingforme.php">Invite them to view my profile</a></li>
+			    				<li id="myfavli"><a href="#favourites.php">Your notes on them</a></li>
+			    				<li id="historyli"><a href="" target="_blank">Your history with them</a></li>
+			    				<li id="dontshowmeli"><a href="" target="_blank">Don't show me again</a></li>
+			    				<li id="blockedli"><a href="" target="_blank">Block them</a></li>
+			    			</ul>
+						</div>
 			    	</div>	<!-- user-block -->
 			    	<br>
 			    	<div id="" class="grid-container">
@@ -199,7 +174,6 @@
 			    	</div>
 			    	<br>
 			    </div>
-			    
 			    <div id="menu2" class="tab-pane fade">
 			      	<div class="header">
 	  					<h1>Chania</h1>
@@ -207,8 +181,9 @@
 					
 					<form action="${pageContext.request.contextPath}/search" method="GET">
 					<div class="row">
-						<div class="col-xs-3 menu">
-							<ul>
+						
+						<div class="col-3 menu">
+		  					<ul>
 		    					<li id="idmatch" >Ideal Match</li>
 		    					
 		    					<li id="lookingFor">Whom I'm looking for</li>
@@ -231,26 +206,23 @@
 		  					<input type="hidden" id="idmatchflag" value="" />
 		  					<input type="hidden" id="lookingforflag" value="" />
 		  					<input type="hidden" id="lookingforMeflag" value="" />
-						</div> <!-- END .col for menu -->
-						
-						<div class="col-xs-9 menu">
+						</div>
+							
+						<div class="col-9">
 							<h1>The Results</h1>
 						  	<div class="resultBox col-8">
 						  		<ul class="list-element col-8" style="list-style-type:none">
-						  			<form action="${pageContext.request.contextPath}/candid" method="GET">
-							  			<c:forEach items="${searchList}" var="user">
-											<li><a href="${pageContext.request.contextPath}/candid/${user.userId}">${user.username}</a></li>
-											<input name="candidUid" type="hidden" value="${user.userId}">
-										</c:forEach>
-									</form>
+						  			<c:forEach items="${searchList}" var="user">
+										<li>${user.username}</li>
+									</c:forEach>
 								</ul>
 						  	</div>
-						</div> <!-- END .col for results -->
-					</div><!-- END .row -->
+						</div>
 	
+					</div>
 					</form>
+			      	
 			    </div>
-			    
 			    <div id="menu3" class="tab-pane fade">
 			      	<h3>Menu 3</h3>
 			      	<p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>

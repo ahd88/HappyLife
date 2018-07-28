@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -13,8 +14,11 @@ import org.hibernate.validator.constraints.NotBlank;
 @Entity
 @Table(name="HL_USERS")
 public class User {
+	
+	// MySql does not support sequence, that is why it is changed into AUTO
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	
 	@Column(name="USER_ID", updatable = false, nullable = false)
 	private long userId;
 	
@@ -38,7 +42,7 @@ public class User {
 	@Column(name="GENDER")
 	private String gender;
 	
-	@Column(name="country")
+	@Column(name="COUNTRY")
 	private String country;
 	
 	@Column(name="PHONE")
@@ -65,6 +69,27 @@ public class User {
 	@Column(name="PUBLIC_PHOTO")
 	private String publicPhoto;
 	
+	
+	public User(){
+		super();
+	}
+	
+	public User(long userId, String fname, String lname, String email, String username, String password, String gender,
+			String country, String phone, String image, String publicPhoto) {
+		super();
+		this.userId = userId;
+		this.fname = fname;
+		this.lname = lname;
+		this.email = email;
+		this.username = username;
+		this.password = password;
+		this.gender = gender;
+		this.country = country;
+		this.phone = phone;
+		this.image = image;
+		this.publicPhoto = publicPhoto;
+	}
+
 	public long getId() {
 		return userId;
 	}

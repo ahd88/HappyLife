@@ -18,16 +18,20 @@ import com.hl.pojo.User;
 public class SearchController {
 	
 	@RequestMapping(value="/search", method=RequestMethod.GET)
-	public ModelAndView loadSearchPage(HttpServletRequest req, HttpSession session){
-		ModelAndView mav = new ModelAndView("myprofile");
+	public ModelAndView loadSearchResults(HttpServletRequest req, HttpSession session){
+		ModelAndView mav = new ModelAndView("searchresult");
 		String desiredLocation = req.getParameter("country");
 		String message = "";
-		User sessionUsr = (User)session.getAttribute("session_user");
+		User sessionUsr = (User)session.getAttribute("sessionUser");
 		String matchGender = "";
 		if(sessionUsr.getGender().equals("M"))	matchGender = "F";
-		else	matchGender = "F";
+		else	matchGender = "M";
+		
+		System.out.println("matchGender is:" + matchGender);
+		
 		try {
 			List<User> list = RegistryDAO.getUserDAO().searchByLocation(matchGender, desiredLocation);
+			mav.addObject("searchList", list);
 			for(User user: list){
 				System.out.println(user.getUsername());
 			}
@@ -35,6 +39,16 @@ public class SearchController {
 			message = e.getMessage();
 			e.printStackTrace();
 		}
+		
+		String lookingForInfo = sessionUsr.getLookingFor();
+		
+		String image = sessionUsr.getImage();
+		String pImage = sessionUsr.getPublicPhoto().toUpperCase();
+		
+		mav.addObject("usrPublicPhoto", pImage);
+		mav.addObject("usrImage", image);
+		mav.addObject("LookingForInfo", lookingForInfo);
+		
 		mav.addObject(message);
 		return mav;
 	}

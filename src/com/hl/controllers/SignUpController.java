@@ -54,10 +54,10 @@ public class SignUpController {
 				String lastName = data.get(1).getString();
 				String email = data.get(2).getString();
 				String username = data.get(3).getString();
-				String password = data.get(4).getString();
+				String password = data.get(6).getString();
 				String repassword = data.get(5).getString();
-				String gender = data.get(6).getString();
-				String country = data.get(7).getString();
+				String gender = data.get(7).getString();
+				String country = data.get(4).getString();
 				String phone = data.get(8).getString();
 				
 				String image = new File(data.get(9).getName()).getName();
@@ -93,7 +93,7 @@ public class SignUpController {
 					String msg = RegistryDAO.getUserDAO().doHibernateSignUp(user);
 					
 					System.out.println(msg);
-					return "redirect:/myprofile";
+					return "login";
 				}else{
 					message = "Password does not match..please try again";
 					

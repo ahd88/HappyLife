@@ -94,7 +94,6 @@ $( function() {
     var lookingForVal = $( "#lookingforflag" ).val();
     var lookingForMeVal = $( "#lookingforMeflag" ).val();
     
-    console.log(lookingForVal);
     
     $( "#lookingForMe" ).on( "click", function() {
     	if((lookingForVal == 1) && (lookingForMeVal ==1)){
@@ -115,3 +114,4 @@ $( function() {
       });
 });
 
+/* to  */

@@ -20,7 +20,7 @@ public class HibernateConnection {
 		database.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/spring");
 		database.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
 		database.setProperty("hibernate.show_sql", "true");
-		database.setProperty("hibernate.hbm2ddl.auto", "update");
+		//database.setProperty("hibernate.hbm2ddl.auto", "update");
 		
 		
 		

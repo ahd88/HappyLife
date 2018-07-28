@@ -62,4 +62,17 @@ public class UserDAOImpl  implements UserDAO{
 			session.close();
 		}
 	}
+	
+	public void updateUser(User user)throws UserDAOException{
+		Session session = HibernateConnection.doHibernateConnection().openSession();
+		session.beginTransaction();
+		try{
+			session.update(user);
+			session.getTransaction().commit();
+		}catch(Exception e){
+			throw new UserDAOException("Error saving");
+		}finally{
+			session.close();
+		}
+	}
 }

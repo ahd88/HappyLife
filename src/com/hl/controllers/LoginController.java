@@ -17,7 +17,7 @@ import com.hl.pojo.User;
 @Controller
 public class LoginController {
 
-	
+	//My first comment
 	@RequestMapping(value="/login" , method=RequestMethod.GET)
 	public ModelAndView loadLoginPage(){
 		ModelAndView mav = new ModelAndView("login");
@@ -56,6 +56,16 @@ public class LoginController {
 		} catch(Exception e){
 			return "login";
 		}
+	}
+	
+	
+	@RequestMapping(value="/logout" , method=RequestMethod.GET)
+	public ModelAndView logMeOut(HttpServletRequest request){
+		ModelAndView mav = new ModelAndView("index");
+		request.getSession().invalidate();
+		System.out.println("Logout has been clicked");
+		
+		return mav;
 	}
 	
 }
