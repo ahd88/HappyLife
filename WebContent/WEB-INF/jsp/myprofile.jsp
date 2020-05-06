@@ -1,267 +1,160 @@
+<%@page import="com.happylife.pojo.User"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+	pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
 <html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-		<title>My Profile</title>
-		
-		<!-- Bootstrap core CSS -->
-    	<!--link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet"-->
-    	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap337.min.css">
-    	<!-- specific -->
-    	
-    	<link href="${pageContext.request.contextPath}/css/grid.css" rel="stylesheet">
-    	<link href="${pageContext.request.contextPath}/css/profile.css" rel="stylesheet">
-    	
-    	<meta name="viewport" content="width=device-width, initial-scale=1">
-    	
-    	<!-- Side navigation menu -->
-    	<link href="${pageContext.request.contextPath}/css/sidnavpush.css" rel="stylesheet">
-		
-		<!-- for responsive tabs -->
-		<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
-		<script src="${pageContext.request.contextPath}/js/bootstrap337.min.js"></script>
-		
-		<script type="text/javascript" src="${pageContext.request.contextPath}/js/actions.js"></script>
-		
-		<link rel="stylesheet" href="${pageContext.request.contextPath}/css/jquery-ui.css">
-		<script src="${pageContext.request.contextPath}/js/jquery-1.12.4.js"></script>
-  		<script src="${pageContext.request.contextPath}/js/jquery-ui.js"></script>
-	</head>
-	<body>
-		<header>
-	    	<!-- nav class="navbar navbar-light navbar-expand-md bg-dark fixed-top justify-content-center">
-    			
-    			<div class="navbar-brand d-flex w-50 mr-auto">
-    				<span href="javascript:void(0)" style="cursor:pointer;" id="nav_title" onclick="openNav()">&#9776; Happy Life</span>
-    				
-    				<span id="hiUser">welcome ${username}&nbsp; <a href="${pageContext.request.contextPath}/logout">Logout</a></span>
-    				
-    			</div>
-    		</nav-->
-    		
-    		<!-- Fixed navbar -->
-		    <nav class="navbar navbar-inverse navbar-fixed-top">
-		      <div class="container">
-		        <div class="navbar-header">
-		          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-		            <span class="sr-only">Toggle navigation</span>
-		            <span class="icon-bar"></span>
-		            <span class="icon-bar"></span>
-		            <span class="icon-bar"></span>
-		          </button>
-		          <a class="navbar-brand" href="javascript:void(0)" style="cursor:pointer;" id="nav_title" onclick="openNav()">&#9776; Happy Life</a>
-		        </div>
-		        <div id="navbar" class="navbar-collapse collapse">
-		          <ul class="nav navbar-nav navbar-right">
-		            <li><a>welcome ${username}</a></li>
-		            <li class="active"><a href="${pageContext.request.contextPath}/logout">Logout</a></li>
-		          </ul>
-		        </div><!--/.nav-collapse -->
-		      </div>
-		    </nav>
-    		
-	    </header>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<title>My Profile</title>
+
+	<!-- Bootstrap core CSS -->
+	<!--link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet"-->
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap337.min.css">
+	<!-- specific -->
 	
-		<div id="mySidenav" class="sidenav">
-		  	<a href="#">Inbox</a>
-		  	<a href="#">Sent</a>
-		  	<a href="#">Search</a>
-		  	<a href="#">Contact</a>
-		</div>
+	<link href="${pageContext.request.contextPath}/css/grid.css" rel="stylesheet">
+	<link href="${pageContext.request.contextPath}/css/profile.css" rel="stylesheet">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<!-- Side navigation menu -->
+	<link href="${pageContext.request.contextPath}/css/sidnavpush.css" rel="stylesheet">
+	
+	<!-- for responsive tabs -->
+	<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
+	<script src="${pageContext.request.contextPath}/js/bootstrap337.min.js"></script>
+	
+	<script type="text/javascript" src="${pageContext.request.contextPath}/js/actions.js"></script>
+	
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/jquery-ui.css">
+	<script src="${pageContext.request.contextPath}/js/jquery-1.12.4.js"></script>
+	<script src="${pageContext.request.contextPath}/js/jquery-ui.js"></script>
+</head>
+<body>
+	<header>
+		<!-- Fixed navbar -->
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed"
+						data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+						aria-controls="navbar">
+						<span class="sr-only">Toggle navigation</span> <span
+							class="icon-bar"></span> <span class="icon-bar"></span> <span
+							class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="javascript:void(0)"
+						style="cursor: pointer;" id="nav_title" onclick="openNav()">&#9776;
+						Happy Life</a>
+				</div>
+				<div id="navbar" class="navbar-collapse collapse">
+					<ul class="nav navbar-nav navbar-right">
+						<li><a>welcome ${username}</a></li>
+						<li class="active"><a href="${pageContext.request.contextPath}/logout">Logout</a></li>
+					</ul>
+				</div>
+				<!--/.nav-collapse -->
+			</div>
+		</nav>
+	</header>
+
+	<div id="mySidenav" class="sidenav">
+		<a href="#">Inbox</a>
+		<a href="#">Sent</a>
+		<a href="#">Search</a>
+		<a href="#">Contact</a>
+	</div>
+
+	<br>
+	<br>
 		
-		<br>
-		<br>
-		
-		<br><br>
-		<div class="container">
-			<ul class="nav nav-tabs">
-	    		<li class="active"><a data-toggle="tab" href="#home">Home</a></li>
-	    		<li><a data-toggle="tab" href="#howilook">My Profile</a></li>
-	    		<li><a data-toggle="tab" href="#menu2">Search</a></li>
-	    		<li><a data-toggle="tab" href="#menu3">Marriage Advice</a></li>
-  			</ul>
-		
-			<div class="tab-content">
-			    <div id="home" class="tab-pane fade in active">
-			    	<div id="user-block" class="grid-container container">
-			    		<div class="row">
-							<div class="profile-image col-xs-12 col-md-2">
-								<div>
-									<!-- src="http://placehold.it/119/00F/FFF" -->
-									<p><a id="mainfullimage" href="http://placehold.it/400/00F/FFF"><img src="${pageContext.request.contextPath}/img/usrphotos/${usrImage}" alt="click to see larger photo" title="click to see larger photo"></a></p>
-									<p><a href="#createphotoprofilepage"><button>Change Photo</button></a></p>
-								</div>
-								<!-- <div><p><a href="#createphotoprofilepage"><button>Change Photo</button></a></p></div> -->
-							</div>
-							
-							<div class="item3 col-xs-12 col-md-5">
-								<ul class="summary">
-				    				<li><label>Username:</label></li>
-				    				<li><label>Last Login:</label></li>
-				    			</ul>
-							</div>  
-							<div class="item4 col-xs-12 col-md-5">
-								<ul class="primary">
-				    				<li id="updateli"><a href="#prfprofile.php">Edit my profile</a></li>
-				    				<li id="findexactli"><a href="#purematches.php">Find my exact </a></li>
-				    				<li id="findli"><a href="#bestmatch.php">Members I am looking for</a></li>
-				    				<li id="lookformeli"><a href="#lookingforme.php">Members looking for me</a></li>
-				    				<li id="myfavli"><a href="#favourites.php">My Favourites</a></li>
-				    				<li id="youtubeli"><a href="" target="_blank">Watch our Quick Start video</a></li>
-				    			</ul>
-							</div>
-						</div> <!-- END .row -->
-			    	</div>	<!-- user-block -->
-			    	<br>
-			    	<div id="myIdeal" class="grid-container">
-			    		<h3>My Ideal Matches..</h3>
-			    	</div>
-			    	
-			    	<br>
-			    	<div id="lastViewers" class="grid-container">
-			    		<h3 class="">Members who've recently viewed me ...</h3>
-			    	</div>
-			    	
-			    	<br>
-			    	<div id="newMembers" class="grid-container">
-			    		<h3 class="">New members of Happy Life ...</h3>
-			    	</div>
-			    	
-			    	<br>
-			    	<div id="view-profile" class="grid-container">
-			    		<h3 class=""></h3>
-			    	</div>
-			    	<br>
-			    	<br>
-			    </div> <!-- home tab -->
-			    
-			    
-			    <div id="howilook" class="tab-pane fade">
-			    	<br>
-			    	<!-- <p><a href="${pageContext.request.contextPath}/howilook">How I Look</a></p>  -->
-			    	<br>
-			    	<p>edit</p>
-			      	<ul class="nav nav-pills updateProfile">
-	    				<li><a href="${pageContext.request.contextPath}/aboutme">About Me</a></li>
-	    				<li><a href="#myPhoto">My Photo</a></li>
-	    				<li><a href="${pageContext.request.contextPath}/lookingfor">Looking For</a></li>
-	    				<li><a href="#myQuestions">My Questions</a></li>
-	  				</ul>
-	  				<hr>
-	  				<p>How others see me</p>
-	  				
-	  				<br>
-	  				<div id="user-block" class="grid-container container">
-	  					<div class="row">
-							<div class="profile-image col-xs-12 col-md-2">
-								<div>
-									<!-- src="http://placehold.it/119/00F/FFF" -->
-									<p><a id="mainfullimage" href="http://placehold.it/400/00F/FFF"><img src="${pageContext.request.contextPath}/img/publicphotos/${usrPublicPhoto}" alt="click to see larger photo" title="click to see larger photo"></a></p>
-									<p><a href="#createphotoprofilepage"><button>Change Photo</button></a></p>
-								</div>
-								<!-- <div><p><a href="#createphotoprofilepage"><button>Change Photo</button></a></p></div> -->
-							</div>
-							
-							<div class="item3 col-xs-12 col-md-5">
-								<ul class="summary">
-				    				<li><label>Age:</label></li>
-				    				<li><label>Location:</label></li>
-				    				<li><label>Last Login:</label></li>
-				    				<li><label>I am currently available for communication:</label></li>
-				    				<li><label>Message response rate:</label></li>
-				    			</ul>
-							</div>  
-							<div class="item4 col-xs-12 col-md-5">
-								<ul class="primary">
-				    				<li id="morelikeli"><a href="#prfprofile.php">More like ${username}</a></li>
-				    				<li id="messagetoli"><a href="#purematches.php">send them a message </a></li>
-				    				<li id="addfavli"><a href="#bestmatch.php">Add them to My Favourites</a></li>
-				    				<li id="inviteli"><a href="#lookingforme.php">Invite them to view my profile</a></li>
-				    				<li id="myfavli"><a href="#favourites.php">Your notes on them</a></li>
-				    				<li id="historyli"><a href="" target="_blank">Your history with them</a></li>
-				    				<li id="dontshowmeli"><a href="" target="_blank">Don't show me again</a></li>
-				    				<li id="blockedli"><a href="" target="_blank">Block them</a></li>
-				    			</ul>
-							</div>
-						</div> <!-- END .row -->
-			    	</div>	<!-- user-block -->
-			    	<br>
-			    	<div id="" class="grid-container">
-			    		<h3 class="">Profile</h3>
-			    		<p>${AboutMeInfo}</p>
-			    	</div>
-			    	
-			    	<br>
-			    	<div id="" class="grid-container">
-			    		<h3 class="">Looking For</h3>
-			    	</div>
-			    	<br>
-			    </div>
-			    
-			    <div id="menu2" class="tab-pane fade">
-			      	<div class="header">
-	  					<h1>Chania</h1>
-					</div>
-					
-					<form action="${pageContext.request.contextPath}/search" method="GET">
+	<br><br>
+	<div class="container">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="/HappyLife/myprofile">Home</a></li>
+			<li><a href="/HappyLife/pinfo">My Profile</a></li>
+			<li><a href="/HappyLife/search">Search</a></li>
+			<li><a href="#menu3">Marriage Advice</a></li>
+		</ul>
+
+		<div class="tab-content">
+			<div id="home" class="tab-pane fade in active">
+				<div id="user-block" class="grid-container container">
 					<div class="row">
-						<div class="col-xs-3 menu">
-							<ul>
-		    					<li id="idmatch" >Ideal Match</li>
-		    					
-		    					<li id="lookingFor">Whom I'm looking for</li>
-		    					<li id="lookingForMe">who's looking for me</li>
-		    					<li id="onlineNow">on-Line Now</li>
-		    					<li id="photosUploaded">Photos uploaded</li>
-		    					<li id="hvntviewed">only those I haven't viewed</li>
-		    					<li id="hvntmessgd">only those I haven't messaged</li>
-		    					<li>Aged from</li>
-		    					<li>to</li>
-		    					<li id="selectContainer"><div>In 
-		    						<select name="country" id="inputCountry" class="form-control" required="">
-										<option value="Sudan">Sudan</option>
-										<option value="Yemen" selected="selected">Yemen</option>
-										<option value="India">India</option>
-									</select>
-		    					</div></li>
-		    					<li><input class="btn btn-lg btn-primary btn-block" type="submit" value="Find a match"></li>
-		  					</ul>
-		  					<input type="hidden" id="idmatchflag" value="" />
-		  					<input type="hidden" id="lookingforflag" value="" />
-		  					<input type="hidden" id="lookingforMeflag" value="" />
-						</div> <!-- END .col for menu -->
-						
-						<div class="col-xs-9 menu">
-							<h1>The Results</h1>
-						  	<div class="resultBox col-8">
-						  		<ul class="list-element col-8" style="list-style-type:none">
-						  			<form action="${pageContext.request.contextPath}/candid" method="GET">
-							  			<c:forEach items="${searchList}" var="user">
-											<li><a href="${pageContext.request.contextPath}/candid/${user.userId}">${user.username}</a></li>
-											<input name="candidUid" type="hidden" value="${user.userId}">
-										</c:forEach>
-									</form>
-								</ul>
-						  	</div>
-						</div> <!-- END .col for results -->
-					</div><!-- END .row -->
-	
-					</form>
-			    </div>
-			    
-			    <div id="menu3" class="tab-pane fade">
-			      	<h3>Menu 3</h3>
-			      	<p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-			    </div>
-	  		</div>
-		
-		
-		</div><!-- container close -->
-		
-		
-		<script type="text/javascript" src="${pageContext.request.contextPath}/js/actions.js"></script>
-		<script type="text/javascript" src="${pageContext.request.contextPath}/js/opennav.js"></script>
-	</body>
+						<div class="profile-image col-xs-12 col-md-2">
+							<div>
+								<!-- src="http://placehold.it/119/00F/FFF" -->
+								<p>
+									<a id="mainfullimage" href="">
+										
+										<img src="${pageContext.request.contextPath}/<%=application.getInitParameter("photo")%>"
+											 alt="click to see larger photo"
+											 title="click to see larger photo">
+									</a>
+								</p>
+								<p>
+									<a href="#createphotoprofilepage"><button>Change
+											Photo</button></a>
+								</p>
+							</div>
+							<!-- <div><p><a href="#createphotoprofilepage"><button>Change Photo</button></a></p></div> -->
+						</div>
+
+						<div class="item3 col-xs-12 col-md-5">
+							<ul class="summary">
+								<li><label>Username:</label></li>
+								<li><label>Last Login:</label></li>
+							</ul>
+						</div>
+						<div class="item4 col-xs-12 col-md-5">
+							<ul class="primary">
+								<li id="updateli"><a href="#prfprofile.php">Edit myprofile</a></li>
+								<li id="findexactli"><a href="#purematches.php">Find my exact </a></li>
+								<li id="findli"><a href="#bestmatch.php">Members I am looking for</a></li>
+								<li id="lookformeli"><a href="#lookingforme.php">Members looking for me</a></li>
+								<li id="myfavli"><a href="#favourites.php">My Favourites</a></li>
+								<li id="youtubeli"><a href="" target="_blank">Watch our Quick Start video</a></li>
+							</ul>
+						</div>
+					</div>
+					<!-- END .row -->
+				</div>
+				<!-- user-block -->
+				<br>
+				<div id="myIdeal" class="grid-container">
+					<h3>My Ideal Matches..</h3>
+				</div>
+
+				<br>
+				<div id="lastViewers" class="grid-container">
+					<h3 class="">Members who've recently viewed me ...</h3>
+				</div>
+
+				<br>
+				<div id="newMembers" class="grid-container">
+					<h3 class="">New members of Happy Life ...</h3>
+				</div>
+
+				<br>
+				<div id="view-profile" class="grid-container">
+					<h3 class=""></h3>
+				</div>
+				<br> <br>
+			</div>
+			<!-- home tab -->
+
+
+			<!-- howilook taken from myprofile.jsp -->
+
+			
+		</div>
+
+
+	</div>
+	<!-- container close -->
+
+
+	<script type="text/javascript" src="${pageContext.request.contextPath}/js/actions.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/js/opennav.js"></script>
+</body>
 </html>
