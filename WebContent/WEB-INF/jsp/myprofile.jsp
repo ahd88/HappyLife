@@ -1,4 +1,7 @@
 <%@page import="com.happylife.pojo.User"%>
+<%@page import="java.awt.image.BufferedImage"%>
+<%@page import="javax.imageio.ImageIO"%>
+<%@page import="java.io.*"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -59,7 +62,7 @@
 	</header>
 
 	<div id="mySidenav" class="sidenav">
-		<a href="#">Inbox</a>
+		<a href="/HappyLife/myinbox">Inbox</a>
 		<a href="#">Sent</a>
 		<a href="#">Search</a>
 		<a href="#">Contact</a>
@@ -85,9 +88,23 @@
 							<div>
 								<!-- src="http://placehold.it/119/00F/FFF" -->
 								<p>
+									<%
+									String photo = (String) session.getAttribute("personalPhoto");
+									BufferedImage bImage = ImageIO.read(new File("F:/Github/HappyLife/WebContent/WEB-INF/usrphotos/"+photo));
+								    System.out.println("Photo " + photo);
+								    System.out.println("Buffered Image" + bImage);
+								    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+								    ImageIO.write( bImage, "PNG", baos );
+								    baos.flush();
+								    byte[] imageInByteArray = baos.toByteArray();
+								    baos.close();
+								    String b64 = javax.xml.bind.DatatypeConverter.printBase64Binary(imageInByteArray); 
+								    
+								    //String b64 = (String)session.getAttribute("64");
+									%>
 									<a id="mainfullimage" href="">
 										
-										<img src="${pageContext.request.contextPath}/<%=application.getInitParameter("photo")%>"
+										<img src="data:image/png;base64, <%=b64%>"
 											 alt="click to see larger photo"
 											 title="click to see larger photo">
 									</a>
