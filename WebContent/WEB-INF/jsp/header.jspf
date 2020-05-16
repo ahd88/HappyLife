@@ -16,6 +16,5 @@
 		<input type="hidden" value=<%request.getParameter("email");%> ></input>
 		<input type="hidden" value=<%request.getParameter("sex");%>></input>
 		
-		<%-- This is JSP comment --%>
 	</body>
 </html>

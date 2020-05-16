@@ -1,6 +1,7 @@
 package com.happylife.controllers;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
+import com.happylife.DoMath;
 import com.happylife.dao.layer.UserDAOException;
 import com.happylife.dao.registry.RegistryDAO;
 
@@ -38,25 +40,28 @@ public class LoginServlet extends HttpServlet{
 				//User userFetched = RegistryDAO.getUserDAO().doHibernateLogin(email, password);
 				
 				if(userFetched != null){
-					String aboutme = RegistryDAO.getUserDAO().getAboutMe(userFetched.getId());
-					String lookingfor = RegistryDAO.getUserDAO().getLookingFor(userFetched.getId());
+					DoMath doM = new DoMath();
+					
 					session.setAttribute("sessionUser", userFetched);
 					session.setAttribute("userId", userFetched.getId());
 					session.setAttribute("username", userFetched.getUsername());
-					session.setAttribute("aboutMeInfo", aboutme);
-					session.setAttribute("lookingForInfo", lookingfor);
+					session.setAttribute("gender",  userFetched.getGender());
 					
 					session.setAttribute("personalPhoto", userFetched.getImage());
 					session.setAttribute("publicPhoto", userFetched.getPublicPhoto()+".JPG");
+					session.setAttribute("aboutMeInfo", userFetched.getAboutMe());
+					session.setAttribute("lookingForInfo", userFetched.getLookingFor());
+					session.setAttribute("myAge", doM.getAge(userFetched.getDob()));
 					System.out.println("Fetched Personal photo name is "+ userFetched.getImage());
 					System.out.println("Fetched Public photo name is "+ userFetched.getPublicPhoto());
+					session.setAttribute("photopath", "F:/GitHub/HappyLife/WebContent/WEB-INF/usrphotos/"+userFetched.getImage());
 					RequestDispatcher rd = req.getRequestDispatcher("/WEB-INF/jsp/myprofile.jsp");
 					rd.forward(req, res);
 					//res.sendRedirect("myprofile");
 				}else{
 					//md.addAttribute("error_msg", "please try again");
 					req.setAttribute("error_msg", "please try again");
-					RequestDispatcher rd = req.getRequestDispatcher("/login");
+					RequestDispatcher rd = req.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
 					rd.forward(req,res);
 				}
 			} catch (UserDAOException e) {

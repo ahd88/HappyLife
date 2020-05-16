@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+    pageEncoding="ISO-8859-1" import="com.happylife.pojo.Messages, com.happylife.pojo.User, java.util.*"%>
+    
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    <%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,6 +34,8 @@
  	<script src="${pageContext.request.contextPath}/js/jquery-ui.js"></script>
 </head>
 <body>
+	<% response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");%>
+	<% if(session.getAttribute("username")==null) response.sendRedirect("/HappyLife");%>
 	<header>
 		<!-- Fixed navbar -->
 		<nav class="navbar navbar-inverse navbar-fixed-top">
@@ -59,7 +64,7 @@
 	</header>
 	
 	<div id="mySidenav" class="sidenav">
-		<a href="#">Inbox</a>
+		<a href="/HappyLife/myinbox">Inbox</a>
 		<a href="#">Sent</a>
 		<a href="#">Search</a>
 		<a href="#">Contact</a>
@@ -87,12 +92,12 @@
 				<hr>
 
 				<div id="" class="grid-container">
-					<form action="${pageContext.request.contextPath}/sendmessage" method="POST">
+					<form action="${pageContext.request.contextPath}/sendmessageto?=${candidId}" method="POST">
 						<div class="row">
 							<div class="col-12">
 								<p>message to ${candidName}</p>
 								<textarea class="col-12" name="message" id="profiletextarea"
-									rows="7" cols="100">${aboutMeInfo}</textarea>
+									rows="7" cols="100"></textarea>
 							</div>
 						</div>
 						<br>
@@ -105,6 +110,38 @@
 					</form>
 				</div>
 				<hr>
+				<div class="resultBox col-8">
+					<ul id="message-li" class="col-8">
+						<table class="table table-dark">					
+						 	<tbody>
+						 		<%
+						  			List<Messages> mlist = (List<Messages>)request.getAttribute("mlist");
+						 			List<User> chatList = (List<User>)request.getAttribute("chatList");
+									int i = 0;
+							  		System.out.println("Messages list from sendmessage.jsp= " + mlist.size());
+						  			for(Messages m: mlist){
+						  				User pu = chatList.get(i++);
+						 		%>
+								    <tr>
+								    	<th scope="row">From <%=pu.getUsername() %></th>
+								    	<td><%=m.getMsgContent()%></td>
+								    	<td><%=m.getTime()%></td>
+								    </tr>
+							    <%
+							    	}
+						  		%>
+							    
+							    <%-- <c:forEach items="${mlist}" var="message">
+								    <tr>
+								    	<th scope="row">From ${m.senderId}</th>
+								    	<td>${m.msgContent}</td>
+								    </tr>
+							    </c:forEach> --%>
+					    	</tbody>
+							
+						</table>
+					</ul>
+				</div>
 				
 				<!-- user-block -->
 				<br>
@@ -119,6 +156,6 @@
 	<!-- container -->
 	
 	<script type="text/javascript" src="${pageContext.request.contextPath}/js/actions.js"></script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/js/opennav.js"></script>	
+	<script type="text/javascript" src="${pageContext.request.contextPath}/js/opennav.js"></script>		
 </body>
 </html>

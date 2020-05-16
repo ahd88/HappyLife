@@ -1,6 +1,10 @@
 package com.happylife.controllers;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import java.util.Random;
 
 import com.happylife.dao.registry.RegistryDAO;
@@ -37,7 +41,8 @@ public class SignUpServlet extends HttpServlet {
 		String gender = request.getParameter("sex");
 		String country = request.getParameter("country");
 		String phone = request.getParameter("phone");
-		
+		String dobStr = request.getParameter("dob");
+		Date dob = Date.valueOf(dobStr);
 		//String image = new File(data.get(9).getName()).getName();
 		
 		User user = new User();
@@ -49,6 +54,8 @@ public class SignUpServlet extends HttpServlet {
 		user.setGender(gender);
 		user.setCountry(country);
 		user.setPhone(phone);
+		user.setDob(dob);
+		
 		//user.setImage(image);
 		
 		System.out.println("First Name is " +firstName);
@@ -59,10 +66,11 @@ public class SignUpServlet extends HttpServlet {
 		System.out.println("Gender is " + gender);
 		System.out.println(country);
 		System.out.println(phone);
+		System.out.println("DOB is " + dob);
 		//System.out.println(image);
 		
 		if(password.equals(repassword)){
-			String publicPhoto = n + ".JPG";
+			String publicPhoto = n + "";
 			user.setPublicPhoto(publicPhoto);
 			System.out.println(publicPhoto);
 			//String path = request.getSession().getServletContext().getRealPath("/") + "//WEB-INF//usrphotos//";
@@ -72,7 +80,6 @@ public class SignUpServlet extends HttpServlet {
 			//String signupStatus = RegistryDAO.getUserDAO().doHibernateSignUp(user);
 			
 			System.out.println(" this is status from doSignUp: " + signupStatus);
-			
 			
 		}else{
 			message = "Password does not match..please try again";
@@ -86,7 +93,7 @@ public class SignUpServlet extends HttpServlet {
 		if(signupStatus.equals("Sign Up Successfully..."))	response.sendRedirect("login.html");
 		else {
 			request.setAttribute("errorMsg", message);
-			response.sendRedirect("signup.jsp");
+			request.getRequestDispatcher("signup.jsp").forward(request, response);
 		}
 	}
 }

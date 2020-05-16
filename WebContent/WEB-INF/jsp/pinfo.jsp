@@ -29,8 +29,11 @@
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/jquery-ui.css">
 	<script src="${pageContext.request.contextPath}/js/jquery-1.12.4.js"></script>
  	<script src="${pageContext.request.contextPath}/js/jquery-ui.js"></script>
+ 	<script src="${pageContext.request.contextPath}/js/checkFileType.js"></script>
 </head>
 <body>
+	<% response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");%>
+	<% if(session.getAttribute("username")==null) response.sendRedirect("/HappyLife");%>
 	<header>
 		<!-- Fixed navbar -->
 		<nav class="navbar navbar-inverse navbar-fixed-top">
@@ -59,7 +62,7 @@
 	</header>
 	
 	<div id="mySidenav" class="sidenav">
-		<a href="#">Inbox</a>
+		<a href="/HappyLife/myinbox">Inbox</a>
 		<a href="#">Sent</a>
 		<a href="#">Search</a>
 		<a href="#">Contact</a>
@@ -87,7 +90,10 @@
 				<p>edit</p>
 				<ul class="nav nav-pills updateProfile">
 					<li><a href="${pageContext.request.contextPath}/aboutme&lookingfor">About Me / Looking for</a></li>
-					<li><a href="#myPhoto">My Photo</a></li>
+					<li><a>My Photo <form action="uploadphoto" method="post" enctype="multipart/form-data">
+										<input type="file" id="uploadFile" name="photo" multiple>
+										<input type="submit" name="save" onclick="CheckFileName();">
+									</form></a></li>
 					<li><a href="#myQuestions">My Questions</a></li>
 				</ul>
 				<hr>
@@ -114,9 +120,9 @@
 
 						<div class="item3 col-xs-12 col-md-5">
 							<ul class="summary">
-								<li><label>Age:</label></li>
+								<li><label>Age: ${myAge}</label></li>
 								<li><label>Location:</label></li>
-								<li><label>Last Login:</label></li>
+								<li><label>Last Login: now</label></li>
 								<li><label>I am currently available for communication:</label></li>
 								<li><label>Message response rate:</label></li>
 							</ul>

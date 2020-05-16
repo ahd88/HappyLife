@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1" import="com.happylife.pojo.Messages, java.util.*"%>
+    pageEncoding="ISO-8859-1" import="com.happylife.pojo.Messages, com.happylife.pojo.User, java.util.*"%>
+    
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 <!DOCTYPE html>
@@ -32,6 +33,8 @@
 	<script src="${pageContext.request.contextPath}/js/jquery-ui.js"></script>
 </head>
 <body>
+	<% response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");%>
+	<% if(session.getAttribute("username")==null) response.sendRedirect("/HappyLife");%>
 	<header>
 		<!-- Fixed navbar -->
 		<nav class="navbar navbar-inverse navbar-fixed-top">
@@ -60,8 +63,8 @@
 	</header>
 
 	<div id="mySidenav" class="sidenav">
-		<a href="#">Inbox</a>
-		<a href="#">Sent</a>
+		<a href="/HappyLife/myinbox">Inbox</a>
+		<a href="#">Sent</a> 
 		<a href="#">Search</a>
 		<a href="#">Contact</a>
 	</div>
@@ -105,17 +108,23 @@
 						
 						<%
 						  	List<Messages> inboxList = (List<Messages>)request.getAttribute("inboxList");
+							List<User> sendersList = (List<User>)request.getAttribute("sendersList");
+							int i = 0;
+							System.out.println("Senders list =" + sendersList.size());
+					  		System.out.println("Messages list =" + inboxList.size());
 						  	for(Messages m: inboxList){
+						  		User pu = sendersList.get(i++);
 						 %>
 						 	<tbody>
 							    <tr>
-							    	<th scope="row"><%=m.getMessageId()%></th>
-							    	<td><%=m.getSenderId()%></td>
-							     	<td><a href="#"><%=m.getMsgContent().substring(0,19)%></a></td>
+							    	<th scope="row"><%=i%></th>
+							    	<td><%=pu.getUsername()%></td>
+							     	<td><a href="/HappyLife/sendmessageto?=<%=m.getSenderId()%>"><%=m.getMsgContent().substring(0,19)%></a></td>
 							    	<td><%=m.getTime()%></td>
 							    </tr>
 					    	</tbody>
 						<%
+								
 							}
 						%>
 							

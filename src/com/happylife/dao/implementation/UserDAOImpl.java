@@ -1,9 +1,11 @@
 package com.happylife.dao.implementation;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,7 @@ import org.hibernate.SessionFactory;
 
 import com.happylife.dao.layer.UserDAO;
 import com.happylife.dao.layer.UserDAOException;
+import com.happylife.pojo.Messages;
 import com.happylife.pojo.User;
 
 public class UserDAOImpl implements UserDAO {
@@ -50,12 +53,24 @@ public class UserDAOImpl implements UserDAO {
 				String country  = rs.getString(8);				//rs.getString("COUNTRY");
 				String phone  = rs.getString(9);				//rs.getString("PHONE");
 				String image  = rs.getString(10);				//rs.getString("IMAGE");
+				Date dob = rs.getDate(11);
+				String aboutMyself = rs.getString(14);
+				String lookingFor = rs.getString(15);
 				String publicPhoto  = rs.getString(16);			//rs.getString("PUBLIC_PHOTO");
-				User user = new User(userId, fname, lname, emailId, uname, pass, gender, country, phone, image, publicPhoto);
+				Timestamp lastLogin = rs.getTimestamp(17);
+				User user = new User(userId, fname, lname, emailId, uname, gender, country, phone, image, dob, 
+						aboutMyself, lookingFor, publicPhoto, lastLogin);
 				userToFetch = user;
 			}
 			
-			rs.close();
+			java.util.Date date = new java.util.Date();
+			long time = date.getTime();
+			Timestamp ts = new Timestamp(time);
+			System.out.println("Timestamp after login is " + ts);
+			pstmt = conn.prepareStatement("update HL_USERS set lastlogin=? where userId=?");
+			pstmt.setLong(2,userToFetch.getId());
+			pstmt.setTimestamp(1,ts);
+			pstmt.executeUpdate();
 			
 			
 			if(userToFetch == null){
@@ -81,7 +96,7 @@ public class UserDAOImpl implements UserDAO {
 		boolean status = false;
 		try {
 			conn = DatabaseConnectivity.doDBConnection();
-			pstmt = conn.prepareStatement("insert into HL_USERS values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ");
+			pstmt = conn.prepareStatement("insert into HL_USERS values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ");
 			
 			pstmt.setLong(1,user.getId());
 			pstmt.setString(2,user.getFname());
@@ -93,12 +108,13 @@ public class UserDAOImpl implements UserDAO {
 			pstmt.setString(8,user.getCountry());
 			pstmt.setString(9,user.getPhone());
 			pstmt.setString(10,null);
-			pstmt.setString(11,null);
+			pstmt.setDate(11,user.getDob());
 			pstmt.setString(12,null);
 			pstmt.setString(13,null);
 			pstmt.setString(14,null);
 			pstmt.setString(15,null);
 			pstmt.setString(16,user.getPublicPhoto());
+			pstmt.setTimestamp(17,null);
 			status = pstmt.execute();
 			
 			//statment.executeQuery("INSERT INTO 'spring'.'HL_USERS' ('userId', 'FNAME', 'LNAME', 'EMAIL', 'USERNAME', 'PASSWD', 'GENDER', 'COUNTRY', 'PHONE', 'PUBLIC_PHOTO') VALUES ('"+user.getId()+"', '"+user.getFname()+"', '"+user.getLname()+"', '"+user.getEmail()+"', '"+user.getUsername()+"', '"+user.getPassword()+"', '"+user.getGender()+"', '"+user.getCountry()+"', '"+user.getPhone()+"', '"+user.getPublicPhoto()+"')");
@@ -135,13 +151,17 @@ public class UserDAOImpl implements UserDAO {
 				String lname = rs.getString(3);					
 				String emailId  = rs.getString(4);				
 				String uname  = rs.getString(5);				
-				String pass  = rs.getString(6);					
+				String pass  = rs.getString(6);			// not taken		
 				String gender  = rs.getString(7);				
 				String country  = rs.getString(8);				
 				String phone  = rs.getString(9);				
-				String image  = rs.getString(10);				
-				String publicPhoto  = rs.getString(16);			
-				User candidate = new User(userId, fname, lname,emailId, uname, pass, gender, country, phone, publicPhoto);
+				String image  = rs.getString(10);	
+				Date dob = rs.getDate(11);
+				String aboutMyself = rs.getString(14);
+				String lookingFor = rs.getString(15);
+				String publicPhoto = rs.getString(16);
+				Timestamp lastLogin = rs.getTimestamp(17);
+				User candidate = new User(userId, fname, lname, emailId, uname, gender, country, phone, image, dob, aboutMyself, lookingFor, publicPhoto, lastLogin);
 				candidateList.add(candidate);
 			}
 			if(candidateList == null) throw new UserDAOException("You Search Criteria is not met") ;
@@ -174,15 +194,17 @@ public class UserDAOImpl implements UserDAO {
 				String lname = rs.getString(3);					
 				String emailId  = rs.getString(4);				
 				String uname  = rs.getString(5);				
-				String pass  = rs.getString(6);					
+				String pass  = rs.getString(6);					// not needed
 				String gender  = rs.getString(7);				
 				String country  = rs.getString(8);				
 				String phone  = rs.getString(9);				
-				String image  = rs.getString(10);
+				String image  = rs.getString(10);				// I should take because I don't need it
+				Date dob  = rs.getDate(11);
 				String aboutMe = rs.getString(14);
 				String lookingfor = rs.getString(15);
-				String publicPhoto  = rs.getString(16);			
-				candidate = new User(userId, fname, lname,emailId, uname, pass, gender, country, phone, image, aboutMe, lookingfor, publicPhoto);
+				String publicPhoto  = rs.getString(16);
+				Timestamp lastLogin = rs.getTimestamp(17);
+				candidate = new User(userId, fname, lname, emailId, uname, gender, country, phone, image, dob, aboutMe, lookingfor, publicPhoto, lastLogin);
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -288,6 +310,20 @@ public class UserDAOImpl implements UserDAO {
 			} catch(Exception e){}
 		}
 	}
+	
+	
+	
+	/*
+	 * @Override public void setLoginTime(long userId, Timestamp ts) throws
+	 * UserDAOException { try { conn = DatabaseConnectivity.doDBConnection(); pstmt
+	 * = conn.prepareStatement("update HL_USERS set lastlogin=? where userId=?");
+	 * pstmt.setLong(2,userId); pstmt.setTimestamp(1,ts); pstmt.executeUpdate();
+	 * 
+	 * 
+	 * }catch(Exception e) { e.printStackTrace(); }finally { try { if(conn != null)
+	 * conn.close(); if(pstmt != null) pstmt.close(); if(rs != null) rs.close(); }
+	 * catch(Exception e){} } }
+	 */
 	
 	@Override
 	public User doHibernateLogin(String email, String password) throws UserDAOException {

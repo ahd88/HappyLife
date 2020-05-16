@@ -92,11 +92,11 @@
 		        	</div>
 		      	</div>
 		      	
-		      	<!-- <div class="row">
+		      	<div class="row">
 		        	<div class="form-group col-md-12">
-		        		<input type="number" name="dob" id="dateOfBirth" class="form-control" placeholder="Date" required=""/>
+		        		<input type="date" name="dob" id="dateOfBirth" class="form-control" placeholder="Date" required=""/>
 		        	</div>
-		      	</div> -->
+		      	</div>
 		      	
 		      	<!-- <div class="row">
 		      		<div class="form-group col-md-12">

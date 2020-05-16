@@ -1,4 +1,5 @@
 <%@page import="com.happylife.pojo.User"%>
+<%@page import="java.awt.Graphics2D"%>
 <%@page import="java.awt.image.BufferedImage"%>
 <%@page import="javax.imageio.ImageIO"%>
 <%@page import="java.io.*"%>
@@ -34,6 +35,8 @@
 	<script src="${pageContext.request.contextPath}/js/jquery-ui.js"></script>
 </head>
 <body>
+	<% response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); %>
+	<% if(session.getAttribute("username")==null) response.sendRedirect("/HappyLife");%>
 	<header>
 		<!-- Fixed navbar -->
 		<nav class="navbar navbar-inverse navbar-fixed-top">
@@ -88,25 +91,55 @@
 							<div>
 								<!-- src="http://placehold.it/119/00F/FFF" -->
 								<p>
+									
 									<%
+									
+									String path = (String) session.getAttribute("photopath");
 									String photo = (String) session.getAttribute("personalPhoto");
-									BufferedImage bImage = ImageIO.read(new File("F:/Github/HappyLife/WebContent/WEB-INF/usrphotos/"+photo));
-								    System.out.println("Photo " + photo);
-								    System.out.println("Buffered Image" + bImage);
-								    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-								    ImageIO.write( bImage, "PNG", baos );
-								    baos.flush();
-								    byte[] imageInByteArray = baos.toByteArray();
-								    baos.close();
-								    String b64 = javax.xml.bind.DatatypeConverter.printBase64Binary(imageInByteArray); 
+									String gender = (String) session.getAttribute("gender");
+									String b64 = "";
+									if(gender.equals("M")) 	b64 = request.getContextPath()+"/publicphotos/manonymous.png"; 
+									else 					b64 = request.getContextPath()+"/publicphotos/fanonymous.png";
+									
+									System.out.println("b64 context path " + b64);
+									if(photo != null){
+										BufferedImage bInputImage = ImageIO.read(new File(path));
+									    System.out.println("Path " + path);
+									    System.out.println("Buffered Image" + bInputImage);
+									    System.out.println("Gender is " + gender);
+									    BufferedImage bOutputImage = new BufferedImage(150, 150, bInputImage.getType());
+									    Graphics2D g2d = bOutputImage.createGraphics();
+								        g2d.drawImage(bInputImage, 0, 0, 150, 150, null);
+								        g2d.dispose();
+									    
+									    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+									    ImageIO.write( bOutputImage, "PNG", baos );
+									    baos.flush();
+									    byte[] imageInByteArray = baos.toByteArray();
+									    baos.close();
+									    b64 = javax.xml.bind.DatatypeConverter.printBase64Binary(imageInByteArray); 
+									}
 								    
-								    //String b64 = (String)session.getAttribute("64");
+								    
+								    //String b64 = (String)session.getAttribute("b64");
 									%>
+									
 									<a id="mainfullimage" href="">
-										
+										<%if(photo != null) {%>
 										<img src="data:image/png;base64, <%=b64%>"
 											 alt="click to see larger photo"
 											 title="click to see larger photo">
+										<%}else{ %>
+											<%if(gender.equals("M")) {%>
+												<img src="/HappyLife/publicphotos/manonymous.png"
+												 alt="click to see larger photo"
+												 title="click to see larger photo">
+											<%} %>
+											<%if(gender.equals("F")) {%>
+												<img src="/HappyLife/publicphotos/fanonymous.png"
+												 alt="click to see larger photo"
+												 title="click to see larger photo">
+											<%} } %>
 									</a>
 								</p>
 								<p>

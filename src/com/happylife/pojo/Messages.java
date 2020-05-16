@@ -26,7 +26,7 @@ public class Messages {
 	private long recipientId;
 	
 	@Column(name="msgContent", updatable = false, nullable = false)
-	private String msg;
+	private String msgContent;
 	
 	@Column(name="msgTime", updatable = false, nullable = false)
 	private Timestamp time;
@@ -43,7 +43,7 @@ public class Messages {
 		this.messageId = messageId;
 		this.senderId = senderId;
 		this.recipientId = recipientId;
-		this.msg = msg;
+		this.msgContent = msg;
 		this.time = ts;
 		this.flag = flag;
 	}
@@ -72,12 +72,12 @@ public class Messages {
 		this.recipientId = id;
 	}
 	
-	public String getMessage() {
-		return msg;
+	public String getMsgContent() {
+		return msgContent;
 	}
 
-	public void setMessage(String message) {
-		this.msg = message;
+	public void setMsgContent(String message) {
+		this.msgContent = message;
 	}
 	
 	public boolean getMessageStatus() {

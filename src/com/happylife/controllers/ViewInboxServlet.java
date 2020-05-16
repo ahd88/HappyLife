@@ -1,6 +1,7 @@
 package com.happylife.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import org.hibernate.jpa.criteria.expression.function.SubstringFunction;
 
 import com.happylife.dao.layer.MessageDAOException;
+import com.happylife.dao.layer.UserDAOException;
 import com.happylife.dao.registry.RegistryDAO;
 import com.happylife.pojo.User;
 
@@ -34,12 +36,17 @@ public class ViewInboxServlet extends HttpServlet {
 		
 		try {
 			List<Messages> list = RegistryDAO.getMessageDAO().getAllInboxMsgs(sessionUser);
+			List<User> sendersList = new ArrayList<User>();
+			int count = 0;
 			request.setAttribute("inboxList", list);
 			
 			for(Messages m: list){
+				User u = RegistryDAO.getUserDAO().getUser(m.getSenderId());
 				System.out.println("Message " + m.getMessageId() + " is " + m.getMsgContent());
+				sendersList.add(u);
 			}
-		} catch (MessageDAOException e) {
+			request.setAttribute("sendersList", sendersList);
+		} catch (MessageDAOException | UserDAOException e) {
 			e.printStackTrace();
 			if(e.getMessage().equals("Your inbox is empty")) message = "Your inbox is empty";
 		}

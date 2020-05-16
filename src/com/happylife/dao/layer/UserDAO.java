@@ -23,4 +23,5 @@ public interface UserDAO {
 	//public String getAboutMeHibernate(long userId) throws UserDAOException;
 	public String getLookingFor(long userId) throws UserDAOException;
 	//public String getLookingForHibernate(long userId) throws UserDAOException;
+	
 }

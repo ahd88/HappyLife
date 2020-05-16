@@ -1,5 +1,8 @@
 package com.happylife.pojo;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -46,8 +49,8 @@ public class User {
 	@Column(name="IMAGE", nullable = true)
 	private String image;
 	
-	@Column(name="POSTAL_CODE", nullable = true)
-	private String postalCode;
+	@Column(name="DOB", nullable = false)
+	private Date dob;
 	
 	@Column(name="RESIDENCY_STATUS", nullable = true)
 	private String residencyStatus;
@@ -64,13 +67,16 @@ public class User {
 	@Column(name="PUBLIC_PHOTO", nullable = true)
 	private String publicPhoto;
 	
+	@Column(name="LastLogin", updatable = true, nullable = true)
+	private Timestamp lastLogin; 
+	
 	
 	public User(){
 		super();
 	}
 	
 	public User(long userId, String fname, String lname, String email, String username, String password, String gender,
-			String country, String phone, String publicPhoto) {
+			String country, String phone, Date dob, String publicPhoto) {
 		super();
 		this.userId = userId;
 		this.fname = fname;
@@ -81,6 +87,7 @@ public class User {
 		this.gender = gender;
 		this.country = country;
 		this.phone = phone;
+		this.dob = dob;
 		this.publicPhoto = publicPhoto;
 	}	// used in sign up form
 	
@@ -100,23 +107,26 @@ public class User {
 		this.publicPhoto = publicPhoto;
 	}	// used in login 
 	
-	public User(long userId, String fname, String lname, String email, String username, String password, String gender,
-			String country, String phone, String image, String aboutMyself, String lookingFor, String publicPhoto) {
+	public User(long userId, String fname, String lname, String email, String username, String gender,
+			String country, String phone, String image, Date dob, String aboutMyself, String lookingFor, String publicPhoto,
+			Timestamp lastLogin) {
 		super();
 		this.userId = userId;
 		this.fname = fname;
 		this.lname = lname;
 		this.email = email;
 		this.username = username;
-		this.password = password;
+		//this.password = password;
 		this.gender = gender;
 		this.country = country;
 		this.phone = phone;
 		this.image = image;
+		this.dob = dob;
 		this.aboutMe = aboutMyself;
 		this.lookingFor = lookingFor;
 		this.publicPhoto = publicPhoto;
-	}	// used in viewcandid
+		this.lastLogin = lastLogin;
+	}	// used in viewcandid & searchby
 
 	public long getId() {
 		return userId;
@@ -198,12 +208,12 @@ public class User {
 		this.image = image;
 	}
 
-	public String getPostalCode() {
-		return postalCode;
+	public Date getDob() {
+		return dob;
 	}
 
-	public void setPostalCode(String postalCode) {
-		this.postalCode = postalCode;
+	public void setDob(Date dob) {
+		this.dob = dob;
 	}
 
 	public String getResidencyStatus() {
@@ -245,4 +255,13 @@ public class User {
 	public void setPublicPhoto(String publicPhoto) {
 		this.publicPhoto = publicPhoto;
 	}
+
+	public Timestamp getLastLogin() {
+		return lastLogin;
+	}
+
+	public void setLastLogin(Timestamp lastLogin) {
+		this.lastLogin = lastLogin;
+	}
+	
 }

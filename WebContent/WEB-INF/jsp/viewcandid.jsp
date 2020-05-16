@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1" import="com.happylife.pojo.User"%>
+    pageEncoding="ISO-8859-1" import="com.happylife.pojo.User, com.happylife.DoMath"%>
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,6 +31,8 @@
 	<script src="${pageContext.request.contextPath}/js/jquery-ui.js"></script>
 </head>
 <body>
+	<% response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");%>
+	<% if(session.getAttribute("username")==null) response.sendRedirect("/HappyLife");%>
 	<header>
 		<!-- Fixed navbar -->
 		<nav class="navbar navbar-inverse navbar-fixed-top">
@@ -58,7 +61,7 @@
 	</header>
 	
 	<div id="mySidenav" class="sidenav">
-		<a href="#">Inbox</a>
+		<a href="/HappyLife/myinbox">Inbox</a>
 		<a href="#">Sent</a> 
 		<a href="#">Search</a>
 		<a href="#">Contact</a>
@@ -93,18 +96,18 @@
 							</div>
 							<!-- <div><p><a href="#createphotoprofilepage"><button>Change Photo</button></a></p></div> -->
 						</div>
-
+						<% DoMath doM = new DoMath(); %>
 						<div class="item3 col-xs-12 col-md-5">
 							<ul class="summary">
 								<li><label>Username: <%=candidate.getUsername() %></label></li>
-								<li><label>Age: </label></li>
-								<li><label>Last Login:</label></li>
+								<li><label>Age: <%=doM.getAge(candidate.getDob()) %></label></li>
+								<li><label>Last Login: ${candidLastLogin}</label></li>
 							</ul>
 						</div>
 						<div class="item4 col-xs-12 col-md-5">
 							<ul class="primary">
 								<li id="morelikeli"><a href="#prfprofile.php">More Like <%=candidate.getUsername() %></a></li>
-								<li id="messagetoli"><a href="/HappyLife/sendmessage">Send a message </a></li>
+								<li id="messagetoli"><a href="/HappyLife/sendmessageto?=<%=candidate.getId()%>">Send a message </a></li>
 								<li id="deladdfavli"><a href="#bestmatch.php">Add to My Favourites</a></li>
 								<li id="photoli"><a href="#lookingforme.php">Ask to exchange Photos</a></li>
 								<li id="nudgeli"><a href="#favourites.php">Invite to view my Profile</a></li>

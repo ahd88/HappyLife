@@ -34,6 +34,8 @@
  	<script src="${pageContext.request.contextPath}/js/jquery-ui.js"></script>
 </head>
 <body>
+	<% response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");%>
+	<% if(session==null) response.sendRedirect("/HappyLife");%>
 	<header>
 		<nav class="navbar navbar-light navbar-expand-md bg-dark fixed-top justify-content-center">
 			<div class="navbar-brand d-flex w-50 mr-auto">
@@ -46,7 +48,7 @@
 	
 	<hr>
 	<div id="mySidenav" class="sidenav">
-		<a href="#">Inbox</a>
+		<a href="/HappyLife/myinbox">Inbox</a>
 		<a href="#">Sent</a> 
 		<a href="#">Search</a>
 		<a href="#">Contact</a>

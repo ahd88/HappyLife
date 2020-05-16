@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.happylife.DoMath;
 import com.happylife.dao.layer.UserDAOException;
 import com.happylife.dao.registry.RegistryDAO;
 import com.happylife.pojo.User;
@@ -32,8 +33,11 @@ public class ViewProfileServlet extends HttpServlet {
 			HttpSession session = request.getSession();
 			try {
 				User candidUser = RegistryDAO.getUserDAO().getUser(candidId);
+				DoMath doM = new DoMath();
 				System.out.println("Candidate User is: " + candidUser.getEmail());
 				request.setAttribute("candidate", candidUser);
+				String lastLogin = doM.getLastLogin(candidUser.getLastLogin());
+				request.setAttribute("candidLastLogin", lastLogin);
 				ServletContext ctx = getServletContext();
 				ctx.setAttribute("candidate", candidUser);
 			} catch (UserDAOException e) {
@@ -44,5 +48,7 @@ public class ViewProfileServlet extends HttpServlet {
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/viewcandid.jsp");
 		rd.forward(request, response);
 	}
+	
+	
 
 }
