@@ -52,12 +52,12 @@
 	      			</div>
 	      			<div class="form-group col-md-6">
 
-		        	<select name="country" id="inputCountry" class="form-control" required="">
-						<option value="Sudan">Sudan</option>
-						<option value="Yemen" selected="selected">Yemen</option>
-						<option value="India">India</option>
-					</select>
-		      	</div>
+			        	<select name="country" id="inputCountry" class="form-control" required="">
+							<option value="Sudan">Sudan</option>
+							<option value="Yemen" selected="selected">Yemen</option>
+							<option value="India">India</option>
+						</select>
+		      		</div>
 	      			
 	      		</div>
 	

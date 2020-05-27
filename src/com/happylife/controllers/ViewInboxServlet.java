@@ -41,7 +41,7 @@ public class ViewInboxServlet extends HttpServlet {
 			request.setAttribute("inboxList", list);
 			
 			for(Messages m: list){
-				User u = RegistryDAO.getUserDAO().getUser(m.getSenderId());
+				User u = RegistryDAO.getUserDAO().getUserByUserId(m.getSenderId());
 				System.out.println("Message " + m.getMessageId() + " is " + m.getMsgContent());
 				sendersList.add(u);
 			}

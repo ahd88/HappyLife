@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -65,7 +66,7 @@
 		<a href="/HappyLife/myinbox">Inbox</a>
 		<a href="#">Sent</a>
 		<a href="#">Search</a>
-		<a href="#">Contact</a>
+		<a href="#">My Favorites</a>
 	</div>
 
 	<br>
@@ -144,16 +145,219 @@
 				</div>
 				<!-- user-block -->
 				<br>
+				
+				<form action="${pageContext.request.contextPath}/aboutme&lookingfor" method="POST">
 				<div id="" class="grid-container">
-					<h3 class="">Profile</h3>
-					<p>${aboutMeInfo}</p>
+					<!-- <h3 class="">Profile</h3> -->
+					<table class="table table-dark">
+						<tbody>
+							<tr>
+								<th class="col-md-4">Profile</th>
+							</tr>
+							<tr>
+								<th><c:if test="${not empty aboutMeInfo}">
+									<p>${aboutMeInfo}</p>
+								</c:if></th>
+							</tr>
+							
+						</tbody>
+					</table>
+					
+      				<table class="table table-dark">
+	      				<tbody>
+		      				<tr>
+      							<th class="col-md-3">Profile Basics</th>
+	      						<th class="col-md-3">Lifestyle / Current Status</th>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3">Profile posted by: ${sessionUser.profilePostedBy}</td>
+			      				<td class="col-md-3">Pray: 
+			      					<c:choose>
+										<c:when test="${sessionUser.pray=='AP'}">Always Pray </c:when>
+										<c:when test="${sessionUser.pray=='smissfajr'}">Sometimes miss Fajr and make Qadah</c:when>
+										<c:when test="${sessionUser.pray=='rmissprayer'}">Rarely miss a prayer and make Qadah</c:when>
+										<c:when test="${sessionUser.pray=='spray'}">Sometimes Pray</c:when>
+										<c:otherwise>Intend to start praying</c:otherwise>
+    								</c:choose>
+								</td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3">Residency Status: ${sessionUser.residencyStatus}</td>
+			      				<td class="col-md-3">Sect: ${sessionUser.sect}</td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3">Are you Willing to relocate: </td>
+			      				<td class="col-md-3">Marital Status: 
+			      					<c:choose>
+										<c:when test="${sessionUser.maritalStatus=='NM'}">Never Married</c:when>
+										<c:otherwise>${sessionUser.maritalStatus}</c:otherwise>
+    								</c:choose>
+			      				</td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3">Ethnic Origin: ${sessionUser.ethnicOrigin}</td>
+			      				<td class="col-md-3">Children: ${sessionUser.children}</td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3">My Religious History: 
+			      					<c:choose><c:when test="${sessionUser.religiousHistory=='dontmind'}">
+									        		don't mind
+									          </c:when>
+									          <c:when test="${sessionUser.religiousHistory=='BM'}">
+									        		Muslim since Birth
+									          </c:when>
+											  <c:otherwise> Revert Muslim </c:otherwise>
+    								</c:choose>
+    							</td>
+			      				<td class="col-md-3">Physical Disability: </td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3"></td>
+			      				<td class="col-md-3">Like to have children: ${sessionUser.likeToHaveChildren}</td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3"></td>
+			      				<td class="col-md-3">Polygamy: </td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3"></td>
+			      				<td class="col-md-3">Languages: ${sessionuser.languages}</td>
+			      			</tr>
+			      			<tr>
+			      				<th class="col-md-3">Appearance </th>
+			      				<th class="col-md-3">Education/Career</th>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3">Hair Color: ${sessionUser.hairColor}</td>
+			      				<td class="col-md-3">Profession: ${sessionuser.profession}</td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3">Body Type: ${sessionUser.bodyType}</td>
+			      				<td class="col-md-3">Highest Qualification: ${sessionuser.highestQual}</td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3">
+			      					<c:if test="${sessionUser.gender=='M'}">
+										Beard: ${sessionUser.hijabBeard}
+									</c:if>
+									<c:if test="${sessionUser.gender=='F'}"> Hijab: 
+										<c:choose>
+											<c:when test="${sessionUser.hijabBeard=='withniqab'}">Always with Niqab </c:when>
+											<c:when test="${sessionUser.hijabBeard=='dontmind'}">don't mind</c:when>
+											<c:otherwise>Always</c:otherwise>
+	    								</c:choose>
+									</c:if>
+			      				</td>
+			      				<td class="col-md-3"></td>
+			      			</tr>
+		      			</tbody>
+	      			</table>
 				</div>
 
 				<br>
 				<div id="" class="grid-container">
-					<h3 class="">Looking For</h3>
-					<p>${lookingForInfo}</p>
+					<!-- <h3 class="">Looking For</h3> -->
+					<table class="table table-dark">
+						<tbody>
+							<tr>
+								<th class="col-md-4">Looking For</th>
+							</tr>
+							<tr>
+								<th><c:if test="${not empty sessionLookingFor.lookingFor}">
+									<p>${lookingForInfo}</p>
+								</c:if></th>
+							</tr>
+							
+						</tbody>
+					</table>
+					<table class="table table-dark">
+	      				<tbody>
+		      				<tr>
+      							<th class="col-md-3">Looking In: ${sessionLookingFor.lookingIn}</th>
+	      						<th class="col-md-3">Age: from ${sessionLookingFor.ageL} to ${sessionLookingFor.ageH}</th>
+			      			</tr>
+			      			<tr>
+			      				<th class="col-md-3">Profile Basics</th>
+			      				<th class="col-md-3">Lifestyle / Current status</th>
+			      			</tr>
+			      			<tr>
+								<td class="col-md-3">Residency Status: ${sessionLookingFor.residencyStatus}</td>
+								<td class="col-md-3">
+									<c:choose>
+										<c:when test="${sessionLookingFor.pray=='AP'}">Always Pray </c:when>
+										<c:when test="${sessionLookingFor.pray=='smissfajr'}">Sometimes miss Fajr and make Qadah</c:when>
+										<c:when test="${sessionLookingFor.pray=='rmissprayer'}">Rarely miss a prayer and make Qadah</c:when>
+										<c:when test="${sessionLookingFor.pray=='spray'}">Sometimes Pray</c:when>
+										<c:otherwise>Intend to start praying</c:otherwise>
+    								</c:choose>
+								</td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3">Are you Willing to relocate: ${sessionLookingFor.willingToRelocate}</td>
+			      				<td class="col-md-3">What sect you wish to marry from: ${sessionLookingFor.sect}</td>
+			      			</tr>
+			      			<tr>
+								<td class="col-md-3">Ethnic Origin: ${sessionLookingFor.ethnicOrigin}</td>
+								<td class="col-md-3">Marital Status: ${sessionLookingFor.maritalStatus}</td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3">Candidate Religious History: 
+			      					<c:choose><c:when test="${sessionLookingFor.religiousHistory=='dontmind'}">
+									        		don't mind
+									          </c:when>
+									          <c:when test="${sessionLookingFor.religiousHistory=='BM'}">
+									        		Muslim since Birth
+									          </c:when>
+											  <c:otherwise> Revert Muslim </c:otherwise>
+    								</c:choose>
+    							</td>
+			      				<td class="col-md-3">Has Children: ${sessionLookingFor.hasChildren}</td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3">Living with in-laws: ${sessionLookingFor.livingWithInLaws}</td>
+			      				<td class="col-md-3">Has physical disability: ${sessionLookingFor.hasPDisability}</td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3"></td>
+			      				<td class="col-md-3">Like to have children: ${sessionLookingFor.likeToHaveChildren}</td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3"></td>
+			      				<td class="col-md-3">Polygamy: </td>
+			      			</tr>
+			      			<tr>
+			      				<th class="col-md-3">Appearance </th>
+			      				<th class="col-md-3">Education/Career</th>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3">Body type: ${sessionLookingFor.bodyType}</td>
+			      				<td class="col-md-3">Profession: ${sessionLookingFor.profession}</td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3">
+									<c:if test="${sessionUser.gender=='F'}">
+										Beard: ${sessionLookingFor.hijabBeard}
+									</c:if>
+									<c:if test="${sessionUser.gender=='M'}"> Hijab: 
+										<c:choose>
+											<c:when test="${sessionLookingFor.hijabBeard=='withniqab'}">Always with Niqab </c:when>
+											<c:when test="${sessionLookingFor.hijabBeard=='dontmind'}">don't mind</c:when>
+											<c:otherwise>Always</c:otherwise>
+	    								</c:choose>
+									</c:if>
+								</td>
+			      				<td class="col-md-3">Minimum Qualification: ${sessionLookingFor.minimumQual}</td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3">
+			      					Height: from ${sessionLookingFor.heightL} to${sessionLookingFor.heightH} 
+			      				</td>
+			      				<td class="col-md-3"></td>
+			      			</tr>
+		      			</tbody>
+	      			</table>
 				</div>
+				</form>
 				<br>
 			</div>
 

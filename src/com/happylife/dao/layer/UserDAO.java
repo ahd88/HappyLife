@@ -7,21 +7,27 @@ import com.happylife.pojo.User;
 public interface UserDAO {
 	public User doLogin(String email, String password) throws UserDAOException;
 	public User doHibernateLogin(String email, String password) throws UserDAOException;
-	public String doSignUp(User user);
-	public String doHibernateSignUp(User user);
-	public void updateUser(User user)throws UserDAOException;
+	public String doSignUp(User user)throws UserDAOException;
+	public String doHibernateSignUp(User user)throws UserDAOException;
+	//public void updateUser(User user)throws UserDAOException;
 	//public void updateUserHibernate(User user)throws UserDAOException;	//to be implemented
-	public List<User> searchByLocation(String matchgender, String ...v)throws UserDAOException;
+	public List<User> searchBy(String matchgender, String ...v)throws UserDAOException;
 	//public List<User> searchByLocationHibernate(String matchgender, String ...v)throws UserDAOException;
-	public User getUser(long id)throws UserDAOException;
+	public User getUserByUserId(long id)throws UserDAOException;
 	//public User getUserHibernate(long id)throws UserDAOException;
-	public String UpdateAboutMe(User user, String aboutme)throws UserDAOException;
-	//public String UpdateAboutMeHibernate(User user, String aboutme)throws UserDAOException;
-	public String UpdateLookingFor(User user, String lookingfor)throws UserDAOException;
-	//public String UpdateLookingForHibernate(User user, String lookingfor)throws UserDAOException;
+	public User getUserByEmail(String email)throws UserDAOException;
+	//public User getUserByEmailHibernate(String email)throws UserDAOException;
+	public String updateUser(long userId, String ...v)throws UserDAOException;			//need to find out what the problem is
+	//public String updateUserHibernate(long userId, String ...v)throws UserDAOException;
+	public String updateAboutMe(User user, String aboutme)throws UserDAOException;
+	//public String updateAboutMeHibernate(User user, String aboutme)throws UserDAOException;
+	public String updateLookingFor(User user, String lookingfor)throws UserDAOException;
+	//public String updateLookingForHibernate(User user, String lookingfor)throws UserDAOException;
 	public String getAboutMe(long userId) throws UserDAOException;
 	//public String getAboutMeHibernate(long userId) throws UserDAOException;
 	public String getLookingFor(long userId) throws UserDAOException;
 	//public String getLookingForHibernate(long userId) throws UserDAOException;
+	public String updateUserPhoto(long userId, String photoName)throws UserDAOException;
+	//public String updateUserPhotoHibernate(long userId, String photoName)throws UserDAOException;
 	
 }

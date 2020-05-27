@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" import="com.happylife.pojo.User, com.happylife.DoMath"%>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
     
 <!DOCTYPE html>
 <html>
@@ -107,7 +108,7 @@
 						<div class="item4 col-xs-12 col-md-5">
 							<ul class="primary">
 								<li id="morelikeli"><a href="#prfprofile.php">More Like <%=candidate.getUsername() %></a></li>
-								<li id="messagetoli"><a href="/HappyLife/sendmessageto?=<%=candidate.getId()%>">Send a message </a></li>
+								<li id="messagetoli"><a href="/HappyLife/sendmessageto?=<%=candidate.getUserId()%>">Send a message </a></li>
 								<li id="deladdfavli"><a href="#bestmatch.php">Add to My Favourites</a></li>
 								<li id="photoli"><a href="#lookingforme.php">Ask to exchange Photos</a></li>
 								<li id="nudgeli"><a href="#favourites.php">Invite to view my Profile</a></li>
@@ -123,18 +124,189 @@
 				<!-- user-block -->
 				<br>
 				<div id="myIdeal" class="grid-container">
-					<h3>Their Profile</h3>
-					<p><%=candidate.getAboutMe() %></p>
+					
+					<table class="table table-dark">
+						<tbody>
+							<tr>
+								<th class="col-md-4">Looking For</th>
+							</tr>
+							<tr>
+								<th><c:if test="${not empty candidate.lookingFor}">
+									<p>${candidate.lookingFor}</p>
+								</c:if></th>
+							</tr>
+							
+						</tbody>
+					</table>
+					<table class="table table-dark">
+	      				<tbody>
+		      				<tr>
+      							<th class="col-md-3">Profile Basics</th>
+	      						<th class="col-md-3">Lifestyle / Current Status</th>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3">Profile posted by: ${candidate.profilePostedBy}</td>
+			      				<td class="col-md-3">Pray ${candidate.pray}</td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3">Residency Status: ${candidate.residencyStatus}</td>
+			      				<td class="col-md-3">Sect: ${candidate.sect}</td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3">Are you Willing to relocate: </td>
+			      				<td class="col-md-3">Marital Status ${candidate.maritalStatus}</td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3">Ethnic Origin: ${candidate.ethnicOrigin}</td>
+			      				<td class="col-md-3">Children: ${candidate.children}</td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3">My Religious History: ${candidate.religiousHistory}</td>
+			      				<td class="col-md-3">Physical Disability: </td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3"></td>
+			      				<td class="col-md-3">Like to have children: ${candidate.likeToHaveChildren}</td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3"></td>
+			      				<td class="col-md-3">Polygamy: </td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3"></td>
+			      				<td class="col-md-3">Languages: ${candidate.languages}</td>
+			      			</tr>
+			      			<tr>
+			      				<th class="col-md-3">Appearance </th>
+			      				<th class="col-md-3">Education/Career</th>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3">Hair Color: ${candidate.hairColor}</td>
+			      				<td class="col-md-3">Profession: ${candidate.profession}</td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3">Body Type: ${candidate.bodyType}</td>
+			      				<td class="col-md-3">Highest Qualification: ${candidate.highestQual}</td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3">
+			      					<c:if test="${candidate.gender=='M'}">
+										Beard: ${candidate.hijabBeard}
+									</c:if>
+									<c:if test="${candidate.gender=='F'}">
+										Hijab: ${candidate.hijabBeard}
+									</c:if>
+			      				</td>
+			      				<td class="col-md-3"></td>
+			      			</tr>
+		      			</tbody>
+	      			</table>
 				</div>
-
+				
 				<br>
-				<div id="lastViewers" class="grid-container">
-					<h3 class="">Looking For ...</h3>
-					<p><%=candidate.getLookingFor() %></p>
+				<div id="" class="grid-container">
+					<!-- <h3 class="">Looking For</h3> -->
+					<table class="table table-dark">
+						<tbody>
+							<tr>
+								<th class="col-md-4">Looking For</th>
+							</tr>
+							<tr>
+								<th><c:if test="${not empty candidLookingfor.lookingFor}">
+									<p>${candidLookingfor.lookingFor}</p>
+								</c:if></th>
+							</tr>
+							
+						</tbody>
+					</table>
+					
+					<table class="table table-dark">
+	      				<tbody>
+		      				<tr>
+      							<th class="col-md-3">Looking In: ${candidLookingfor.lookingIn}</th>
+	      						<th class="col-md-3">Age: from ${candidLookingfor.ageL} to ${candidLookingfor.ageH}</th>
+			      			</tr>
+			      			<tr>
+			      				<th class="col-md-3">Profile Basics</th>
+			      				<th class="col-md-3">Lifestyle / Current status</th>
+			      			</tr>
+			      			<tr>
+								<td class="col-md-3">Residency Status: ${candidLookingfor.residencyStatus}</td>
+								<td class="col-md-3">
+									<c:choose>
+										<c:when test="${candidLookingfor.pray=='AP'}">Always Pray </c:when>
+										<c:when test="${candidLookingfor.pray=='smissfajr'}">Sometimes miss Fajr and make Qadah</c:when>
+										<c:when test="${candidLookingfor.pray=='rmissprayer'}">Rarely miss a prayer and make Qadah</c:when>
+										<c:when test="${candidLookingfor.pray=='spray'}">Sometimes Pray</c:when>
+										<c:otherwise>Intend to start praying</c:otherwise>
+    								</c:choose>
+								</td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3">Are you Willing to relocate: ${sessionLookingFor.willingToRelocate}</td>
+			      				<td class="col-md-3">What sect you wish to marry from: ${sessionLookingFor.sect}</td>
+			      			</tr>
+			      			<tr>
+								<td class="col-md-3">Ethnic Origin: ${sessionLookingFor.ethnicOrigin}</td>
+								<td class="col-md-3">Marital Status: ${sessionLookingFor.maritalStatus}</td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3">Candidate Religious History: 
+			      					<c:choose><c:when test="${candidLookingfor.religiousHistory=='dontmind'}">
+									        		don't mind
+									          </c:when>
+									          <c:when test="${candidLookingfor.religiousHistory=='BM'}">
+									        		Muslim since Birth
+									          </c:when>
+											  <c:otherwise> Revert Muslim </c:otherwise>
+    								</c:choose>
+    							</td>
+			      				<td class="col-md-3">Has Children: ${candidLookingfor.hasChildren}</td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3">Living with in-laws: ${candidLookingfor.livingWithInLaws}</td>
+			      				<td class="col-md-3">Has physical disability: ${candidLookingfor.hasPDisability}</td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3"></td>
+			      				<td class="col-md-3">Like to have children: ${candidLookingfor.likeToHaveChildren}</td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3"></td>
+			      				<td class="col-md-3">Polygamy: </td>
+			      			</tr>
+			      			<tr>
+			      				<th class="col-md-3">Appearance </th>
+			      				<th class="col-md-3">Education/Career</th>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3">Body type: ${candidLookingfor.bodyType}</td>
+			      				<td class="col-md-3">Profession: ${candidLookingfor.profession}</td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3">
+									<c:if test="${sessionUser.gender=='F'}">
+										Beard: ${candidLookingfor.hijabBeard}
+									</c:if>
+									<c:if test="${sessionUser.gender=='M'}"> Hijab: 
+										<c:choose>
+											<c:when test="${candidLookingfor.hijabBeard=='withniqab'}">Always with Niqab </c:when>
+											<c:when test="${candidLookingfor.hijabBeard=='dontmind'}">don't mind</c:when>
+											<c:otherwise>Always</c:otherwise>
+	    								</c:choose>
+									</c:if>
+								</td>
+			      				<td class="col-md-3">Minimum Qualification: ${candidLookingfor.minimumQual}</td>
+			      			</tr>
+			      			<tr>
+			      				<td class="col-md-3">
+			      					Height: from ${candidLookingfor.heightL} to${candidLookingfor.heightH} 
+			      				</td>
+			      				<td class="col-md-3"></td>
+			      			</tr>
+		      			</tbody>
+	      			</table>
 				</div>
-
-				<br>
-
 				<br>
 				
 				<br> <br>

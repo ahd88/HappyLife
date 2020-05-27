@@ -67,8 +67,8 @@
 	<div id="mySidenav" class="sidenav">
 		<a href="/HappyLife/myinbox">Inbox</a>
 		<a href="#">Sent</a>
-		<a href="#">Search</a>
-		<a href="#">Contact</a>
+		<a href="/HappyLife/search">Search</a>
+		<a href="#">My Favorites</a>
 	</div>
 
 	<br>

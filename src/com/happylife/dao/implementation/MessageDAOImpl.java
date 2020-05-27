@@ -52,7 +52,7 @@ public class MessageDAOImpl implements MessageDAO{
 		try {
 			conn = DatabaseConnectivity.doDBConnection();
 			PreparedStatement pstmt = conn.prepareStatement("select * from messages where recipientId=?");
-			pstmt.setLong(1,user.getId());
+			pstmt.setLong(1,user.getUserId());
 			rs = pstmt.executeQuery();
 			while (rs.next()){
 				long msgId = rs.getLong(1);
@@ -124,5 +124,28 @@ public class MessageDAOImpl implements MessageDAO{
 			} catch(Exception e){}
 		}
 		return chatList;
+	}
+
+	@Override
+	public String updateMessageStatus(long candidId, long userId) throws MessageDAOException {
+		try {
+			conn = DatabaseConnectivity.doDBConnection();
+			pstmt = conn.prepareStatement("update messages set msgRead=? where senderId=? and recipientId=?");
+			pstmt.setBoolean(1,true);
+			pstmt.setLong(2,candidId);
+			pstmt.setLong(3,userId);
+			pstmt.executeUpdate();
+			
+			return "Message Status updated Successfully...";
+		}catch(Exception e) {
+			e.printStackTrace();
+			return "Something went wrong in upadating Message Status, please try again ! ! !";
+		}finally {
+			try {
+				if(conn != null)	conn.close();
+				if(pstmt != null)	pstmt.close();
+				if(rs != null)		rs.close();
+			} catch(Exception e){}
+		}
 	}
 }

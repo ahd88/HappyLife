@@ -21,6 +21,7 @@ import com.happylife.pojo.User;
 /**
  * Servlet implementation class SendMessageServlet
  * the candidate attribute was used much in viewcandid page
+ * YOU HAVE TO INFORM THE CANDIDATE THAT USER HAS READ THEIR MESSAGE EITHER BY EMAIL OR WHATSAPP
  */
 @WebServlet("/sendmessageto")
 public class SendMessageServlet extends HttpServlet {
@@ -37,15 +38,18 @@ public class SendMessageServlet extends HttpServlet {
 			System.out.println("Session User name in SendMessageServlet = " + sessionUser.getUsername());
 			try {
 				
-				User candidate = RegistryDAO.getUserDAO().getUser(candidId);
-				System.out.println("Candiate Id in SendMessageServlet fetched from database = " + candidate.getId());
+				User candidate = RegistryDAO.getUserDAO().getUserByUserId(candidId);
+				System.out.println("Candiate Id in SendMessageServlet fetched from database = " + candidate.getUserId());
 				request.setAttribute("candidName", candidate.getUsername());
-				request.setAttribute("candidId", candidate.getId());
+				request.setAttribute("candidId", candidate.getUserId());
 				System.out.println("Candidate name in SendMessageServlet is " + candidate.getUsername());
-				List<Messages> mlist = RegistryDAO.getMessageDAO().getChat(sessionUser.getId(), candidate.getId());
+				List<Messages> mlist = RegistryDAO.getMessageDAO().getChat(sessionUser.getUserId(), candidate.getUserId());
+				String msg = RegistryDAO.getMessageDAO().updateMessageStatus(candidId, sessionUser.getUserId());
+				System.out.println("Message Status in SendMessageServlet doGet is "+ msg);
+				// YOU HAVE TO INFORM THE CANDIDATE THAT USER HAS READ THEIR MESSAGE EITHER BY EMAIL OR WHATSAPP
 				List<User> chatList = new ArrayList<User>();
 				for(Messages m: mlist){
-					User u = RegistryDAO.getUserDAO().getUser(m.getSenderId());
+					User u = RegistryDAO.getUserDAO().getUserByUserId(m.getSenderId());
 					System.out.println("Message " + m.getMessageId() + " is " + m.getMsgContent());
 					chatList.add(u);
 				}
@@ -75,13 +79,14 @@ public class SendMessageServlet extends HttpServlet {
 			//User candidate = (User) request.getServletContext().getAttribute("candidate");		// Attribute was set in ViewProfileServlet
 			//System.out.println("Candidate username to send to is " + candidate.getUsername());
 			String messageContent = request.getParameter("message");
-			message.setSenderId(sessionUser.getId());
+			message.setSenderId(sessionUser.getUserId());
 			message.setRecipientId(candidId);
 			message.setMsgContent(messageContent);
 			message.setTime(timestamp);
 			
 			try {
 				RegistryDAO.getMessageDAO().doSendMessage(message);
+				
 			} catch (MessageDAOException e) {
 				e.printStackTrace();
 			}

@@ -93,20 +93,25 @@
 
 				<div id="" class="grid-container">
 					<form action="${pageContext.request.contextPath}/sendmessageto?=${candidId}" method="POST">
-						<div class="row">
-							<div class="col-12">
-								<p>message to ${candidName}</p>
-								<textarea class="col-12" name="message" id="profiletextarea"
-									rows="7" cols="100"></textarea>
-							</div>
-						</div>
+						<table class="table table-dark">
+							<tbody>
+								<tr>
+									<th class="col-md-4">message to ${candidName}</th>
+								</tr>
+								<tr>
+									<td class="col-md-4">
+										<textarea class="form-control" name="message" id="profiletextarea"
+											  rows="7" cols="100"></textarea>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<input type="submit" name="submit" value="submit">
+									</td>
+								</tr>
+							</tbody>
+						</table>
 						<br>
-
-						<div class="row">
-							<div class="col-2">
-								<input type="submit" name="submit" value="submit">
-							</div>
-						</div>
 					</form>
 				</div>
 				<hr>

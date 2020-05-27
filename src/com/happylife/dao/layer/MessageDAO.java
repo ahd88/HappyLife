@@ -13,4 +13,6 @@ public interface MessageDAO {
 	//public List<Messages> doCheckInboxForUnReadMsgsHibernate(User user) throws MessageDAOException;
 	public List<Messages> getChat(long userId, long candidId) throws MessageDAOException;
 	//public String getChatHibernate(long userId, long candidId) throws MessageDAOException;
+	public String updateMessageStatus(long candidId, long userId)throws MessageDAOException;
+	//public String updateMessageStatusHibernate(long candidId)throws MessageDAOException;
 }

@@ -77,7 +77,7 @@
 	<div class="container">
 		<ul class="nav nav-tabs">
 			<li><a href="/HappyLife/myprofile">Home</a></li>
-			<li class="active"><a data-toggle="tab" href="#howilook">My Profile</a></li>
+			<li><a href="/HappyLife/pinfo">My Profile</a></li>
 			<li><a href="/HappyLife/search">Search</a></li>
 			<li><a href="#menu3">Marriage Advice</a></li>
 		</ul>

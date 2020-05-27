@@ -14,8 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.happylife.DoMath;
+import com.happylife.dao.layer.LookingForDAOException;
 import com.happylife.dao.layer.UserDAOException;
 import com.happylife.dao.registry.RegistryDAO;
+import com.happylife.pojo.LookingFor;
 import com.happylife.pojo.User;
 
 @WebServlet("/candid")
@@ -32,15 +34,19 @@ public class ViewProfileServlet extends HttpServlet {
 			//if(list==null) System.out.println("List is Null");
 			HttpSession session = request.getSession();
 			try {
-				User candidUser = RegistryDAO.getUserDAO().getUser(candidId);
+				User candidUser = RegistryDAO.getUserDAO().getUserByUserId(candidId);
+				LookingFor lFor = RegistryDAO.getLookingForDAO().getLookingFor(candidId);
 				DoMath doM = new DoMath();
+				LookingFor candidlookingFor = RegistryDAO.getLookingForDAO().getLookingFor(candidUser.getUserId());
 				System.out.println("Candidate User is: " + candidUser.getEmail());
 				request.setAttribute("candidate", candidUser);
+				request.setAttribute("candidLookingfor", lFor);
+				request.setAttribute("CandidateLookingfor", candidlookingFor);
 				String lastLogin = doM.getLastLogin(candidUser.getLastLogin());
 				request.setAttribute("candidLastLogin", lastLogin);
 				ServletContext ctx = getServletContext();
 				ctx.setAttribute("candidate", candidUser);
-			} catch (UserDAOException e) {
+			} catch (UserDAOException | LookingForDAOException e) {
 				e.printStackTrace();
 			}
 		}

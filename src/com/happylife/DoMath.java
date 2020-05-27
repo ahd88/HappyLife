@@ -71,6 +71,7 @@ public class DoMath {
 		else if(monthDiff > 0)	return monthDiff>1?  monthDiff + " months": monthDiff + " month";
 		else if(dayDiff > 0)	return dayDiff>1?    dayDiff + " days": dayDiff + " day";
 		else if(hourDiff > 0) 	return hourDiff>1?   hourDiff + " hours": hourDiff + " hour";
-		else 					return minuteDiff>1? minuteDiff + " minutes":minuteDiff + " minute";
+		else if(minuteDiff > 5) return minuteDiff + " minutes";
+		else return "Online";
 	}
 }

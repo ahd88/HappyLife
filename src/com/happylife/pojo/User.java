@@ -70,6 +70,50 @@ public class User {
 	@Column(name="LastLogin", updatable = true, nullable = true)
 	private Timestamp lastLogin; 
 	
+	@Column(name="ProfilePostedBy", nullable = true)
+	private String profilePostedBy;
+	
+	@Column(name="EthnicOrigin", nullable = true)
+	private String ethnicOrigin;
+	
+	@Column(name="religiousHistory", nullable = true)
+	private String religiousHistory;
+	
+	@Column(name="HairColor", nullable = true)
+	private String hairColor;
+	
+	@Column(name="BodyType", nullable=true)
+	private String bodyType;
+	
+	@Column(name="Hijab_Beard", nullable = true)
+	private String hijabBeard;
+	
+	@Column(name="Height", nullable = true)
+	private String height;
+	
+	@Column(name="Pray", nullable = true)
+	private String pray;
+	
+	@Column(name="Sect", nullable = true)
+	private String sect;
+	
+	@Column(name="MaritalStatus", nullable = true)
+	private String maritalStatus;
+	
+	@Column(name="Children", nullable = true)
+	private String children;
+	
+	@Column(name="LikeToHaveChildren", nullable = true)
+	private String likeToHaveChildren;
+	
+	@Column(name="Languages", nullable = true)
+	private String languages;
+	
+	@Column(name="Profession", nullable = true)
+	private String profession;
+	
+	@Column(name="HighestQual", nullable = true)
+	private String highestQual;
 	
 	public User(){
 		super();
@@ -91,25 +135,20 @@ public class User {
 		this.publicPhoto = publicPhoto;
 	}	// used in sign up form
 	
-	public User(long userId, String fname, String lname, String email, String username, String password, String gender,
-			String country, String phone, String image, String publicPhoto) {
-		super();
-		this.userId = userId;
-		this.fname = fname;
-		this.lname = lname;
-		this.email = email;
-		this.username = username;
-		this.password = password;
-		this.gender = gender;
-		this.country = country;
-		this.phone = phone;
-		this.image = image;
-		this.publicPhoto = publicPhoto;
-	}	// used in login 
-	
+	/*
+	 * public User(long userId, String fname, String lname, String email, String
+	 * username, String password, String gender, String country, String phone,
+	 * String image, String publicPhoto) { super(); this.userId = userId; this.fname
+	 * = fname; this.lname = lname; this.email = email; this.username = username;
+	 * this.password = password; this.gender = gender; this.country = country;
+	 * this.phone = phone; this.image = image; this.publicPhoto = publicPhoto; } //
+	 * used in login
+	 */	
 	public User(long userId, String fname, String lname, String email, String username, String gender,
-			String country, String phone, String image, Date dob, String aboutMyself, String lookingFor, String publicPhoto,
-			Timestamp lastLogin) {
+			String country, String phone, String image, Date dob, String residencyStatus, String aboutMyself, String lookingFor, 
+			String publicPhoto, Timestamp lastLogin, String profilePostedBy, String ethnicOrigin, String religiousHistory, 
+			String hairColor, String bodyType, String hijabBeard, String height, String pray, String sect, String maritalStatus, 
+			String children, String likeToHaveChildren, String languages, String profession, String highestQual) {
 		super();
 		this.userId = userId;
 		this.fname = fname;
@@ -122,17 +161,33 @@ public class User {
 		this.phone = phone;
 		this.image = image;
 		this.dob = dob;
+		this.residencyStatus = residencyStatus;
 		this.aboutMe = aboutMyself;
 		this.lookingFor = lookingFor;
 		this.publicPhoto = publicPhoto;
 		this.lastLogin = lastLogin;
-	}	// used in viewcandid & searchby
+		this.profilePostedBy = profilePostedBy;
+		this.ethnicOrigin = ethnicOrigin;
+		this.religiousHistory = religiousHistory;
+		this.hairColor = hairColor;
+		this.bodyType = bodyType;
+		this.hijabBeard = hijabBeard;
+		this.height = height;
+		this.pray = pray;
+		this.sect = sect;
+		this.maritalStatus = maritalStatus;
+		this.children = children;
+		this.likeToHaveChildren = likeToHaveChildren;
+		this.languages = languages;
+		this.profession = profession;
+		this.highestQual = highestQual;
+	}	// used in viewcandid & searchby & login
 
-	public long getId() {
+	public long getUserId() {
 		return userId;
 	}
 
-	public void setId(long id) {
+	public void setUserId(long id) {
 		this.userId = id;
 	}
 
@@ -263,5 +318,127 @@ public class User {
 	public void setLastLogin(Timestamp lastLogin) {
 		this.lastLogin = lastLogin;
 	}
+
+	public String getProfilePostedBy() {
+		return profilePostedBy;
+	}
+
+	public void setProfilePostedBy(String profilePostedBy) {
+		this.profilePostedBy = profilePostedBy;
+	}
+
+	public String getEthnicOrigin() {
+		return ethnicOrigin;
+	}
+
+	public void setEthnicOrigin(String ethnicOrigin) {
+		this.ethnicOrigin = ethnicOrigin;
+	}
+
+	public String getReligiousHistory() {
+		return religiousHistory;
+	}
+
+	public void setReligiousHistory(String religiousHistory) {
+		this.religiousHistory = religiousHistory;
+	}
+
+	public String getHairColor() {
+		return hairColor;
+	}
+
+	public void setHairColor(String hairColor) {
+		this.hairColor = hairColor;
+	}
+
+	public String getBodyType() {
+		return bodyType;
+	}
+
+	public void setBodyType(String bodyType) {
+		this.bodyType = bodyType;
+	}
+
+	public String getHijabBeard() {
+		return hijabBeard;
+	}
+
+	public void setHijabBeard(String beard) {
+		this.hijabBeard = beard;
+	}
+
+	public String getHeight() {
+		return height;
+	}
+
+	public void setHeight(String height) {
+		this.height = height;
+	}
+
+	public String getPray() {
+		return pray;
+	}
+
+	public void setPray(String pray) {
+		this.pray = pray;
+	}
+
+	public String getSect() {
+		return sect;
+	}
+
+	public void setSect(String sect) {
+		this.sect = sect;
+	}
+
+	public String getMaritalStatus() {
+		return maritalStatus;
+	}
+
+	public void setMaritalStatus(String maritalStatus) {
+		this.maritalStatus = maritalStatus;
+	}
+
+	public String getChildren() {
+		return children;
+	}
+
+	public void setChildren(String children) {
+		this.children = children;
+	}
+
+	public String getLikeToHaveChildren() {
+		return likeToHaveChildren;
+	}
+
+	public void setLikeToHaveChildren(String likeToHaveChildren) {
+		this.likeToHaveChildren = likeToHaveChildren;
+	}
+	
+	public String getLanguages() {
+		return languages;
+	}
+
+	public void setLanguages(String languages) {
+		this.languages = languages;
+	}
+
+	public String getProfession() {
+		return profession;
+	}
+
+	public void setProfession(String profession) {
+		this.profession = profession;
+	}
+
+	public String getHighestQual() {
+		return highestQual;
+	}
+
+	public void setHighestQual(String highestQual) {
+		this.highestQual = highestQual;
+	}
+	
+	
 	
 }

@@ -16,6 +16,8 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
+import com.happylife.dao.registry.RegistryDAO;
+
 /**
  * Servlet implementation class UploadPhotoServlet
  * String path = request.getSession().getServletContext().getRealPath("/") + "//WEB-INF//usrphotos//";
@@ -37,10 +39,14 @@ public class UploadPhotoServlet extends HttpServlet {
 	
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String msg = "";
 		try {
 			List<FileItem> data = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
 			String path = "F:\\Github\\HappyLife\\WebContent\\WEB-INF\\usrphotos\\";
 			System.out.println("Path = " + path);
+			long userId = (Long)request.getSession().getAttribute("userId");		// was set in LoginServlet
+			System.out.println("UserId in UploadPhotoServlet is " + userId);
+			System.out.println("Photo Name in UploadPhotoServlet is " + data.get(0).getName());
 			
 			for(FileItem item: data) {
 				File file = new File(path + item.getName());
@@ -49,9 +55,11 @@ public class UploadPhotoServlet extends HttpServlet {
 				else System.out.println("File exist");
 			}
 			
+			//msg = RegistryDAO.getUserDAO().updateUserPhoto(userId, data.get(0).getName());
+			msg = RegistryDAO.getUserDAO().updateUser(userId, "personalphoto", data.get(0).getName());
 			System.out.println("File uploaded");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			System.out.println("result got fro updating user is " + msg);
 			e.printStackTrace();
 		}
 		//doGet(request, response);

@@ -29,7 +29,7 @@ public class SearchController extends HttpServlet {
 		System.out.println("matchGender is:" + matchGender);
 		
 		try {
-			List<User> list = RegistryDAO.getUserDAO().searchByLocation(matchGender, desiredLocation);
+			List<User> list = RegistryDAO.getUserDAO().searchBy(matchGender, "location", desiredLocation);
 			req.setAttribute("searchList", list);
 			for(User user: list){
 				System.out.println(user.getUsername());

@@ -7,7 +7,10 @@ import java.text.SimpleDateFormat;
 
 import java.util.Random;
 
+import com.happylife.dao.layer.LookingForDAOException;
+import com.happylife.dao.layer.UserDAOException;
 import com.happylife.dao.registry.RegistryDAO;
+import com.happylife.pojo.LookingFor;
 import com.happylife.pojo.User;
 
 import javax.servlet.RequestDispatcher;
@@ -29,6 +32,7 @@ public class SignUpServlet extends HttpServlet {
 		int n = rand.nextInt(16)+1;
 		String message = "";
 		String signupStatus = "";
+		String lookingforStatus = "" ;
 		
 		System.out.println("n = "+ n);
 				
@@ -58,6 +62,8 @@ public class SignUpServlet extends HttpServlet {
 		
 		//user.setImage(image);
 		
+		LookingFor lookingFor = new LookingFor();
+		
 		System.out.println("First Name is " +firstName);
 		System.out.println(lastName);
 		System.out.println(email);
@@ -76,7 +82,28 @@ public class SignUpServlet extends HttpServlet {
 			//String path = request.getSession().getServletContext().getRealPath("/") + "//WEB-INF//usrphotos//";
 			//data.get(6).write(new File(path + File.separator + image));
 			
-			signupStatus = RegistryDAO.getUserDAO().doSignUp(user);
+			try {
+				signupStatus = RegistryDAO.getUserDAO().doSignUp(user);
+			} catch (UserDAOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			User accountCreated = null;
+			try {
+				accountCreated = RegistryDAO.getUserDAO().getUserByEmail(email);
+				lookingFor.setUserId(accountCreated.getUserId());
+			} catch (UserDAOException e1) {
+				System.out.println("The user with email: " +email+" was not created in the first place");
+				e1.printStackTrace();
+			}
+			try {
+				lookingforStatus =  RegistryDAO.getLookingForDAO().insertLookingFor(lookingFor);
+			} catch (LookingForDAOException e) {
+				System.out.println("Inside SignupServlet.doPost LookingForDAOException catch block");
+				System.out.println("Message passed from LookingForDAOImpl.insertLookingFor is:" + lookingforStatus);
+				System.out.println("This is disastrous, user might have been created with no record in LookingFor");
+				e.printStackTrace();
+			}
 			//String signupStatus = RegistryDAO.getUserDAO().doHibernateSignUp(user);
 			
 			System.out.println(" this is status from doSignUp: " + signupStatus);

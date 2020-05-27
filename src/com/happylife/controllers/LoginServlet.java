@@ -15,9 +15,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
 import com.happylife.DoMath;
+import com.happylife.dao.layer.LookingForDAOException;
 import com.happylife.dao.layer.UserDAOException;
 import com.happylife.dao.registry.RegistryDAO;
-
+import com.happylife.pojo.LookingFor;
 import com.happylife.pojo.User;
 
 @WebServlet("/login")
@@ -37,13 +38,17 @@ public class LoginServlet extends HttpServlet{
 
 			try {
 				User userFetched = RegistryDAO.getUserDAO().doLogin(email, password);
+				
 				//User userFetched = RegistryDAO.getUserDAO().doHibernateLogin(email, password);
 				
 				if(userFetched != null){
 					DoMath doM = new DoMath();
+					LookingFor lookingFor = RegistryDAO.getLookingForDAO().getLookingFor(userFetched.getUserId());
+					System.out.println(lookingFor.getLookingFor());
 					
 					session.setAttribute("sessionUser", userFetched);
-					session.setAttribute("userId", userFetched.getId());
+					session.setAttribute("sessionLookingFor", lookingFor);
+					session.setAttribute("userId", userFetched.getUserId());
 					session.setAttribute("username", userFetched.getUsername());
 					session.setAttribute("gender",  userFetched.getGender());
 					
@@ -64,7 +69,7 @@ public class LoginServlet extends HttpServlet{
 					RequestDispatcher rd = req.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
 					rd.forward(req,res);
 				}
-			} catch (UserDAOException e) {
+			} catch (UserDAOException | LookingForDAOException e) {
 				e.printStackTrace();
 				res.sendRedirect("login.html");
 			}
