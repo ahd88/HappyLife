@@ -10,6 +10,7 @@ import com.happylife.dao.implementation.UserDAOImpl;
 import com.happylife.dao.layer.MessageDAO;
 import com.happylife.dao.layer.UserDAO;
 import com.happylife.dao.layer.UserDAOException;
+import com.happylife.pojo.LookingFor;
 import com.happylife.pojo.Messages;
 import com.happylife.pojo.User;
 
@@ -35,13 +36,26 @@ public class MyApp {
 		 * System.out.println("Last Login " + doM.getLastLogin(ts));
 		 */
 		
-		MessageDAO messageDao = new MessageDAOImpl();
-		List<Messages> mlist = messageDao.getChat(8, 1);
-		Iterator<Messages> itr = mlist.iterator();
-		while (itr.hasNext()){
-			Messages m = itr.next();
-			System.out.println(m.getMessageId() + " " + m.getMsgContent());
-		}
+		/*
+		 * MessageDAO messageDao = new MessageDAOImpl(); List<Messages> mlist =
+		 * messageDao.getChat(8, 1); Iterator<Messages> itr = mlist.iterator(); while
+		 * (itr.hasNext()){ Messages m = itr.next(); System.out.println(m.getMessageId()
+		 * + " " + m.getMsgContent()); }
+		 */
+		
+		DoMath doM3 = new DoMath();
+		/*
+		 * LookingFor lf = new LookingFor(1, 1, "28", "40", "Sudan", "Citizen",
+		 * "dontmind", "Arab", "dontmind", "wc", "AP", "SS", "NM", null, null, null,
+		 * null, "dontmind", "Any", "Any", "Yes", "Doctor", null, null); String query =
+		 * doM3.constructQueryL(lf, 25, "155");
+		 * System.out.println("Constructed Query in main is: " + query);
+		 */
+		/*
+		 * long arr[] = new long[] {1, 16, 34, 149, 17}; String query =
+		 * doM3.constructQuery(arr, "F"); System.out.println("Constructed Query is: " +
+		 * query);
+		 */
 	}
 
 }

@@ -3,6 +3,10 @@ package com.happylife;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.List;
+
+import com.happylife.pojo.LookingFor;
+import com.happylife.pojo.User;
 
 public class DoMath {
 
@@ -73,5 +77,150 @@ public class DoMath {
 		else if(hourDiff > 0) 	return hourDiff>1?   hourDiff + " hours": hourDiff + " hour";
 		else if(minuteDiff > 5) return minuteDiff + " minutes";
 		else return "Online";
+	}
+	
+	public String constructQuery(User user, String query) {
+		String column = "lookingin";
+		boolean flag = false;
+		switch (column) {
+		case "lookingin":
+			if(user.getLookingIn()!= null) {
+				flag = true ;
+				query = query + "(" +column + "='" + user.getLookingIn() + "' or " +column+ "='dontmind')";
+			}
+			column = "ethnicorigin";
+		case "ethnicorigin":
+			if(user.getEthnicOrigin()!= null && !user.getEthnicOrigin().equals("preferN")) {
+				if(flag) query = query + " and "; else flag = true;
+				query = query + "(" +column + "='" + user.getEthnicOrigin() + "' or " +column+ "='dontmind')";
+			}
+			column = "bodytype";
+		case "bodytype":
+			if(user.getBodyType()!= null && !user.getBodyType().equals("preferN")) {
+				if(flag) query = query + " and "; else flag = true;
+				query = query + "(" +column + "='" + user.getBodyType() + "' or " +column+ "='dontmind')";
+			}
+			column = "hijab_beard";
+		case "hijab_beard":
+			if(user.getHijabBeard()!= null && !user.getHijabBeard().equals("preferN")) {
+				if(flag) query = query + " and "; else flag = true;
+				query = query + "(" +column + "='" + user.getHijabBeard() + "' or " +column+ "='dontmind')";
+			}
+			column = "pray";
+		case "pray":
+			if(user.getPray()!= null) {
+				if(flag) query = query + " and "; else flag = true;
+				query = query + "(" +column + ">='" + user.getPray() + "' or " +column+ "='dontmind')";
+			}
+			column = "sect";
+		case "sect":
+			if(user.getSect()!= null && !user.getSect().equals("preferN")) {
+				if(flag) query = query + " and "; else flag = true;
+				query = query + "(" +column + "='" + user.getSect() + "' or " +column+ "='dontmind')";
+			}
+			column = "maritalstatus";
+		case "maritalstatus":
+			if(user.getMaritalStatus()!= null && !user.getMaritalStatus().equals("preferN")) {
+				if(flag) query = query + " and "; else flag = true;
+				query = query + "(" +column + "='" + user.getMaritalStatus() + "' or " +column+ "='dontmind')";
+			}
+			column = "profession";
+		case "profession":
+			if(user.getProfession()!= null) {
+				if(flag) query = query + " and "; else flag = true;
+				query = query + "(" +column + "='" + user.getProfession() + "' or " +column+ "='dontmind'" + " or " +column+ "='Other')";
+			}
+			column = "AgeRange";
+			/*
+			 * case "AgeRange": for(LookingFor lf:agerange) { query = query + " and "; query
+			 * = query + "'" +user.getAge(user.getDob())+ "'" + " between AgeL and AgeH "; }
+			 * column = "HeightRange"; case "HeightRange": for(LookingFor lf:heightrange) {
+			 * query = query + " and "; query = query + "'" +user.getHeight()+ "'" +
+			 * " between HeightL and HeightH "; }
+			 */
+		}
+		
+		return query;
+	}
+	public String constructLookingForQuery(User user, String [][] agerange, String [][] heightrange) {
+		String query = "select userId from looking_for where ";
+		String column = "lookingin";
+		switch (column) {
+		case "lookingin":
+			if(user.getLookingIn()!= null) {
+				query = query + column + "='" + user.getLookingIn() + "' or " +column+ "='dontmind'";
+			}
+			column = "ethnicorigin";
+		case "ethnicorigin":
+			if(user.getEthnicOrigin()!= null && !user.getEthnicOrigin().equals("preferN")) {
+				query = query + " and ";
+				query = query + column + "='" + user.getEthnicOrigin() + "' or " +column+ "='dontmind'";
+			}
+			column = "bodytype";
+		case "bodytype":
+			if(user.getBodyType()!= null &&!user.getBodyType().equals("preferN")) {
+				query = query + " and ";
+				query = query + column + "='" + user.getBodyType() + "' or " +column+ "='dontmind'";
+			}
+			column = "hijab_beard";
+		case "hijab_beard":
+			if(user.getHijabBeard()!= null && !user.getHijabBeard().equals("preferN")) {
+				query = query + " and ";
+				query = query + column + "='" + user.getHijabBeard() + "' or " +column+ "='dontmind'";
+			}
+			column = "pray";
+		case "pray":
+			if(user.getPray()!= null) {
+				query = query + " and ";
+				query = query + column + "='" + user.getPray() + "' or " +column+ "='dontmind'";
+			}
+			column = "sect";
+		case "sect":
+			if(user.getSect()!= null && !user.getSect().equals("preferN")) {
+				query = query + " and ";
+				query = query + column + "='" + user.getSect() + "' or " +column+ "='dontmind'";
+			}
+			column = "maritalstatus";
+		case "maritalstatus":
+			if(user.getMaritalStatus()!= null && !user.getMaritalStatus().equals("preferN")) {
+				query = query + " and ";
+				query = query + column + "='" + user.getMaritalStatus() + "' or " +column+ "='dontmind'";
+			}
+			column = "profession";
+		case "profession":
+			if(user.getProfession()!= null) {
+				query = query + " and ";
+				query = query + column + "='" + user.getProfession() + "' or " +column+ "='dontmind'";
+			}
+			column = "AgeRange";
+		case "AgeRange":
+			for(int i=0; i<agerange[0].length; i++) {
+				query = query + " and ";
+				query = query +user.getAge(user.getDob())+ " between '" +agerange[0][i]+ "' and '" +agerange[1][i]+ "' ";
+			}
+			column = "HeightRange";
+		case "HeightRange":
+			for(int i=0; i<heightrange[0].length; i++) {
+				query = query + " and ";
+				query = query +user.getHeight()+ " between '" +heightrange[0][i]+ "' and '" +heightrange[1][i]+ "' ";
+			}
+		}
+		
+		return query;
+	}
+	
+	
+	public String constructQuery(List<Long> userIds, String matchGender) {
+		int fl = 0;
+		int i = 0;
+		String query = "select * from hl_users where ";
+		if(userIds.get(0) != null) {
+			for(Long id:userIds) {
+				fl = 1; if(fl == 1 && i != 0) query = query + " or ";
+				query = query + "(userId='" + id + "' and gender='" + matchGender + "') ";
+				i++;
+			}
+		}
+		return query;
 	}
 }

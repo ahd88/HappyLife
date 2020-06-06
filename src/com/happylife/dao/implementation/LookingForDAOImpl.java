@@ -5,12 +5,19 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+import static java.util.stream.Collectors.toList;
 
+import com.happylife.DoMath;
 import com.happylife.dao.layer.LookingForDAO;
 import com.happylife.dao.layer.LookingForDAOException;
+import com.happylife.dao.layer.UserDAOException;
 import com.happylife.pojo.LookingFor;
+import com.happylife.pojo.User;
 
 public class LookingForDAOImpl implements LookingForDAO{
+	private static final String String = null;
 	static Connection conn;
 	static PreparedStatement pstmt;
 	static ResultSet rs;
@@ -65,7 +72,7 @@ public class LookingForDAOImpl implements LookingForDAO{
 	}
 	
 	@Override
-	public LookingFor getLookingFor(long userId) throws LookingForDAOException {
+	public LookingFor getLookingForById(long userId) throws LookingForDAOException {
 		LookingFor lf = null;
 		try {
 			conn = DatabaseConnectivity.doDBConnection();
@@ -313,4 +320,224 @@ public class LookingForDAOImpl implements LookingForDAO{
 		return msg;
 	}
 
+	@Override
+	public List<Long> getLookingForUserIds(User sessionUser) throws LookingForDAOException {
+		List<Long> userIdsList = new ArrayList<Long>();
+		try {
+			//String ageRanges [][] = getAgeRangesForGivenAge(sessionUser.getAge());
+			//String heightRanges [][] = getHeightRangesForGivenHeight(sessionUser.getHeight());
+			List<LookingFor> ageLookingForList = getAllLookingForGivenAge(sessionUser.getAge(sessionUser.getDob()));
+			List<LookingFor> heightLookingForList = getAllLookingForGivenHeight(sessionUser.getHeight());
+			List<Long> uidsOfAgeList = new ArrayList<Long>();
+			List<Long> uidsOfHeightList = new ArrayList<Long>();
+			for(LookingFor lf:ageLookingForList) {
+				long userId = lf.getUserId();
+				uidsOfAgeList.add(userId);	
+			}
+			for(LookingFor lf:heightLookingForList) {
+				long userId = lf.getUserId();
+				uidsOfHeightList.add(userId);	
+			}
+			System.out.println("ageLookingForlist size before reserving common elements only "+ ageLookingForList.size());
+			for(Long lf:uidsOfAgeList)	System.out.println("uidsOfAgeList items userId: "+ lf);
+			for(Long lf:uidsOfHeightList)	System.out.println("uidsOfHeightList items userId "+ lf);
+			List<Long> common = new ArrayList<Long>(uidsOfAgeList);
+			common.retainAll(uidsOfHeightList);
+			//List<LookingFor> common = ageLookingForList.stream().filter(heightLookingForList::contains).collect(toList());
+			System.out.println("uids common generated from uidsOfAgeList.retainAll(uidsOfHeightList "+ common.size());
+			for(Long uid:common)	System.out.println("commonList items "+ uid);
+			
+			DoMath doM = new DoMath();
+			//String query = doM.constructLookingForQuery(sessionUser, ageRanges, heightRanges);
+			
+			
+			String query = doM.constructQuery(sessionUser, "select userId from looking_for where ");
+			System.out.println("Inside getLookingForUserIds(), constructed Query from DoMath is: " + query);
+			conn = DatabaseConnectivity.doDBConnection();
+			pstmt = conn.prepareStatement(query);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()){
+				long userId  = rs.getLong(1);
+				userIdsList.add(userId);
+			}
+			System.out.println("userIdsList before reserving common elements only "+ userIdsList.size());
+			userIdsList.retainAll(common);
+			System.out.println("userIdsList after reserving common elements only "+ userIdsList.size());
+			//if(userIdsList.size() == 0) throw new LookingForDAOException("No Ids were matched in LookingFor table") ;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				if(conn != null)	conn.close();
+				if(pstmt != null)	pstmt.close();
+				if(rs != null)		rs.close();
+			} catch(Exception e){}
+		}
+		return userIdsList;
+	}
+
+	@Override
+	public String[][] getAgeRangesForGivenAge(int age) throws LookingForDAOException {
+		String agerange[][] = new String[2][];
+		try {
+			System.out.println("Inside getAgeRangesForGivenAge");
+			conn = DatabaseConnectivity.doDBConnection();
+			pstmt = conn.prepareStatement("select AgeL, AgeH from looking_for where ? between ageL and ageH");
+			pstmt.setInt(1,age);
+			rs = pstmt.executeQuery();
+			int i = 0;
+			while (rs.next()){
+				agerange[0][i] = rs.getString("AgeL");			// this approcah is giving error 
+				agerange[1][i++] = rs.getString("AgeH");			// I don't know why
+			}
+			if(agerange[0][0] == null) throw new LookingForDAOException("No Ids were matched in LookingFor table") ;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				if(conn != null)	conn.close();
+				if(pstmt != null)	pstmt.close();
+				if(rs != null)		rs.close();
+			} catch(Exception e){}
+		}
+		return agerange;
+	}
+
+	@Override
+	public String[][] getHeightRangesForGivenHeight(String height) throws LookingForDAOException {
+		String heightrange[][] = new String[2][];
+		try {
+			System.out.println("Inside getHeightRangesForGivenHeight");
+			conn = DatabaseConnectivity.doDBConnection();
+			pstmt = conn.prepareStatement("select HeightL, HeightH from looking_for where ? between HeightL and HeightH");
+			pstmt.setString(1,height);
+			rs = pstmt.executeQuery();
+			int i = 0;
+			while (rs.next()){
+				heightrange[0][i] = rs.getString("HeightL");
+				heightrange[1][i++] = rs.getString("HeightH");
+			}
+			//if(heightrange[0][0] == null) throw new LookingForDAOException("No Ids were matched in LookingFor table") ;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				if(conn != null)	conn.close();
+				if(pstmt != null)	pstmt.close();
+				if(rs != null)		rs.close();
+			} catch(Exception e){}
+		}
+		return heightrange;
+	}
+
+	@Override
+	public List<LookingFor> getAllLookingForGivenAge(int age) throws LookingForDAOException {
+		List<LookingFor> lookingForList = new ArrayList<LookingFor>();
+		try {
+			System.out.println("Inside getAllLookingForGivenAge: the argument age = " + age);
+			conn = DatabaseConnectivity.doDBConnection();
+			pstmt = conn.prepareStatement("select * from looking_for where ? between ageL and ageH");
+			pstmt.setString(1,Integer.toString(age));
+			rs = pstmt.executeQuery();
+			while (rs.next()){
+				LookingFor lf = new LookingFor();
+				long id = rs.getLong(1);
+				long userId  = rs.getLong(2);
+				String ageL  = rs.getString(3);				
+				String ageH = rs.getString(4);					
+				String lookingIn  = rs.getString(5);				
+				String residencyStatus  = rs.getString(6);				
+				String willingToRelocate  = rs.getString(7);
+				String ethnicOrigin  = rs.getString(8);				
+				String religiousHistory  = rs.getString(9);
+				String livingWithInLaws  = rs.getString(10);
+				String pray  = rs.getString(11);				
+				String sect  = rs.getString(12);
+				String maritalStatus = rs.getString(13);
+				String children = rs.getString(14);
+				String hasPDisability = rs.getString(15);
+				String likeToHaveChildren = rs.getString(16);
+				String polygamy = rs.getString(17);
+				String bodyType  = rs.getString(18);
+				String heightL = rs.getString(19);
+				String heightH = rs.getString(20);
+				String hijabBeard  = rs.getString(21);
+				String profession = rs.getString(22);
+				String highestQual = rs.getString(23);
+				String lookingfor = rs.getString(24);
+				lf = new LookingFor(id, userId, ageL, ageH, lookingIn, residencyStatus, willingToRelocate, ethnicOrigin, religiousHistory,
+						livingWithInLaws, pray, sect, maritalStatus, children, hasPDisability, likeToHaveChildren, polygamy, bodyType,
+						heightL, heightH, hijabBeard, profession, highestQual, lookingfor);
+				lookingForList.add(lf);
+			}
+			for(LookingFor lookingfor: lookingForList){
+				System.out.println("Inside getAllLookingForGivenAge: UserId in looking_for table " + lookingfor.getUserId());
+			}
+			if(lookingForList == null) throw new UserDAOException("No Ids were matched in LookingFor table") ;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				if(conn != null)	conn.close();
+				if(pstmt != null)	pstmt.close();
+				if(rs != null)		rs.close();
+			} catch(Exception e){}
+		}
+		return lookingForList;
+	}
+
+	@Override
+	public List<LookingFor> getAllLookingForGivenHeight(String height) throws LookingForDAOException {
+		List<LookingFor> lookingForList = new ArrayList<LookingFor>();
+		try {
+			System.out.println("Inside getAllLookingForGivenHeight");
+			conn = DatabaseConnectivity.doDBConnection();
+			pstmt = conn.prepareStatement("select * from looking_for where ? between HeightL and HeightH");
+			pstmt.setString(1,height);
+			rs = pstmt.executeQuery();
+			int i = 0;
+			while (rs.next()){
+				LookingFor lf = new LookingFor();
+				long id = rs.getLong(1);
+				long userId  = rs.getLong(2);
+				String ageL  = rs.getString(3);				
+				String ageH = rs.getString(4);					
+				String lookingIn  = rs.getString(5);				
+				String residencyStatus  = rs.getString(6);				
+				String willingToRelocate  = rs.getString(7);
+				String ethnicOrigin  = rs.getString(8);				
+				String religiousHistory  = rs.getString(9);
+				String livingWithInLaws  = rs.getString(10);
+				String pray  = rs.getString(11);				
+				String sect  = rs.getString(12);
+				String maritalStatus = rs.getString(13);
+				String children = rs.getString(14);
+				String hasPDisability = rs.getString(15);
+				String likeToHaveChildren = rs.getString(16);
+				String polygamy = rs.getString(17);
+				String bodyType  = rs.getString(18);
+				String heightL = rs.getString(19);
+				String heightH = rs.getString(20);
+				String hijabBeard  = rs.getString(21);
+				String profession = rs.getString(22);
+				String highestQual = rs.getString(23);
+				String lookingfor = rs.getString(24);
+				lf = new LookingFor(id, userId, ageL, ageH, lookingIn, residencyStatus, willingToRelocate, ethnicOrigin, religiousHistory,
+						livingWithInLaws, pray, sect, maritalStatus, children, hasPDisability, likeToHaveChildren, polygamy, bodyType,
+						heightL, heightH, hijabBeard, profession, highestQual, lookingfor);
+				lookingForList.add(lf);
+			}
+			if(lookingForList == null) throw new UserDAOException("No Ids were matched in LookingFor table") ;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				if(conn != null)	conn.close();
+				if(pstmt != null)	pstmt.close();
+				if(rs != null)		rs.close();
+			} catch(Exception e){}
+		}
+		return lookingForList;
+	}
 }

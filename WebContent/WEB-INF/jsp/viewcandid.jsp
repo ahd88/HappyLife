@@ -102,6 +102,7 @@
 							<ul class="summary">
 								<li><label>Username: <%=candidate.getUsername() %></label></li>
 								<li><label>Age: <%=doM.getAge(candidate.getDob()) %></label></li>
+								<li><label>Location: ${candidate.country}</label></li>
 								<li><label>Last Login: ${candidLastLogin}</label></li>
 							</ul>
 						</div>
@@ -232,13 +233,11 @@
 			      			</tr>
 			      			<tr>
 								<td class="col-md-3">Residency Status: ${candidLookingfor.residencyStatus}</td>
-								<td class="col-md-3">
+								<td class="col-md-3"> Pray: 
 									<c:choose>
 										<c:when test="${candidLookingfor.pray=='AP'}">Always Pray </c:when>
 										<c:when test="${candidLookingfor.pray=='smissfajr'}">Sometimes miss Fajr and make Qadah</c:when>
 										<c:when test="${candidLookingfor.pray=='rmissprayer'}">Rarely miss a prayer and make Qadah</c:when>
-										<c:when test="${candidLookingfor.pray=='spray'}">Sometimes Pray</c:when>
-										<c:otherwise>Intend to start praying</c:otherwise>
     								</c:choose>
 								</td>
 			      			</tr>

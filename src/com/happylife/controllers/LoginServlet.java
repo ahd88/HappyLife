@@ -43,7 +43,9 @@ public class LoginServlet extends HttpServlet{
 				
 				if(userFetched != null){
 					DoMath doM = new DoMath();
-					LookingFor lookingFor = RegistryDAO.getLookingForDAO().getLookingFor(userFetched.getUserId());
+					int age = doM.getAge(userFetched.getDob());
+					String msg = RegistryDAO.getUserDAO().updateUser(userFetched.getUserId(), "Age", Integer.toString(age));
+					LookingFor lookingFor = RegistryDAO.getLookingForDAO().getLookingForById(userFetched.getUserId());
 					System.out.println(lookingFor.getLookingFor());
 					
 					session.setAttribute("sessionUser", userFetched);

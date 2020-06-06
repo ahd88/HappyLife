@@ -56,7 +56,7 @@ public class SignUpServlet extends HttpServlet {
 		user.setUsername(username);
 		user.setPassword(password);
 		user.setGender(gender);
-		user.setCountry(country);
+		user.setLookingIn(country);
 		user.setPhone(phone);
 		user.setDob(dob);
 		

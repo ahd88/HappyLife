@@ -220,19 +220,19 @@
 			      				<td class="col-md-3">Polygamy: </td>
 			      			</tr>
 			      			<tr>
-			      				<td class="col-md-3"></td>
+			      				<th class="col-md-3">Appearance </th>
 			      				<td class="col-md-3">Languages: ${sessionuser.languages}</td>
 			      			</tr>
 			      			<tr>
-			      				<th class="col-md-3">Appearance </th>
+			      				<td class="col-md-3">Hair Color: ${sessionUser.hairColor}</td>
 			      				<th class="col-md-3">Education/Career</th>
 			      			</tr>
 			      			<tr>
-			      				<td class="col-md-3">Hair Color: ${sessionUser.hairColor}</td>
+			      				<td class="col-md-3">Body Type: ${sessionUser.bodyType}</td>
 			      				<td class="col-md-3">Profession: ${sessionuser.profession}</td>
 			      			</tr>
 			      			<tr>
-			      				<td class="col-md-3">Body Type: ${sessionUser.bodyType}</td>
+			      				<td class="col-md-3">Height: ${sessionUser.height}</td>
 			      				<td class="col-md-3">Highest Qualification: ${sessionuser.highestQual}</td>
 			      			</tr>
 			      			<tr>
@@ -281,24 +281,41 @@
 			      				<th class="col-md-3">Lifestyle / Current status</th>
 			      			</tr>
 			      			<tr>
-								<td class="col-md-3">Residency Status: ${sessionLookingFor.residencyStatus}</td>
-								<td class="col-md-3">
+								<td class="col-md-3">Residency Status: 
 									<c:choose>
+										<c:when test="${sessionLookingFor.residencyStatus=='dontmind'}">don't mind</c:when>
+										<c:when test="${sessionLookingFor.residencyStatus=='dc'}">Definitely Consider </c:when>
+										<c:when test="${sessionLookingFor.residencyStatus=='mc'}">May Consider</c:when>
+										<c:when test="${sessionLookingFor.residencyStatus=='wc'}">Would not Consider</c:when>
+    								</c:choose>
+								</td>
+								<td class="col-md-3"> Pray: 
+									<c:choose>
+										<c:when test="${sessionLookingFor.pray=='dontmind'}">don't mind</c:when>
 										<c:when test="${sessionLookingFor.pray=='AP'}">Always Pray </c:when>
 										<c:when test="${sessionLookingFor.pray=='smissfajr'}">Sometimes miss Fajr and make Qadah</c:when>
 										<c:when test="${sessionLookingFor.pray=='rmissprayer'}">Rarely miss a prayer and make Qadah</c:when>
-										<c:when test="${sessionLookingFor.pray=='spray'}">Sometimes Pray</c:when>
-										<c:otherwise>Intend to start praying</c:otherwise>
     								</c:choose>
 								</td>
 			      			</tr>
 			      			<tr>
-			      				<td class="col-md-3">Are you Willing to relocate: ${sessionLookingFor.willingToRelocate}</td>
+			      				<td class="col-md-3">Are you Willing to relocate: 
+			      					<c:choose>
+										<c:when test="${sessionLookingFor.willingToRelocate=='dontmind'}">don't mind</c:when>
+										<c:when test="${sessionLookingFor.willingToRelocate=='Yes'}">Yes</c:when>
+										<c:when test="${sessionLookingFor.willingToRelocate=='No'}">No</c:when>
+    								</c:choose>
+			      				</td>
 			      				<td class="col-md-3">What sect you wish to marry from: ${sessionLookingFor.sect}</td>
 			      			</tr>
 			      			<tr>
 								<td class="col-md-3">Ethnic Origin: ${sessionLookingFor.ethnicOrigin}</td>
-								<td class="col-md-3">Marital Status: ${sessionLookingFor.maritalStatus}</td>
+								<td class="col-md-3">Marital Status: 
+									<c:choose>
+										<c:when test="${sessionLookingFor.maritalStatus=='NM'}">Never Married</c:when>
+										<c:otherwise>${sessionLookingFor.maritalStatus}</c:otherwise>
+    								</c:choose>
+								</td>
 			      			</tr>
 			      			<tr>
 			      				<td class="col-md-3">Candidate Religious History: 
@@ -314,7 +331,19 @@
 			      				<td class="col-md-3">Has Children: ${sessionLookingFor.hasChildren}</td>
 			      			</tr>
 			      			<tr>
-			      				<td class="col-md-3">Living with in-laws: ${sessionLookingFor.livingWithInLaws}</td>
+			      				<td class="col-md-3">Living with in-laws: 
+			      					<c:choose><c:when test="${sessionLookingFor.livingWithInLaws=='dontmind'}">
+									        		don't mind
+									          </c:when>
+									          <c:when test="${sessionLookingFor.livingWithInLaws=='dc'}">
+									        		Definitely Consider
+									          </c:when>
+									          <c:when test="${sessionLookingFor.livingWithInLaws=='mc'}">
+									        		May Consider
+									          </c:when>
+											  <c:otherwise>Would not Consider </c:otherwise>
+    								</c:choose>
+			      				</td>
 			      				<td class="col-md-3">Has physical disability: ${sessionLookingFor.hasPDisability}</td>
 			      			</tr>
 			      			<tr>

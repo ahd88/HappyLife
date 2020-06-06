@@ -35,9 +35,9 @@ public class ViewProfileServlet extends HttpServlet {
 			HttpSession session = request.getSession();
 			try {
 				User candidUser = RegistryDAO.getUserDAO().getUserByUserId(candidId);
-				LookingFor lFor = RegistryDAO.getLookingForDAO().getLookingFor(candidId);
+				LookingFor lFor = RegistryDAO.getLookingForDAO().getLookingForById(candidId);
 				DoMath doM = new DoMath();
-				LookingFor candidlookingFor = RegistryDAO.getLookingForDAO().getLookingFor(candidUser.getUserId());
+				LookingFor candidlookingFor = RegistryDAO.getLookingForDAO().getLookingForById(candidUser.getUserId());
 				System.out.println("Candidate User is: " + candidUser.getEmail());
 				request.setAttribute("candidate", candidUser);
 				request.setAttribute("candidLookingfor", lFor);

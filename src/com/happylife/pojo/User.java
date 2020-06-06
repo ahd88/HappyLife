@@ -12,6 +12,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+import com.happylife.DoMath;
+
 @Entity
 @Table(name="HL_USERS")
 public class User {
@@ -40,8 +42,8 @@ public class User {
 	@Column(name="GENDER", nullable = false)
 	private String gender;
 	
-	@Column(name="COUNTRY", nullable = false)
-	private String country;
+	@Column(name="LOOKINGIN", nullable = false)
+	private String lookingIn;
 	
 	@Column(name="PHONE", nullable = false)
 	private String phone;
@@ -55,8 +57,9 @@ public class User {
 	@Column(name="RESIDENCY_STATUS", nullable = true)
 	private String residencyStatus;
 	
-	@Column(name="HOW_DID_YOU_KNOW_US", nullable = true)
-	private String howDidYouKnowUs;
+	//@GeneratedValue(strategy = GenerationType.AUTO, generator = "year_gen")
+	//@Column(name="Age", nullable = true)
+	private int age;
 	
 	@Column(name="ABOUT_MYSELF", nullable = true)
 	private String aboutMe;
@@ -129,7 +132,7 @@ public class User {
 		this.username = username;
 		this.password = password;
 		this.gender = gender;
-		this.country = country;
+		this.lookingIn = country;
 		this.phone = phone;
 		this.dob = dob;
 		this.publicPhoto = publicPhoto;
@@ -157,7 +160,7 @@ public class User {
 		this.username = username;
 		//this.password = password;
 		this.gender = gender;
-		this.country = country;
+		this.lookingIn = country;
 		this.phone = phone;
 		this.image = image;
 		this.dob = dob;
@@ -239,12 +242,12 @@ public class User {
 		this.gender = gender;
 	}
 
-	public String getCountry() {
-		return country;
+	public String getLookingIn() {
+		return lookingIn;
 	}
 
-	public void setCountry(String country) {
-		this.country = country;
+	public void setLookingIn(String country) {
+		this.lookingIn = country;
 	}
 
 	public String getPhone() {
@@ -279,12 +282,13 @@ public class User {
 		this.residencyStatus = residencyStatus;
 	}
 
-	public String getHowDidYouKnowUs() {
-		return howDidYouKnowUs;
+	public int getAge(Date date) {
+		DoMath doM = new DoMath();
+		return doM.getAge(date);
 	}
 
-	public void setHowDidYouKnowUs(String howDidYouKnowUs) {
-		this.howDidYouKnowUs = howDidYouKnowUs;
+	public void setAge(int age) {
+		this.age = age;
 	}
 
 	public String getAboutMe() {

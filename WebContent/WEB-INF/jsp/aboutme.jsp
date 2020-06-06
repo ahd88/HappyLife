@@ -147,7 +147,7 @@
 								    	<td scope="row"></td>
 								    	<td scope="row">
 								    		<select name="country" id="" class="form-control" required="">
-								    			<option value="${sessionUser.country}" selected="selected">${sessionUser.country}</option>
+								    			<option value="${sessionUser.lookingIn}" selected="selected">${sessionUser.lookingIn}</option>
 								    			
 												<option value="Sudan">Sudan</option>
 												<option value="Yemen">Yemen</option>
@@ -315,11 +315,11 @@
 		      								<select name="pray" id="" class="form-control" required="">
 			      								<option value="">select</option>
 			      								<option value="${sessionUser.pray}" selected="selected">${sessionUser.pray}</option>
-												<option value="AP">Always Pray</option>
-												<option value="smissfajr">Sometimes miss Fajr and make Qadah</option>
-												<option value="rmissprayer">Rarely miss a prayer and make Qadah</option>
-												<option value="spray">Sometimes Pray</option>
-												<option value="itostart">Intend to start praying</option>
+												<option value="AP">Always Pray</option>									<!-- 5 AP -->
+												<option value="smissfajr">Sometimes miss Fajr and make Qadah</option>	<!-- 4 smissfajr -->
+												<option value="rmissprayer">Rarely miss a prayer and make Qadah</option><!-- 3 rmissprayer -->
+												<option value="spray">Sometimes Pray</option>							<!-- 2 spray -->
+												<option value="itostart">Intend to start praying</option>				<!-- 1 itostart-->
 											</select>
 		      							</td>
 		      							<td class="col-md-2"></td>
@@ -338,8 +338,10 @@
 		      								<select name="sect" id="" class="form-control" required="">
 			      								<option value="">select</option>
 			      								<option value="${sessionUser.sect}" selected="selected">${sessionUser.sect}</option>
-												<option value="salafi">Salaf</option>
-												<option value="soufi">Soufia</option>
+												<option value="preferN">Prefer not to say</option>
+												<option value="SS">Sunni Salafi</option>
+												<option value="Sunni">Sunni</option>
+												<option value="Soufi">Soufi</option>
 											</select>
 		      							</td>
 		      							<td class="col-md-4"></td>
@@ -499,6 +501,8 @@
 		      								<select name="hijaborbeard" id="" class="form-control" required="">
 			      								<option value="">select</option>
 			      								<option value="${sessionUser.hijabBeard}" selected="selected">${sessionUser.hijabBeard}</option>
+												
+												<option value="preferN">Prefer not to say</option>
 												<option value="Yes">Yes</option>
 												<option value="No">No</option>
 											</select>
@@ -512,10 +516,11 @@
 			      								<select name="hijaborbeard" id="" class="form-control" required="">
 				      								<option value="">select</option>
 				      								<option value="${sessionUser.hijabBeard}" selected="selected">${sessionUser.hijabBeard}</option>
-													<option value="always">Always</option>
+													<option value="preferN">Prefer not to say</option>
+													<option value="Always">Always</option>
 													<option value="withniqab">Always with Niqab</option>
-													<option value="sometimes">Sometimes</option>
-													<option value="never">Never</option>
+													<option value="Sometimes">Sometimes</option>
+													<option value="Never">Never</option>
 												</select>
 			      							</td>
 			      							<td class="col-md-4"></td>
@@ -609,6 +614,7 @@
 												<option value="Pharmacist">Pharmacist</option>
 												<option value="Psychologist">Psychologist</option>
 												<option value="semployed">Self-employed Person</option>
+												<option value="sales">Sales Person</option>
 												<option value="Supervisor">Supervisor</option>
 												<option value="Student">Student</option>
 												<option value="sconsultant">Software Consultant</option>
@@ -673,7 +679,7 @@
 		      							<td class="col-md-1">
 		      								<select name="agefrom" id="" class="form-control">
 		      									<option value="${sessionLookingFor.ageL}">${sessionLookingFor.ageL}</option>
-			      								<option value="any">Any</option>
+			      								<option value="Any">Any</option>
 												<option value="18">18</option>
 												<option value="19">19</option>
 												<option value="20">20</option>
@@ -716,7 +722,7 @@
 		      							<td class="col-md-1">
 		      								<select name="ageto" id="" class="form-control">
 		      									<option value="${sessionLookingFor.ageH}">${sessionLookingFor.ageH}</option>
-			      								<option value="any">Any</option>
+			      								<option value="Any">Any</option>
 												<option value="53">53</option>
 												<option value="52">52</option>
 												<option value="51">51</option>
@@ -777,6 +783,7 @@
 								    		<select name="candidcountry" id="" class="form-control">
 								    			<option value="${sessionLookingFor.lookingIn}" selected="selected">${sessionLookingFor.lookingIn}</option>
 								    			
+								    			<option value="dontmind">don't mind</option>
 												<option value="Sudan">Sudan</option>
 												<option value="Yemen">Yemen</option>
 												<option value="India">India</option>
@@ -813,8 +820,8 @@
 		      									
 			      								<option value="dontmind">don't mind</option>
 												<option value="Citizen">Citizen</option>
-												<option value="studentvisa">Student Visa</option>
-												<option value="workpermit">Work Permit</option>
+												<option value="svisa">Student Visa</option>
+												<option value="wpermit">Work Permit</option>
 												<option value="president">Permanent Resident</option>
 												<option value="Other">Other</option>
 											</select>
@@ -836,8 +843,8 @@
 		      									<option value="${sessionLookingFor.willingToRelocate}" selected="selected">${sessionLookingFor.willingToRelocate}</option>
 		      									
 			      								<option value="dontmind">don't mind</option>
-												<option value="yes">Yes</option>
-												<option value="no">No</option>
+												<option value="Yes">Yes</option>
+												<option value="No">No</option>
 											</select>
 		      							</td>
 		      							<td class="col-md-4"></td>
@@ -937,13 +944,14 @@
 		      				<table class="table table-dark">
 		      					<tbody>
 		      						<tr>
-		      							<th class="col-md-2">What Sect are you?</th>
+		      							<th class="col-md-2">What Sect are you looking for?</th>
 		      							<td class="col-md-2">
 		      								<select name="candidsect" id="" class="form-control">
 		      									<option value="${sessionLookingFor.sect}" selected="selected">${sessionLookingFor.sect}</option>
 		      									
 			      								<option value="dontmind">don't mind</option>
-												<option value="Salaf">Salaf</option>
+												<option value="SS">Sunni Salafi</option>
+												<option value="Sunni">Sunni</option>
 												<option value="Soufia">Soufia</option>
 											</select>
 		      							</td>
@@ -1065,6 +1073,7 @@
 			      								<option value="${sessionLookingFor.bodyType}" selected="selected">${sessionLookingFor.bodyType}</option>
 			      								
 			      								<option value="">select</option>
+			      								<option value="dontmind">don't mind</option>
 												<option value="Slim">Slim</option>
 												<option value="Average">Average</option>
 												<option value="Athletic">Athletic</option>
@@ -1125,7 +1134,7 @@
 		      								<select name="candidheightf" id="" class="form-control">
 		      									<option value="${sessionLookingFor.heightL}" selected="selected">${sessionLookingFor.heightL}</option>
 		      									
-												<option value="any">Any</option>
+												<option value="Any">Any</option>
 												<option value="134">134</option>
 												<option value="137">137</option>
 												<option value="139">139</option>
@@ -1169,7 +1178,7 @@
 		      								<select name="candidheightto" id="" class="form-control">
 		      									<option value="${sessionLookingFor.heightH}" selected="selected">${sessionLookingFor.heightH}</option>
 		      									
-												<option value="any">Any</option>
+												<option value="Any">Any</option>
 												<option value="212">212</option>
 												<option value="210">210</option>
 												<option value="208">208</option>

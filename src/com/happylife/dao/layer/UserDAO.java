@@ -11,7 +11,7 @@ public interface UserDAO {
 	public String doHibernateSignUp(User user)throws UserDAOException;
 	//public void updateUser(User user)throws UserDAOException;
 	//public void updateUserHibernate(User user)throws UserDAOException;	//to be implemented
-	public List<User> searchBy(String matchgender, String ...v)throws UserDAOException;
+	public List<User> searchBy(User sessionUser, String ...v)throws UserDAOException;
 	//public List<User> searchByLocationHibernate(String matchgender, String ...v)throws UserDAOException;
 	public User getUserByUserId(long id)throws UserDAOException;
 	//public User getUserHibernate(long id)throws UserDAOException;

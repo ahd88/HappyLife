@@ -85,22 +85,23 @@
  			</ul>
 		<div class="tab-content">
 			<div id="menu2" class="tab-pane fade in active">
+				
 				<form action="${pageContext.request.contextPath}/search" method="GET">
 				<div class="row">
 					<br>
 					<div class="column" style="background-color:#33b5e5;">
 						<ul>
-	    					<li id="idmatch" >Ideal Match <input type="checkbox" id="idealcb" name="" value=""></li>
+	    					<li id="idmatch" >Ideal Match <input type="checkbox" id="idealcb" name="select" value="idealcb"></li>
 	    					
-	    					<li id="lookingFor">Whom I'm looking for <input type="checkbox" id="" name="" value=""></li>
-	    					<li id="lookingForMe">who's looking for me <input type="checkbox" id="" name="" value=""></li>
-	    					<li id="onlineNow">on-Line Now <input type="checkbox" id="" name="" value=""></li>
-	    					<li id="photosUploaded">Photos uploaded <input type="checkbox" id="" name="" value=""></li>
-	    					<li id="hvntviewed">only those I haven't viewed <input type="checkbox" id="" name="lookfor" value=""></li>
-	    					<li id="hvntmessgd">only those I haven't messaged <input type="checkbox" id="" name="lookfor" value=""></li>
+	    					<li id="lookingFor">Whom I'm looking for <input type="checkbox" id="" name="lfselect" value="ilookfcb"></li>
+	    					<li id="lookingForMe">who's looking for me <input type="checkbox" id="" name="lfmselect" value="lookformecb"></li>
+	    					<li id="onlineNow">on-Line Now <input type="checkbox" id="" name="select" value="online"></li>
+	    					<li id="photosUploaded">Photos uploaded <input type="checkbox" id="" name="select" value="photoupl"></li>
+	    					<li id="hvntviewed">only those I haven't viewed <input type="checkbox" id="" name="select" value="notviewed"></li>
+	    					<li id="hvntmessgd">only those I haven't messaged <input type="checkbox" id="" name="select" value="notmsged"></li>
 	    					<li id="age-select"><div class="">Aged from 
-	    						<select class="">
-	    							<option value="any">Any</option>
+	    						<select class="" name="agel">
+	    							<option value="Any">Any</option>
 									<option value="18">18</option>
 									<option value="19">19</option>
 									<option value="20">20</option>
@@ -140,8 +141,8 @@
 	    						</select>
 	    					</div></li>
 	    					<li>to 
-	    						<select class="">
-	    							<option value="any">Any</option>
+	    						<select class="" name="ageh">
+	    							<option value="Any">Any</option>
 									<option value="53">53</option>
 									<option value="52">52</option>
 									<option value="51">51</option>
@@ -181,13 +182,14 @@
 	    						</select>
 	    					</li>
 	    					<li id="selectContainer"><div>In 
-	    						<select name="country" id="inputCountry" class="" required="">
+	    						<select name="country" id="inputCountry" class="">
+	    							<option value="Any" selected="selected">Select place</option>
 									<option value="Sudan">Sudan</option>
-									<option value="Yemen" selected="selected">Yemen</option>
+									<option value="Yemen">Yemen</option>
 									<option value="India">India</option>
 								</select>
 	    					</div></li>
-	    					<li><input class="btn btn-lg btn-primary btn-block" type="submit" value="Find a match"></li>
+	    					<li><input class="btn btn-lg btn-primary btn-block" type="submit" value="Findamatch"></li>
 		  				</ul>
 					 </div>
 					 
