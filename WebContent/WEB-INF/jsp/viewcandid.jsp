@@ -102,13 +102,13 @@
 							<ul class="summary">
 								<li><label>Username: <%=candidate.getUsername() %></label></li>
 								<li><label>Age: <%=doM.getAge(candidate.getDob()) %></label></li>
-								<li><label>Location: ${candidate.country}</label></li>
+								<li><label>Location: ${candidate.lookingIn}</label></li>
 								<li><label>Last Login: ${candidLastLogin}</label></li>
 							</ul>
 						</div>
 						<div class="item4 col-xs-12 col-md-5">
 							<ul class="primary">
-								<li id="morelikeli"><a href="#prfprofile.php">More Like <%=candidate.getUsername() %></a></li>
+								<li id="morelikeli"><a href="/HappyLife/morelike?=<%=candidate.getUserId()%>">More Like <%=candidate.getUsername() %></a></li>
 								<li id="messagetoli"><a href="/HappyLife/sendmessageto?=<%=candidate.getUserId()%>">Send a message </a></li>
 								<li id="deladdfavli"><a href="#bestmatch.php">Add to My Favourites</a></li>
 								<li id="photoli"><a href="#lookingforme.php">Ask to exchange Photos</a></li>
@@ -129,11 +129,11 @@
 					<table class="table table-dark">
 						<tbody>
 							<tr>
-								<th class="col-md-4">Looking For</th>
+								<th class="col-md-4">About myself</th>
 							</tr>
 							<tr>
-								<th><c:if test="${not empty candidate.lookingFor}">
-									<p>${candidate.lookingFor}</p>
+								<th><c:if test="${not empty candidate.aboutMe}">
+									<p>${candidate.aboutMe}</p>
 								</c:if></th>
 							</tr>
 							
@@ -147,7 +147,15 @@
 			      			</tr>
 			      			<tr>
 			      				<td class="col-md-3">Profile posted by: ${candidate.profilePostedBy}</td>
-			      				<td class="col-md-3">Pray ${candidate.pray}</td>
+			      				<td class="col-md-3">Pray: 
+			      					<c:choose>
+										<c:when test="${candidate.pray=='5'}">Always Pray </c:when>
+										<c:when test="${candidate.pray=='4'}">Sometimes miss Fajr and make Qadah</c:when>
+										<c:when test="${candidate.pray=='3'}">Rarely miss a prayer and make Qadah</c:when>
+										<c:when test="${candidate.pray=='2'}">Sometimes Pray</c:when>
+										<c:when test="${candidate.pray=='1'}">Intend to start praying</c:when>
+    								</c:choose>	
+    							</td>
 			      			</tr>
 			      			<tr>
 			      				<td class="col-md-3">Residency Status: ${candidate.residencyStatus}</td>
@@ -155,7 +163,12 @@
 			      			</tr>
 			      			<tr>
 			      				<td class="col-md-3">Are you Willing to relocate: </td>
-			      				<td class="col-md-3">Marital Status ${candidate.maritalStatus}</td>
+			      				<td class="col-md-3">Marital Status:
+			      					<c:choose>
+										<c:when test="${candidate.maritalStatus=='NM'}">Never Married</c:when>
+										<c:otherwise>${candidate.maritalStatus}</c:otherwise>
+    								</c:choose>
+			      				</td>
 			      			</tr>
 			      			<tr>
 			      				<td class="col-md-3">Ethnic Origin: ${candidate.ethnicOrigin}</td>
@@ -235,7 +248,7 @@
 								<td class="col-md-3">Residency Status: ${candidLookingfor.residencyStatus}</td>
 								<td class="col-md-3"> Pray: 
 									<c:choose>
-										<c:when test="${candidLookingfor.pray=='AP'}">Always Pray </c:when>
+										<c:when test="${candidLookingfor.pray=='5'}">Always Pray </c:when>
 										<c:when test="${candidLookingfor.pray=='smissfajr'}">Sometimes miss Fajr and make Qadah</c:when>
 										<c:when test="${candidLookingfor.pray=='rmissprayer'}">Rarely miss a prayer and make Qadah</c:when>
     								</c:choose>
@@ -247,7 +260,12 @@
 			      			</tr>
 			      			<tr>
 								<td class="col-md-3">Ethnic Origin: ${sessionLookingFor.ethnicOrigin}</td>
-								<td class="col-md-3">Marital Status: ${sessionLookingFor.maritalStatus}</td>
+								<td class="col-md-3">Marital Status: 
+									<c:choose>
+										<c:when test="${sessionLookingFor.maritalStatus=='NM'}">Never Married</c:when>
+										<c:otherwise>${sessionLookingFor.maritalStatus}</c:otherwise>
+    								</c:choose>
+								</td>
 			      			</tr>
 			      			<tr>
 			      				<td class="col-md-3">Candidate Religious History: 

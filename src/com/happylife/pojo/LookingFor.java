@@ -18,70 +18,70 @@ public class LookingFor {
 	@Column(name="userId", updatable = false, nullable = false)
 	private long userId;
 	
-	@Column(name="AgeL")
+	@Column(name="AgeL", nullable = true)
 	private String ageL;
 	
-	@Column(name="AgeH")
+	@Column(name="AgeH", nullable = true)
 	private String ageH;
 	
-	@Column(name="LOOKINGIN")
+	@Column(name="LOOKINGIN", nullable = true)
 	private String lookingIn;
 	
-	@Column(name="RESIDENCY_STATUS")
+	@Column(name="RESIDENCY_STATUS", nullable = true)
 	private String residencyStatus;
 	
-	@Column(name="WILLING_TO_RELOCATE")
+	@Column(name="WILLING_TO_RELOCATE", nullable = true)
 	private String willingToRelocate;
 	
-	@Column(name="EthnicOrigin")
+	@Column(name="EthnicOrigin", nullable = true)
 	private String ethnicOrigin;
 	
-	@Column(name="religiousHistory")
+	@Column(name="religiousHistory", nullable = true)
 	private String religiousHistory;
 	
-	@Column(name="Living_With_InLaws")
+	@Column(name="Living_With_InLaws", nullable = true)
 	private String livingWithInLaws;
 	
-	@Column(name="Pray")
+	@Column(name="Pray", nullable = true)
 	private String pray;
 	
-	@Column(name="Sect")
+	@Column(name="Sect", nullable = true)
 	private String sect;
 	
-	@Column(name="MaritalStatus")
+	@Column(name="MaritalStatus", nullable = true)
 	private String maritalStatus;
 	
-	@Column(name="HasChildren")
+	@Column(name="HasChildren", nullable = true)
 	private String hasChildren;
 	
-	@Column(name="HasPDisability")
+	@Column(name="HasPDisability", nullable = true)
 	private String hasPDisability;
 	
-	@Column(name="LikeToHaveChildren")
+	@Column(name="LikeToHaveChildren", nullable = true)
 	private String likeToHaveChildren;
 	
-	@Column(name="Polygamy")
+	@Column(name="Polygamy", nullable = true)
 	private String polygamy;
 	
-	@Column(name="BodyType")
+	@Column(name="BodyType", nullable = true)
 	private String bodyType;
 	
-	@Column(name="HeightL")
+	@Column(name="HeightL", nullable = true)
 	private String heightL;
 	
-	@Column(name="HeightH")
+	@Column(name="HeightH", nullable = true)
 	private String heightH;
 	
-	@Column(name="Hijab_Beard")
+	@Column(name="Hijab_Beard", nullable = true)
 	private String hijabBeard;
 	
-	@Column(name="Profession")
+	@Column(name="Profession", nullable = true)
 	private String profession;
 	
-	@Column(name="MinimumQual")
+	@Column(name="MinimumQual", nullable = true)
 	private String minimumQual;
 	
-	@Column(name="LOOKING_FOR")
+	@Column(name="LOOKING_FOR", nullable = true)
 	private String lookingFor;
 	
 	public LookingFor() {

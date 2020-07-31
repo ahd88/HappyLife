@@ -2,6 +2,8 @@ package com.happylife.controllers;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,9 +19,17 @@ import org.springframework.validation.BindingResult;
 import com.happylife.DoMath;
 import com.happylife.dao.layer.LookingForDAOException;
 import com.happylife.dao.layer.UserDAOException;
+import com.happylife.dao.layer.ViewedDAOException;
 import com.happylife.dao.registry.RegistryDAO;
 import com.happylife.pojo.LookingFor;
 import com.happylife.pojo.User;
+import com.happylife.pojo.Viewed;
+
+/*
+ * The viewedMe to be shown in the myprofile page
+ * but three only will be shown, rest shall be displayed in a different page 
+ * 
+ * */
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet{
@@ -46,6 +56,28 @@ public class LoginServlet extends HttpServlet{
 					int age = doM.getAge(userFetched.getDob());
 					String msg = RegistryDAO.getUserDAO().updateUser(userFetched.getUserId(), "Age", Integer.toString(age));
 					LookingFor lookingFor = RegistryDAO.getLookingForDAO().getLookingForById(userFetched.getUserId());
+					List<Viewed> viewedMe = RegistryDAO.getViewedDAO().getViewedForUser(userFetched.getUserId(), userFetched.getGender());
+					System.out.println("LoginServlet, people viewed me");
+					
+					if(viewedMe!= null) {
+						int count = 0;
+						List<User> viewedList = new ArrayList<User>();
+						for(Viewed v:viewedMe) {
+							count++;
+							if(count<=3) {
+								User userViewedMe = new User();
+								System.out.println(v.getHistoryContent());
+								if(userFetched.getGender().equals("M")) userViewedMe = RegistryDAO.getUserDAO().getUserByUserId(v.getUid2());
+								else userViewedMe = RegistryDAO.getUserDAO().getUserByUserId(v.getUid1());
+								viewedList.add(userViewedMe);		// I need to add only three to the myprofile page
+							}
+							
+						}
+						session.setAttribute("viewedMeList", viewedList);	// To be avoided, not to overload session
+						//session.setAttribute("lastViewedMe", viewedList.get(viewedList.size()-1));		// This also creates some problems if none viewed user profile
+						//List<User> subViewedList = viewedList.subList(viewedList.size()-3, viewedList.size());		// This approach has a problem because not everytime there are at least 3 people viewed the profile 
+					}
+					
 					System.out.println(lookingFor.getLookingFor());
 					
 					session.setAttribute("sessionUser", userFetched);
@@ -61,7 +93,7 @@ public class LoginServlet extends HttpServlet{
 					session.setAttribute("myAge", doM.getAge(userFetched.getDob()));
 					System.out.println("Fetched Personal photo name is "+ userFetched.getImage());
 					System.out.println("Fetched Public photo name is "+ userFetched.getPublicPhoto());
-					session.setAttribute("photopath", "F:/GitHub/HappyLife/WebContent/WEB-INF/usrphotos/"+userFetched.getImage());
+					session.setAttribute("photopath", "D:/tutorials/Github/HappyLife/WebContent/WEB-INF/usrphotos/"+userFetched.getImage());
 					RequestDispatcher rd = req.getRequestDispatcher("/WEB-INF/jsp/myprofile.jsp");
 					rd.forward(req, res);
 					//res.sendRedirect("myprofile");
@@ -71,7 +103,7 @@ public class LoginServlet extends HttpServlet{
 					RequestDispatcher rd = req.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
 					rd.forward(req,res);
 				}
-			} catch (UserDAOException | LookingForDAOException e) {
+			} catch (UserDAOException | LookingForDAOException | ViewedDAOException e) {
 				e.printStackTrace();
 				res.sendRedirect("login.html");
 			}

@@ -6,8 +6,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -135,7 +139,7 @@ public class UserDAOImpl implements UserDAO {
 			pstmt.setString(7,user.getGender());
 			pstmt.setString(8,user.getLookingIn());
 			pstmt.setString(9,user.getPhone());
-			pstmt.setString(10,"0");
+			pstmt.setString(10,user.getImage());
 			pstmt.setDate(11,user.getDob());
 			pstmt.setInt(12,user.getAge(user.getDob()));
 			pstmt.setString(13,null);
@@ -178,8 +182,8 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public List<User> searchBy(User sessionUser, String... v) throws UserDAOException {
 		List<User> candidateList = new ArrayList<User>();
-		String matchGender = getMatchGender(sessionUser.getGender());
-		System.out.println("matchGender is:" + matchGender);
+		List<User> moreLikeCandidateList = new ArrayList<User>();
+		boolean isSessionUser = true;
 		
 		if (v.length %2 != 0) { 
 			System.out.println( "wrong number of arguments, number of Arguments must be even" );
@@ -189,55 +193,96 @@ public class UserDAOImpl implements UserDAO {
 			conn = DatabaseConnectivity.doDBConnection();
 			for(int i=0 ; i< v.length; i+=2) {
 				switch(v[i]) {
-				case "location":
-					System.out.println("Inside searchBy case location");
+				case "lookingIn":
+					System.out.println("Inside searchBy case lookingIn");
 					candidateList = getByLocation(sessionUser, v[i+1]);
 					if(candidateList == null) throw new UserDAOException("Your Location Search Criteria is not met") ;
 					
 					break;
 					
+				case "likecandid":
+					System.out.println("Inside searchBy: case likecandid: ");
+					isSessionUser = false;
+					List<User> lookingForList = getLookingForGivenUser(sessionUser, isSessionUser);	// this represents candidateUser not sessionUser
+					List<User> candidLookingForList = getIamLookingFor(sessionUser, isSessionUser);	// this represents candidateUser not sessionUser
+					moreLikeCandidateList = retainAllofUser(lookingForList, candidLookingForList);
+					System.out.println("uids common generated from lookingForMeList.retainAll(iamLookingForList) "+ candidateList.size());
+					if(moreLikeCandidateList == null) throw new UserDAOException("More like candidate Search Criteria is not met") ;
+					
+					break;
+					
 				case "lookformecb":
 					System.out.println("Inside searchBy: case LookForMe");
-					
-					candidateList = getLookingForMe(sessionUser);
+					isSessionUser = true;
+					candidateList = getLookingForGivenUser(sessionUser, isSessionUser);
 					if(candidateList == null) throw new UserDAOException("You Looking_For_Me Search Criteria is not met") ;
 					
 					break;
 				case "ilookfcb":
 					System.out.println("Inside searchBy: case whom I am looking for: ");
-					candidateList = getIamLookingFor(sessionUser);
+					isSessionUser = true;
+					candidateList = getIamLookingFor(sessionUser, isSessionUser);
 					if(candidateList == null) throw new UserDAOException("Your whom_I_am_Looking_For Search Criteria is not met") ;
 					
 					break;
 					
 				case "idealcb":
 					System.out.println("Inside searchBy: case Ideal: ");
-					List<User> lookingForMeList = getLookingForMe(sessionUser);
-					List<User> iamLookingForList = getIamLookingFor(sessionUser);
-					List<Long> lookingForMeUids = new ArrayList<Long>();
-					List<Long> iamLookingForUids = new ArrayList<Long>();;
-					for(User user:lookingForMeList) {
-						long userId = user.getUserId();
-						lookingForMeUids.add(userId);	
-					}
-					for(User user:iamLookingForList) {
-						long userId = user.getUserId();
-						iamLookingForUids.add(userId);	
-					}
+					isSessionUser = true;
+					List<User> lookingForMeList = getLookingForGivenUser(sessionUser, isSessionUser);
+					List<User> iamLookingForList = getIamLookingFor(sessionUser, isSessionUser);
+					candidateList = retainAllofUser(lookingForMeList, iamLookingForList);
+					System.out.println("uids common generated from lookingForMeList.retainAll(iamLookingForList) "+ candidateList.size());
+					if(candidateList == null) throw new UserDAOException("Your Ideal Match Search Criteria is not met") ;
 					
-					List<Long> common = new ArrayList<Long>(lookingForMeUids);
-					common.retainAll(iamLookingForUids);
-					System.out.println("uids common generated from lookingForMeUids.retainAll(iamLookingForUids) "+ common.size());
-					for(User u:lookingForMeList.size()<iamLookingForList.size()?lookingForMeList:iamLookingForList) {
-						if(common.contains(u.getUserId())) candidateList.add(u);
-					}
+					break;
+					
+				case "online":
+					System.out.println("Inside searchBy: case Online: ");
+					candidateList = getByOnline(sessionUser);
 					if(candidateList == null) throw new UserDAOException("Your Ideal Match Search Criteria is not met") ;
 					
 					break;
 					
 				case "agel":	// this now works for ageh & agelow
 					System.out.println("Inside searchBy case age");
-					candidateList = getByAge(sessionUser, v[i+1], v[i+3]);
+					System.out.println("Age low inside searchBy(), agel case, agel = " + v[i+1]);
+					System.out.println("Age high inside searchBy(), agel case, ageh case = " + v[i+3]);
+					List<User> ageList = getByAge(sessionUser, v[i+1], v[i+3]);
+					candidateList = ageList;
+					//boolean isLocationInArray = Arrays.stream(v).anyMatch("location"::equals);
+					//boolean isOnlineInArray = Arrays.stream(v).anyMatch("isOnline"::equals);
+					//System.out.println("Does search url contain 'location'? " + isLocationInArray + ", does it contain 'online'? " + isOnlineInArray);
+					List<User> list = new ArrayList<User>();
+					if(!(v[i+5].equalsIgnoreCase("Any"))) { 
+						list = getByLocation(sessionUser, v[i+5]);
+						candidateList = retainAllofUser(candidateList, list);
+						System.out.println("uids common generated from ageList.retainAll(countryList) "+ candidateList.size());
+					}else if((v[i+7].equals("true"))) {
+						System.out.println("v[i+7] which is online flag is "+ v[i+7]);
+						list = getByOnline(sessionUser);
+						candidateList = retainAllofUser(candidateList, list);
+						System.out.println("uids common generated from ageList.retainAll(onlineList) "+ candidateList.size());
+					}else if((v[i+9].equals("true"))) {
+						System.out.println("v[i+9] which is photouploaded flag is "+ v[i+9]);
+						list = getByPhotoUploaded(sessionUser);
+						candidateList = retainAllofUser(candidateList, list);
+						System.out.println("uids common generated from ageList.retainAll(photouploadedList) "+ candidateList.size());
+					}else if((v[i+11].equals("true"))) {
+						System.out.println("v[i+11] which is isNotmsged flag is "+ v[i+11]);
+						List<Long> recipientIdsList = getByMessaged(sessionUser);
+						/*List<Long> ageListUids = new ArrayList<Long>();
+						for(User user:ageList) {
+							long userId = user.getUserId();
+							ageListUids.add(userId);	
+						}
+						List<Long> commonList = recipientIdsList;
+						commonList.retainAll(ageListUids);*/
+						List<User> notMessagedUserList = getNotMessagedUserList(sessionUser, recipientIdsList); 
+						
+						candidateList = retainAllofUser(candidateList, notMessagedUserList);
+						System.out.println("uids common generated from ageList.retainAll(notMessagedUserList) "+ candidateList.size());
+					}else candidateList = ageList;
 					if(candidateList == null) throw new UserDAOException("You Search Criteria is not met") ;
 					
 					break;
@@ -256,172 +301,24 @@ public class UserDAOImpl implements UserDAO {
 		
 		return candidateList;
 	}
-	
-	
-	String getMatchGender(String gender) {
-		String matchGender = "";
-		if(gender.equals("M"))	matchGender = "F";
-		else	matchGender = "M";
-		return matchGender;
-	}
-	
-	List<User> getByLocation(User sessionUser, String desiredLocation){
+
+
+	/*
+	 * this user can be sessionUser
+	 * it can also be used more like 'candidate'
+	 * due to this fact flag to indicate which user has to passed  
+	 * */
+	private List<User> getLookingForGivenUser(User user, boolean isSessionUser) {
 		List<User> candidateList = new ArrayList<User>();
-		String matchGender = getMatchGender(sessionUser.getGender());
-		try {
-			pstmt = conn.prepareStatement("select * from HL_USERS where gender=? and lookingin=?");
-			System.out.println("select * from HL_USERS where gender='"+matchGender+"' and lookingin='"+desiredLocation+"'");
-			pstmt.setString(2,desiredLocation);
-			pstmt.setString(1,matchGender);
-			rs = pstmt.executeQuery();
-			
-			while (rs.next()){
-				long userId  = rs.getLong(1);					
-				String fname  = rs.getString(2);				
-				String lname = rs.getString(3);					
-				String emailId  = rs.getString(4);				
-				String uname  = rs.getString(5);				
-				String pass  = rs.getString(6);			// not taken		
-				String gender  = rs.getString(7);				
-				String country  = rs.getString(8);				
-				String phone  = rs.getString(9);				
-				String image  = rs.getString(10);	
-				Date dob = rs.getDate(11);
-				String residencyStatus = rs.getString(12);
-				String aboutMyself = rs.getString(14);
-				String lookingFor = rs.getString(15);
-				String publicPhoto = rs.getString(16);
-				Timestamp lastLogin = rs.getTimestamp(17);
-				String profilePostedBy  = rs.getString(18);
-				String origin  = rs.getString(19);
-				String religiousHistory  = rs.getString(20);
-				String hairColor  = rs.getString(21);
-				String bodyType  = rs.getString(22);
-				String hijabBeard  = rs.getString(24);
-				String height = rs.getString(25);
-				String pray = rs.getString(26);
-				String sect = rs.getString(27);
-				String maritalStatus = rs.getString(28);
-				String children = rs.getString(29);
-				String likeToHaveChildren = rs.getString(30);
-				String langs = rs.getString(31);
-				String profession = rs.getString(32);
-				String highestQual = rs.getString(33);
-				
-				User candidate = new User(userId, fname, lname, emailId, uname, gender, country, phone, image, dob, 
-						residencyStatus, aboutMyself, lookingFor, publicPhoto, lastLogin, profilePostedBy, origin, 
-						religiousHistory, hairColor, bodyType, hijabBeard, height, pray, sect, maritalStatus, children, 
-						likeToHaveChildren, langs, profession, highestQual);
-				candidateList.add(candidate);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return candidateList;
-	}
-	
-	Date constructDate(String age) {
-		Date dateSql = null;
-		if(!age.equalsIgnoreCase("Any"))	{
-			int year = Calendar.getInstance().get(Calendar.YEAR);
-			int agel = Integer.parseInt(age);
-			int yearL = year - agel;
-			String dateStr = yearL+"-01-01";
-			
-			//Date date = Date.valueOf(dateStr);
-		}
-		return dateSql;
-	}
-	
-	List<User> getByAge(User sessionUser, String agelow, String agehigh) {
-		List<User> candidateList = new ArrayList<User>();
-		String matchGender = getMatchGender(sessionUser.getGender());
-		Date dateLow = constructDate(agelow);
-		Date dateHigh = constructDate(agehigh);
-		System.out.println("Inside searchBy case dateStr = " + dateLow);
-		System.out.println("Inside searchBy case dateStr = " + dateHigh);
-		
-		try {
-			if((dateLow != null) && (dateHigh != null)) { 
-				pstmt = conn.prepareStatement("select * from HL_USERS where gender=? and dob between ? and ?");
-				pstmt.setDate(2,dateHigh);
-				pstmt.setDate(3,dateLow);
-				pstmt.setString(1,matchGender);
-			}else if(dateLow != null) {
-				pstmt = conn.prepareStatement("select * from HL_USERS where gender=? and dob <= ?");
-				pstmt.setDate(2,dateLow);
-				pstmt.setString(1,matchGender);
-			}else if(dateHigh != null) {
-				pstmt = conn.prepareStatement("select * from HL_USERS where gender=? and dob >= ?");
-				pstmt.setDate(2,dateHigh);
-				pstmt.setString(1,matchGender);
-			}else  {
-				pstmt = conn.prepareStatement("select * from HL_USERS where gender=?");
-				pstmt.setString(1,matchGender);
-			}
-			rs = pstmt.executeQuery();
-			
-			while (rs.next()){
-				long userId  = rs.getLong(1);					
-				String fname  = rs.getString(2);				
-				String lname = rs.getString(3);					
-				String emailId  = rs.getString(4);				
-				String uname  = rs.getString(5);				
-				String pass  = rs.getString(6);			// not taken		
-				String gender  = rs.getString(7);				
-				String country  = rs.getString(8);				
-				String phone  = rs.getString(9);				
-				String image  = rs.getString(10);	
-				Date dob = rs.getDate(11);
-				String residencyStatus = rs.getString(12);
-				String aboutMyself = rs.getString(14);
-				String lookingFor = rs.getString(15);
-				String publicPhoto = rs.getString(16);
-				Timestamp lastLogin = rs.getTimestamp(17);
-				String profilePostedBy  = rs.getString(18);
-				String origin  = rs.getString(19);
-				String religiousHistory  = rs.getString(20);
-				String hairColor  = rs.getString(21);
-				String bodyType  = rs.getString(22);
-				String hijabBeard  = rs.getString(24);
-				String height = rs.getString(25);
-				String pray = rs.getString(26);
-				String sect = rs.getString(27);
-				String maritalStatus = rs.getString(28);
-				String children = rs.getString(29);
-				String likeToHaveChildren = rs.getString(30);
-				String langs = rs.getString(31);
-				String profession = rs.getString(32);
-				String highestQual = rs.getString(33);
-				
-				User candidate = new User(userId, fname, lname, emailId, uname, gender, country, phone, image, dob, 
-						residencyStatus, aboutMyself, lookingFor, publicPhoto, lastLogin, profilePostedBy, origin, 
-						religiousHistory, hairColor, bodyType, hijabBeard, height, pray, sect, maritalStatus, children, 
-						likeToHaveChildren, langs, profession, highestQual);
-				candidateList.add(candidate);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
-		
-		return candidateList;
-	}
-	
-	
-	List<User> getLookingForMe(User sessionUser) {
-		List<User> candidateList = new ArrayList<User>();
-		String matchGender = getMatchGender(sessionUser.getGender());
+		String matchGender = getMatchGender(user.getGender(), isSessionUser);
 		
 		LookingForDAO lfDao = new LookingForDAOImpl(); 
 		try {
-			List<Long> userIds  = lfDao.getLookingForUserIds(sessionUser);
+			List<Long> userIds  = lfDao.getLookingForUserIds(user);
 			if(userIds.size() != 0) {
 				DoMath doM = new DoMath();
 				String query = doM.constructQuery(userIds, matchGender);
-				System.out.println("Inside serchBy() case: looking_for_me, constructed Query from DoMath is: " + query);
+				System.out.println("Inside getLookingForGivenUser(): constructed Query from DoMath is: " + query);
 				
 				pstmt = conn.prepareStatement(query);
 				rs = pstmt.executeQuery();
@@ -473,13 +370,15 @@ public class UserDAOImpl implements UserDAO {
 		return candidateList;
 	}
 	
-	List<User> getIamLookingFor(User sessionUser){
+	private List<User> getIamLookingFor(User sessionUser, boolean isSessionUser){
 		List<User> candidateList = new ArrayList<User>();
-		String matchGender = getMatchGender(sessionUser.getGender());
+		
+		String matchGender = getMatchGender(sessionUser.getGender(), isSessionUser);
 		
 		LookingForDAO lfDao2 = new LookingForDAOImpl(); 
 		try {
 			LookingFor lf = lfDao2.getLookingForById(sessionUser.getUserId());
+			// dummy user to hold the data got from looking_for table
 			User ilookforUser = new User();
 			if(lf.getLookingIn().equalsIgnoreCase("dontmind")) ilookforUser.setLookingIn(null); else ilookforUser.setLookingIn(lf.getLookingIn());
 			if(lf.getEthnicOrigin().equalsIgnoreCase("dontmind")) ilookforUser.setEthnicOrigin(null); else ilookforUser.setEthnicOrigin(lf.getEthnicOrigin());
@@ -499,7 +398,7 @@ public class UserDAOImpl implements UserDAO {
 			String query = doM.constructQuery(ilookforUser, "select * from hl_users where ");
 			query = query + " and gender='" +matchGender+ "'";
 			pstmt = conn.prepareStatement(query);
-			System.out.println("Inside serchBy() case: looking_for_me, constructed Query from DoMath is: " + query);
+			System.out.println("Inside getIamLookingFor(): I_am_looking_for, constructed Query from DoMath is: " + query);
 			rs = pstmt.executeQuery();
 			while (rs.next()){
 				long userId  = rs.getLong(1);					
@@ -564,6 +463,415 @@ public class UserDAOImpl implements UserDAO {
 		
 		return candidateList;
 	}
+	
+	private Date constructDate(String age) {
+		Date dateSql = null;
+		if(!age.equalsIgnoreCase("Any"))	{
+			int year = Calendar.getInstance().get(Calendar.YEAR);
+			int agel = Integer.parseInt(age);
+			int yearL = year - agel;
+			String dateStr = yearL+"-01-01";
+			
+			dateSql = Date.valueOf(dateStr);
+		}
+		return dateSql;
+	}
+	
+	private List<User> getByAge(User sessionUser, String agelow, String agehigh) {
+		List<User> candidateList = new ArrayList<User>();
+		boolean isSessionUser = true;
+		String matchGender = getMatchGender(sessionUser.getGender(), isSessionUser);
+		Date dateLow = constructDate(agelow);
+		Date dateHigh = constructDate(agehigh);
+		System.out.println("Inside getByAge dateLowr = " + dateLow);
+		System.out.println("Inside getByAge dateHigh = " + dateHigh);
+		
+		try {
+			if((dateLow != null) && (dateHigh != null)) { 
+				System.out.println("Inside if((dateLow != null) && (dateHigh != null))");
+				pstmt = conn.prepareStatement("select * from HL_USERS where gender='"+matchGender+"' and dob between '"+dateHigh+"' and '"+dateLow+"'");
+				System.out.println("select * from HL_USERS where gender='"+matchGender+"' and dob between '"+dateHigh+"' and '"+dateLow+"'");
+				rs = pstmt.executeQuery();
+				//pstmt.setDate(2,dateHigh);
+				//pstmt.setDate(3,dateLow);
+				//pstmt.setString(1,matchGender);
+			}else if(dateLow != null) {
+				System.out.println("Inside if(dateLow != null)");
+				pstmt = conn.prepareStatement("select * from HL_USERS where gender='"+matchGender+"' and dob <= '"+dateLow+"'");
+				System.out.println("select * from HL_USERS where gender='"+matchGender+"' and dob <= '"+dateLow+"'");
+				rs = pstmt.executeQuery();
+				//pstmt.setDate(2,dateLow);
+				//pstmt.setString(1,matchGender);
+			}else if(dateHigh != null) {
+				System.out.println("Inside if(dateHigh != null)");
+				pstmt = conn.prepareStatement("select * from HL_USERS where gender='"+matchGender+"' and dob >= '"+dateHigh+"'");
+				System.out.println("select * from HL_USERS where gender='"+matchGender+"' and dob >= '"+dateHigh+"'");
+				rs = pstmt.executeQuery();
+				//pstmt.setDate(2,dateHigh);
+				//pstmt.setString(1,matchGender);
+			}else  {
+				System.out.println("Inside else");
+				pstmt = conn.prepareStatement("select * from HL_USERS where gender='"+matchGender+"'");		// I dont want to call out all the users
+				System.out.println("select * from HL_USERS where gender='"+matchGender+"'");
+				rs = pstmt.executeQuery();
+				//pstmt.setString(1,matchGender);
+			}
+			
+			while (rs.next()){
+				long userId  = rs.getLong(1);					
+				String fname  = rs.getString(2);				
+				String lname = rs.getString(3);					
+				String emailId  = rs.getString(4);				
+				String uname  = rs.getString(5);				
+				String pass  = rs.getString(6);			// not taken		
+				String gender  = rs.getString(7);				
+				String country  = rs.getString(8);				
+				String phone  = rs.getString(9);				
+				String image  = rs.getString(10);	
+				Date dob = rs.getDate(11);
+				String residencyStatus = rs.getString(12);
+				String aboutMyself = rs.getString(14);
+				String lookingFor = rs.getString(15);
+				String publicPhoto = rs.getString(16);
+				Timestamp lastLogin = rs.getTimestamp(17);
+				String profilePostedBy  = rs.getString(18);
+				String origin  = rs.getString(19);
+				String religiousHistory  = rs.getString(20);
+				String hairColor  = rs.getString(21);
+				String bodyType  = rs.getString(22);
+				String hijabBeard  = rs.getString(24);
+				String height = rs.getString(25);
+				String pray = rs.getString(26);
+				String sect = rs.getString(27);
+				String maritalStatus = rs.getString(28);
+				String children = rs.getString(29);
+				String likeToHaveChildren = rs.getString(30);
+				String langs = rs.getString(31);
+				String profession = rs.getString(32);
+				String highestQual = rs.getString(33);
+				
+				User candidate = new User(userId, fname, lname, emailId, uname, gender, country, phone, image, dob, 
+						residencyStatus, aboutMyself, lookingFor, publicPhoto, lastLogin, profilePostedBy, origin, 
+						religiousHistory, hairColor, bodyType, hijabBeard, height, pray, sect, maritalStatus, children, 
+						likeToHaveChildren, langs, profession, highestQual);
+				candidateList.add(candidate);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		
+		return candidateList;
+	}
+	
+	private List<User> retainAllofUser(List<User> list1, List<User> list2){
+		List<Long> list1Uids = new ArrayList<Long>();
+		List<Long> list2Uids = new ArrayList<Long>();;
+		for(User user:list1) {
+			long userId = user.getUserId();
+			list1Uids.add(userId);	
+		}
+		for(User user:list2) {
+			long userId = user.getUserId();
+			list2Uids.add(userId);	
+		}
+		List<Long> commonUids = new ArrayList<Long>(list1Uids);
+		commonUids.retainAll(list2Uids);
+		List<User> candidateList = new ArrayList<User>();
+		for(User u:list1.size()<list2.size()?list1:list2) {
+			if(commonUids.contains(u.getUserId())) candidateList.add(u);
+		}
+		return candidateList;
+	}
+	
+	private String getMatchGender(String gender, boolean isSessionUser) {
+		String matchGender = "";
+		if((gender.equals("M")) && (isSessionUser == true))	matchGender = "F";
+		else if((gender.equals("M")) && (isSessionUser == false))	matchGender = "M";
+		else if((gender.equals("F")) && (isSessionUser == true))	matchGender = "M";
+		else if((gender.equals("F")) && (isSessionUser == false))	matchGender = "F";
+		return matchGender;
+	}
+
+	private List<User> getByLocation(User sessionUser, String desiredLocation){
+		List<User> candidateList = new ArrayList<User>();
+		boolean isSessionUser = true;
+		String matchGender = getMatchGender(sessionUser.getGender(), isSessionUser);
+		try {
+			pstmt = conn.prepareStatement("select * from HL_USERS where gender=? and lookingin=?");
+			System.out.println("select * from HL_USERS where gender='"+matchGender+"' and lookingin='"+desiredLocation+"'");
+			pstmt.setString(2,desiredLocation);
+			pstmt.setString(1,matchGender);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()){
+				long userId  = rs.getLong(1);					
+				String fname  = rs.getString(2);				
+				String lname = rs.getString(3);					
+				String emailId  = rs.getString(4);				
+				String uname  = rs.getString(5);				
+				String pass  = rs.getString(6);			// not taken		
+				String gender  = rs.getString(7);				
+				String country  = rs.getString(8);				
+				String phone  = rs.getString(9);				
+				String image  = rs.getString(10);	
+				Date dob = rs.getDate(11);
+				String residencyStatus = rs.getString(12);
+				String aboutMyself = rs.getString(14);
+				String lookingFor = rs.getString(15);
+				String publicPhoto = rs.getString(16);
+				Timestamp lastLogin = rs.getTimestamp(17);
+				String profilePostedBy  = rs.getString(18);
+				String origin  = rs.getString(19);
+				String religiousHistory  = rs.getString(20);
+				String hairColor  = rs.getString(21);
+				String bodyType  = rs.getString(22);
+				String hijabBeard  = rs.getString(24);
+				String height = rs.getString(25);
+				String pray = rs.getString(26);
+				String sect = rs.getString(27);
+				String maritalStatus = rs.getString(28);
+				String children = rs.getString(29);
+				String likeToHaveChildren = rs.getString(30);
+				String langs = rs.getString(31);
+				String profession = rs.getString(32);
+				String highestQual = rs.getString(33);
+				
+				User candidate = new User(userId, fname, lname, emailId, uname, gender, country, phone, image, dob, 
+						residencyStatus, aboutMyself, lookingFor, publicPhoto, lastLogin, profilePostedBy, origin, 
+						religiousHistory, hairColor, bodyType, hijabBeard, height, pray, sect, maritalStatus, children, 
+						likeToHaveChildren, langs, profession, highestQual);
+				candidateList.add(candidate);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return candidateList;
+	}	
+	
+	private List<User> getByOnline(User sessionUser){
+		List<User> candidateList = new ArrayList<User>();
+		boolean isSessionUser = true;
+		String matchGender = getMatchGender(sessionUser.getGender(), isSessionUser);
+		
+		try {
+			pstmt = conn.prepareStatement("select * from HL_USERS where gender=? and lastlogin>=?");
+			System.out.println("select * from HL_USERS where gender=? and lastlogin>=?");
+			//java.util.Date date = new java.util.Date();
+            //Timestamp current = new Timestamp(date.getTime());  
+            Timestamp current = new Timestamp(System.currentTimeMillis());
+            String currentStr = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(current);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime datetime = LocalDateTime.parse(currentStr.toString(), formatter);
+            System.out.println("Before subtraction of minutes from date: "+ current);
+            System.out.println("Before subtraction of minutes from date: "+ currentStr);
+            
+            datetime = datetime.minusMinutes(30);
+            Timestamp tsPrevious = Timestamp.valueOf(datetime);
+            String aftersubtraction = datetime.format(formatter);
+            System.out.println("After 30 minutes subtraction from date: "+ aftersubtraction);
+            pstmt.setString(1,matchGender);
+			pstmt.setTimestamp(2,tsPrevious);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()){
+				long userId  = rs.getLong(1);					
+				String fname  = rs.getString(2);				
+				String lname = rs.getString(3);					
+				String emailId  = rs.getString(4);				
+				String uname  = rs.getString(5);				
+				String pass  = rs.getString(6);			// not taken		
+				String gender  = rs.getString(7);				
+				String country  = rs.getString(8);				
+				String phone  = rs.getString(9);				
+				String image  = rs.getString(10);	
+				Date dob = rs.getDate(11);
+				String residencyStatus = rs.getString(12);
+				String aboutMyself = rs.getString(14);
+				String lookingFor = rs.getString(15);
+				String publicPhoto = rs.getString(16);
+				Timestamp lastLogin = rs.getTimestamp(17);
+				String profilePostedBy  = rs.getString(18);
+				String origin  = rs.getString(19);
+				String religiousHistory  = rs.getString(20);
+				String hairColor  = rs.getString(21);
+				String bodyType  = rs.getString(22);
+				String hijabBeard  = rs.getString(24);
+				String height = rs.getString(25);
+				String pray = rs.getString(26);
+				String sect = rs.getString(27);
+				String maritalStatus = rs.getString(28);
+				String children = rs.getString(29);
+				String likeToHaveChildren = rs.getString(30);
+				String langs = rs.getString(31);
+				String profession = rs.getString(32);
+				String highestQual = rs.getString(33);
+				
+				User candidate = new User(userId, fname, lname, emailId, uname, gender, country, phone, image, dob, 
+						residencyStatus, aboutMyself, lookingFor, publicPhoto, lastLogin, profilePostedBy, origin, 
+						religiousHistory, hairColor, bodyType, hijabBeard, height, pray, sect, maritalStatus, children, 
+						likeToHaveChildren, langs, profession, highestQual);
+				candidateList.add(candidate);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return candidateList;
+	}
+	
+	private List<User> getByPhotoUploaded(User sessionUser){
+		List<User> candidateList = new ArrayList<User>();
+		boolean isSessionUser = true;
+		String matchGender = getMatchGender(sessionUser.getGender(), isSessionUser);
+		
+		try {
+			pstmt = conn.prepareStatement("select * from HL_USERS where gender=? and (image<>?) and (image<>?)");
+			System.out.println("select * from HL_USERS where gender='"+matchGender+"' and (image<>'manonymous.png') and (image<>'fanonymous.png')");
+            pstmt.setString(1,matchGender);
+			pstmt.setString(2,"manonymous.png");
+			pstmt.setString(3,"fanonymous.png");
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()){
+				long userId  = rs.getLong(1);
+				String fname  = rs.getString(2);
+				String lname = rs.getString(3);
+				String emailId  = rs.getString(4);
+				String uname  = rs.getString(5);
+				String pass  = rs.getString(6);			// not taken		
+				String gender  = rs.getString(7);
+				String country  = rs.getString(8);
+				String phone  = rs.getString(9);
+				String image  = rs.getString(10);
+				Date dob = rs.getDate(11);
+				String residencyStatus = rs.getString(12);
+				String aboutMyself = rs.getString(14);
+				String lookingFor = rs.getString(15);
+				String publicPhoto = rs.getString(16);
+				Timestamp lastLogin = rs.getTimestamp(17);
+				String profilePostedBy  = rs.getString(18);
+				String origin  = rs.getString(19);
+				String religiousHistory  = rs.getString(20);
+				String hairColor  = rs.getString(21);
+				String bodyType  = rs.getString(22);
+				String hijabBeard  = rs.getString(24);
+				String height = rs.getString(25);
+				String pray = rs.getString(26);
+				String sect = rs.getString(27);
+				String maritalStatus = rs.getString(28);
+				String children = rs.getString(29);
+				String likeToHaveChildren = rs.getString(30);
+				String langs = rs.getString(31);
+				String profession = rs.getString(32);
+				String highestQual = rs.getString(33);
+				
+				User candidate = new User(userId, fname, lname, emailId, uname, gender, country, phone, image, dob, 
+						residencyStatus, aboutMyself, lookingFor, publicPhoto, lastLogin, profilePostedBy, origin, 
+						religiousHistory, hairColor, bodyType, hijabBeard, height, pray, sect, maritalStatus, children, 
+						likeToHaveChildren, langs, profession, highestQual);
+				candidateList.add(candidate);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return candidateList;
+	}
+	
+	private List<Long> getByMessaged(User sessionUser){
+		List<Long> candidateList = new ArrayList<Long>();
+		
+		try {
+			pstmt = conn.prepareStatement("select DISTINCT recipientId from messages where senderId=?");
+			System.out.println("select DISTINCT recipientId from messages where senderId='"+sessionUser.getUserId()+"'");
+            pstmt.setLong(1,sessionUser.getUserId());
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()){
+				//long msgId  = rs.getLong(1);
+				//long senderId  = rs.getLong(2);
+				long recipientId = rs.getLong(1);
+				//String msgContent  = rs.getString(4);
+				//Timestamp ts  = rs.getTimestamp(5);
+				//boolean msgRead  = rs.getBoolean(6);
+				
+				//Messages msg = new Messages(msgId, senderId, recipientId, msgContent, ts, msgRead);
+				candidateList.add(recipientId);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return candidateList;
+	}
+	
+	private List<User> getNotMessagedUserList(User sessionUser, List<Long> messagedIds) {
+		List<User> candidateList = new ArrayList<User>();
+		boolean isSessionUser = true;
+		String matchGender = getMatchGender(sessionUser.getGender(), isSessionUser);
+		String query = "select * from HL_USERS where gender='"+matchGender+"' ";
+		for(Long id:messagedIds) {
+			query = query + "and ";
+			query = query + "userId<>'"+id+"' ";
+		}
+		System.out.println("Constructed query inside getNotMessagedUserList() is: " + query);
+		try {
+			//pstmt = conn.prepareStatement("select * from HL_USERS where gender=? and userId<>?");
+			pstmt = conn.prepareStatement(query);
+			System.out.println("select * from HL_USERS where gender='"+matchGender+"' and userId<>?");
+            //pstmt.setString(1,matchGender);
+			//pstmt.setString(2,"manonymous.png");
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()){
+				long userId  = rs.getLong(1);
+				String fname  = rs.getString(2);
+				String lname = rs.getString(3);
+				String emailId  = rs.getString(4);
+				String uname  = rs.getString(5);
+				String pass  = rs.getString(6);			// not taken		
+				String gender  = rs.getString(7);
+				String country  = rs.getString(8);
+				String phone  = rs.getString(9);
+				String image  = rs.getString(10);
+				Date dob = rs.getDate(11);
+				String residencyStatus = rs.getString(12);
+				String aboutMyself = rs.getString(14);
+				String lookingFor = rs.getString(15);
+				String publicPhoto = rs.getString(16);
+				Timestamp lastLogin = rs.getTimestamp(17);
+				String profilePostedBy  = rs.getString(18);
+				String origin  = rs.getString(19);
+				String religiousHistory  = rs.getString(20);
+				String hairColor  = rs.getString(21);
+				String bodyType  = rs.getString(22);
+				String hijabBeard  = rs.getString(24);
+				String height = rs.getString(25);
+				String pray = rs.getString(26);
+				String sect = rs.getString(27);
+				String maritalStatus = rs.getString(28);
+				String children = rs.getString(29);
+				String likeToHaveChildren = rs.getString(30);
+				String langs = rs.getString(31);
+				String profession = rs.getString(32);
+				String highestQual = rs.getString(33);
+				
+				User candidate = new User(userId, fname, lname, emailId, uname, gender, country, phone, image, dob, 
+						residencyStatus, aboutMyself, lookingFor, publicPhoto, lastLogin, profilePostedBy, origin, 
+						religiousHistory, hairColor, bodyType, hijabBeard, height, pray, sect, maritalStatus, children, 
+						likeToHaveChildren, langs, profession, highestQual);
+				candidateList.add(candidate);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return candidateList;
+	}
+	
 	
 	@Override
 	public User getUserByUserId(long id) throws UserDAOException {

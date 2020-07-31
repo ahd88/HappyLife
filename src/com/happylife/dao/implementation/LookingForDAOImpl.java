@@ -31,7 +31,7 @@ public class LookingForDAOImpl implements LookingForDAO{
 			pstmt = conn.prepareStatement("insert into Looking_For values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 			pstmt.setLong(1, lf.getId());
 			pstmt.setLong(2, lf.getUserId());
-			pstmt.setString(3, null);
+			pstmt.setString(3, lf.getAgeL());
 			pstmt.setString(4, null);
 			pstmt.setString(5, null);
 			pstmt.setString(6, null);
@@ -320,6 +320,10 @@ public class LookingForDAOImpl implements LookingForDAO{
 		return msg;
 	}
 
+	/*
+	 * getLookingForUserIds is used to fetch ids of similar lookingFor 
+	 * 
+	 * */
 	@Override
 	public List<Long> getLookingForUserIds(User sessionUser) throws LookingForDAOException {
 		List<Long> userIdsList = new ArrayList<Long>();
@@ -344,8 +348,8 @@ public class LookingForDAOImpl implements LookingForDAO{
 			List<Long> common = new ArrayList<Long>(uidsOfAgeList);
 			common.retainAll(uidsOfHeightList);
 			//List<LookingFor> common = ageLookingForList.stream().filter(heightLookingForList::contains).collect(toList());
-			System.out.println("uids common generated from uidsOfAgeList.retainAll(uidsOfHeightList "+ common.size());
-			for(Long uid:common)	System.out.println("commonList items "+ uid);
+			System.out.println("uids common generated from uidsOfAgeList.retainAll(uidsOfHeightList) "+ common.size());
+			for(Long uid:common)	System.out.println("commonList items, id "+ uid);
 			
 			DoMath doM = new DoMath();
 			//String query = doM.constructLookingForQuery(sessionUser, ageRanges, heightRanges);
@@ -435,9 +439,9 @@ public class LookingForDAOImpl implements LookingForDAO{
 	public List<LookingFor> getAllLookingForGivenAge(int age) throws LookingForDAOException {
 		List<LookingFor> lookingForList = new ArrayList<LookingFor>();
 		try {
-			System.out.println("Inside getAllLookingForGivenAge: the argument age = " + age);
+			System.out.println("Inside getAllLtookingForGivenAge: the argument age = " + age);
 			conn = DatabaseConnectivity.doDBConnection();
-			pstmt = conn.prepareStatement("select * from looking_for where ? between ageL and ageH");
+			pstmt = conn.prepareStatement("select * from looking_for where ((? between ageL and ageH) or (ageL='Any') or (ageH='Any'))  ");
 			pstmt.setString(1,Integer.toString(age));
 			rs = pstmt.executeQuery();
 			while (rs.next()){

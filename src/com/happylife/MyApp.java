@@ -2,17 +2,24 @@ package com.happylife;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.happylife.dao.implementation.LookingForDAOImpl;
 import com.happylife.dao.implementation.MessageDAOImpl;
 import com.happylife.dao.implementation.UserDAOImpl;
+import com.happylife.dao.implementation.ViewedDAOImpl;
+import com.happylife.dao.layer.LookingForDAO;
 import com.happylife.dao.layer.MessageDAO;
 import com.happylife.dao.layer.UserDAO;
 import com.happylife.dao.layer.UserDAOException;
+import com.happylife.dao.layer.ViewedDAO;
+import com.happylife.dao.registry.RegistryDAO;
 import com.happylife.pojo.LookingFor;
 import com.happylife.pojo.Messages;
 import com.happylife.pojo.User;
+import com.happylife.pojo.Viewed;
 
 public class MyApp {
 
@@ -43,14 +50,37 @@ public class MyApp {
 		 * + " " + m.getMsgContent()); }
 		 */
 		
-		DoMath doM3 = new DoMath();
 		/*
-		 * LookingFor lf = new LookingFor(1, 1, "28", "40", "Sudan", "Citizen",
-		 * "dontmind", "Arab", "dontmind", "wc", "AP", "SS", "NM", null, null, null,
-		 * null, "dontmind", "Any", "Any", "Yes", "Doctor", null, null); String query =
-		 * doM3.constructQueryL(lf, 25, "155");
-		 * System.out.println("Constructed Query in main is: " + query);
+		 * DoMath doM3 = new DoMath();
+		 * 
+		 * LookingFor lf = new LookingFor(17, 17, "Any", null, null, null, null, null,
+		 * null, null, null, null, null, null, null, null, null, null, null, null, null,
+		 * null, null, null);
+		 * 
+		 * LookingFor lf2 = new LookingFor(17, 17, "28", "40", "Sudan", "Citizen",
+		 * "dontmind", "Arab", "dontmind", "wc", "4", "SS", "NM", null, null, null,
+		 * null, "dontmind", "Any", "Any", "Yes", "Doctor", null, null); LookingForDAO
+		 * lfdao = new LookingForDAOImpl(); String msg = lfdao.insertLookingFor(lf);
+		 * System.out.println("lookingfor status: " + msg);
 		 */
+		
+		String gender = "F";
+		UserDAO userDAO = new UserDAOImpl();
+		ViewedDAO viewedDAO = new ViewedDAOImpl();
+		List<Viewed> viewedMe = viewedDAO.getViewedForUser(4, gender);
+		List<User> viewedList = new ArrayList<User>();
+		for(Viewed v:viewedMe) {
+			User userViewedMe = new User();
+			System.out.println(v.getHistoryContent());
+			if(gender.equals("M")) userViewedMe = userDAO.getUserByUserId(v.getUid2());
+			else userViewedMe = userDAO.getUserByUserId(v.getUid1());
+			viewedList.add(userViewedMe);		// I need to add only three to the myprofile page
+		}
+		
+		
+		//String query = doM3.constructQueryL(lf, 25, "155");
+		//System.out.println("Constructed Query in main is: " + query);
+		 
 		/*
 		 * long arr[] = new long[] {1, 16, 34, 149, 17}; String query =
 		 * doM3.constructQuery(arr, "F"); System.out.println("Constructed Query is: " +

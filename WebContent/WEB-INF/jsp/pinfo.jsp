@@ -173,11 +173,11 @@
 			      				<td class="col-md-3">Profile posted by: ${sessionUser.profilePostedBy}</td>
 			      				<td class="col-md-3">Pray: 
 			      					<c:choose>
-										<c:when test="${sessionUser.pray=='AP'}">Always Pray </c:when>
-										<c:when test="${sessionUser.pray=='smissfajr'}">Sometimes miss Fajr and make Qadah</c:when>
-										<c:when test="${sessionUser.pray=='rmissprayer'}">Rarely miss a prayer and make Qadah</c:when>
-										<c:when test="${sessionUser.pray=='spray'}">Sometimes Pray</c:when>
-										<c:otherwise>Intend to start praying</c:otherwise>
+										<c:when test="${sessionUser.pray=='5'}">Always Pray </c:when>
+										<c:when test="${sessionUser.pray=='4'}">Sometimes miss Fajr and make Qadah</c:when>
+										<c:when test="${sessionUser.pray=='3'}">Rarely miss a prayer and make Qadah</c:when>
+										<c:when test="${sessionUser.pray=='2'}">Sometimes Pray</c:when>
+										<c:when test="${sessionUser.pray=='1'}">Intend to start praying</c:when>
     								</c:choose>
 								</td>
 			      			</tr>

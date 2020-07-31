@@ -3,6 +3,7 @@
 <%@page import="java.awt.image.BufferedImage"%>
 <%@page import="javax.imageio.ImageIO"%>
 <%@page import="java.io.*"%>
+<%@page import="com.happylife.pojo.User, java.util.*" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -91,18 +92,18 @@
 							<div>
 								<!-- src="http://placehold.it/119/00F/FFF" -->
 								<p>
-									
+								
 									<%
 									
 									String path = (String) session.getAttribute("photopath");
 									String photo = (String) session.getAttribute("personalPhoto");
 									String gender = (String) session.getAttribute("gender");
-									String b64 = "";
-									if(gender.equals("M")) 	b64 = request.getContextPath()+"/publicphotos/manonymous.png"; 
-									else 					b64 = request.getContextPath()+"/publicphotos/fanonymous.png";
-									
+									String b64 = "Nothing";
+									System.out.println("Photo Path " + path);
+									boolean personalPflag = false;
 									System.out.println("b64 context path " + b64);
-									if(photo != null){
+									if(!(photo.equalsIgnoreCase("manonymous.png")) && !(photo.equalsIgnoreCase("fanonymous.png"))){
+										personalPflag = true;
 										BufferedImage bInputImage = ImageIO.read(new File(path));
 									    System.out.println("Path " + path);
 									    System.out.println("Buffered Image" + bInputImage);
@@ -123,23 +124,17 @@
 								    
 								    //String b64 = (String)session.getAttribute("b64");
 									%>
-									
 									<a id="mainfullimage" href="">
-										<%if(photo != null) {%>
-										<img src="data:image/png;base64, <%=b64%>"
+										<%if(personalPflag) {%>
+											<img src="data:image/png;base64, <%=b64%>"
+												 alt="click to see larger photo"
+												 title="click to see larger photo">
+										<%}else{ %>
+											<img src="/HappyLife/publicphotos/${sessionUser.image}"
 											 alt="click to see larger photo"
 											 title="click to see larger photo">
-										<%}else{ %>
-											<%if(gender.equals("M")) {%>
-												<img src="/HappyLife/publicphotos/manonymous.png"
-												 alt="click to see larger photo"
-												 title="click to see larger photo">
-											<%} %>
-											<%if(gender.equals("F")) {%>
-												<img src="/HappyLife/publicphotos/fanonymous.png"
-												 alt="click to see larger photo"
-												 title="click to see larger photo">
-											<%} } %>
+										<% } %>
+											
 									</a>
 								</p>
 								<p>
@@ -152,13 +147,13 @@
 
 						<div class="item3 col-xs-12 col-md-5">
 							<ul class="summary">
-								<li><label>Username:</label></li>
+								<li><label>Username: ${sessionUser.username}</label></li>
 								<li><label>Last Login:</label></li>
 							</ul>
 						</div>
 						<div class="item4 col-xs-12 col-md-5">
 							<ul class="primary">
-								<li id="updateli"><a href="#prfprofile.php">Edit myprofile</a></li>
+								<li id="updateli"><a href="#prfprofile.php">Edit my profile</a></li>
 								<li id="findexactli"><a href="#purematches.php">Find my exact </a></li>
 								<li id="findli"><a href="#bestmatch.php">Members I am looking for</a></li>
 								<li id="lookformeli"><a href="#lookingforme.php">Members looking for me</a></li>
@@ -178,6 +173,27 @@
 				<br>
 				<div id="lastViewers" class="grid-container">
 					<h3 class="">Members who've recently viewed me ...</h3>
+					<table class="table table-dark">
+					<%
+		  				List<User> viewedList = (List<User>)session.getAttribute("viewedMeList");
+		  				for(int i=viewedList.size(); i--> 0;){
+		  					
+		  					User u = viewedList.get(i);
+		  			%>
+						<tbody>
+							<tr>
+								<th scope="col" class="col-md-4">
+									<%=u.getUsername()%><br>
+	    							<a href="${pageContext.request.contextPath}/candid?=<%=u.getUserId()%>">
+	    								<img src="${pageContext.request.contextPath}/publicphotos/<%=u.getPublicPhoto() %>.JPG">
+	    							</a>
+								</th>
+							</tr>
+						</tbody>
+						<% 
+			    			} 
+			    		%>
+					</table>
 				</div>
 
 				<br>

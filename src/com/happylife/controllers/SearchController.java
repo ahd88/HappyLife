@@ -33,8 +33,10 @@ public class SearchController extends HttpServlet {
 		boolean isPhotoupl = false;
 		boolean isNotviewed = false;
 		boolean isNotmsged = false;
+		boolean isAgeLowEqualsAny = false;
+		boolean isAgeHighEqualsAny = false;
 		
-		if(query != null) { 
+		if(query != null) {
 			System.out.println("Query String in SearchServlet is: " + query);
 			
 			isIdealcb = query.indexOf("idealcb")!= -1?true:false;
@@ -55,6 +57,10 @@ public class SearchController extends HttpServlet {
 		String desiredLocation = req.getParameter("country");
 		String agel = req.getParameter("agel");
 		String ageh = req.getParameter("ageh");
+		//if(agel.equalsIgnoreCase("Any")) isAgeLowEqualsAny = true;
+		//if(ageh.equalsIgnoreCase("Any")) isAgeHighEqualsAny = true;
+		System.out.println("Age low is " + agel);
+		System.out.println("Age high is " + ageh);
 		User sessionUser = (User) req.getSession().getAttribute("sessionUser");	// Attribute sessionUser set in LoginServlet
 		String matchGender = "";
 		String message = "";
@@ -90,16 +96,19 @@ public class SearchController extends HttpServlet {
 					System.out.println(user.getUsername());
 				}
 				//req.getRequestDispatcher("/WEB-INF/jsp/search.jsp").forward(req, res);
-			} else if(desiredLocation != null) {
-				
-				List<User> list = RegistryDAO.getUserDAO().searchBy(sessionUser, "location", desiredLocation, "agel", agel, "ageh", ageh);
-				
+			}else if(agel != null) {
+				//if(!((agel.equalsIgnoreCase("Any")) && (agel.equalsIgnoreCase("Any"))) && !(desiredLocation.equalsIgnoreCase("Any")))
+				// don't change the order of argument
+				List<User> list = RegistryDAO.getUserDAO().searchBy(sessionUser, "agel", agel, "ageh", ageh, "location", desiredLocation, 
+																				 "isOnline", Boolean.toString(isOnline), 
+																				 "isPhotoupl", Boolean.toString(isPhotoupl),
+																				 "isNotmsged", Boolean.toString(isNotmsged));
 				req.setAttribute("searchList", list);
 				for(User user: list){
 					System.out.println(user.getUsername());
 				}
 			}else {
-				List<User> list = RegistryDAO.getUserDAO().searchBy(sessionUser, "location", desiredLocation);
+				List<User> list = RegistryDAO.getUserDAO().searchBy(sessionUser, "lookingIn", desiredLocation);
 				req.setAttribute("searchList", list);
 				for(User user: list){
 					System.out.println(user.getUsername());

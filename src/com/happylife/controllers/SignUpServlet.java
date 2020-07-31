@@ -59,6 +59,8 @@ public class SignUpServlet extends HttpServlet {
 		user.setLookingIn(country);
 		user.setPhone(phone);
 		user.setDob(dob);
+		if(gender.equalsIgnoreCase("F"))	user.setImage("fanonymous.png");
+		else	user.setImage("manonymous.png");
 		
 		//user.setImage(image);
 		
