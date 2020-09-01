@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.happylife.DoMath;
 import com.happylife.dao.layer.LookingForDAOException;
+import com.happylife.dao.layer.UserDAOException;
 import com.happylife.dao.layer.ViewedDAO;
 import com.happylife.dao.layer.ViewedDAOException;
 import com.happylife.pojo.User;
@@ -157,6 +158,31 @@ public class ViewedDAOImpl implements ViewedDAO{
 			} catch(Exception e){}
 		}
 		return msg;
+	}
+	
+	// I may need it, if I don't I will delete it
+	//@Override
+	public String inviteToViewProfile(long userId, long candidId)throws UserDAOException{
+		String invited = "";
+		try {
+			conn = DatabaseConnectivity.doDBConnection();
+			PreparedStatement pstmt = conn.prepareStatement("select my_fav from HL_USERS where userId=?");
+			pstmt.setLong(1,userId);
+			rs = pstmt.executeQuery();
+			while (rs.next()){
+				invited  = rs.getString(1);
+			}
+			System.out.println("inside getMyFavorites(), is " + invited);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				if(conn != null)	conn.close();
+				if(pstmt != null)	pstmt.close();
+				if(rs != null)		rs.close();
+			} catch(Exception e){}
+		}
+		return invited;
 	}
 
 	@Override

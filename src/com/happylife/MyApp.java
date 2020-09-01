@@ -64,18 +64,19 @@ public class MyApp {
 		 * System.out.println("lookingfor status: " + msg);
 		 */
 		
-		String gender = "F";
-		UserDAO userDAO = new UserDAOImpl();
-		ViewedDAO viewedDAO = new ViewedDAOImpl();
-		List<Viewed> viewedMe = viewedDAO.getViewedForUser(4, gender);
-		List<User> viewedList = new ArrayList<User>();
-		for(Viewed v:viewedMe) {
-			User userViewedMe = new User();
-			System.out.println(v.getHistoryContent());
-			if(gender.equals("M")) userViewedMe = userDAO.getUserByUserId(v.getUid2());
-			else userViewedMe = userDAO.getUserByUserId(v.getUid1());
-			viewedList.add(userViewedMe);		// I need to add only three to the myprofile page
-		}
+		/*
+		 * String gender = "F"; UserDAO userDAO = new UserDAOImpl(); ViewedDAO viewedDAO
+		 * = new ViewedDAOImpl(); List<Viewed> viewedMe = viewedDAO.getViewedForUser(4,
+		 * gender); List<User> viewedList = new ArrayList<User>(); for(Viewed
+		 * v:viewedMe) { User userViewedMe = new User();
+		 * System.out.println(v.getHistoryContent()); if(gender.equals("M"))
+		 * userViewedMe = userDAO.getUserByUserId(v.getUid2()); else userViewedMe =
+		 * userDAO.getUserByUserId(v.getUid1()); viewedList.add(userViewedMe); // I need
+		 * to add only three to the myprofile page }
+		 */
+		
+		DoMath doM = new DoMath();
+		doM.sendEmail("ahdmirghany@gmail.com", "", "");
 		
 		
 		//String query = doM3.constructQueryL(lf, 25, "155");

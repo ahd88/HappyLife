@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Random;
 
 import com.happylife.dao.layer.LookingForDAOException;
+import com.happylife.dao.layer.ResetDAOException;
 import com.happylife.dao.layer.UserDAOException;
 import com.happylife.dao.registry.RegistryDAO;
 import com.happylife.pojo.LookingFor;
@@ -86,6 +87,8 @@ public class SignUpServlet extends HttpServlet {
 			
 			try {
 				signupStatus = RegistryDAO.getUserDAO().doSignUp(user);
+				//String signupStatus = RegistryDAO.getUserDAO().doHibernateSignUp(user);
+				System.out.println(" this is status from doSignUp: " + signupStatus);
 			} catch (UserDAOException e2) {
 				// TODO Auto-generated catch block
 				e2.printStackTrace();
@@ -106,9 +109,15 @@ public class SignUpServlet extends HttpServlet {
 				System.out.println("This is disastrous, user might have been created with no record in LookingFor");
 				e.printStackTrace();
 			}
-			//String signupStatus = RegistryDAO.getUserDAO().doHibernateSignUp(user);
 			
-			System.out.println(" this is status from doSignUp: " + signupStatus);
+			String token = java.util.UUID.randomUUID().toString();
+			try {
+				RegistryDAO.getResetDAO().activateAccount(email,token);
+			} catch (ResetDAOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			
 		}else{
 			message = "Password does not match..please try again";

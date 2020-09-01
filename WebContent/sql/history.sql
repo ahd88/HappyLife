@@ -1,6 +1,6 @@
 create schema spring;
 use spring;
-DROP TABLE hl_users;
+/*DROP TABLE hl_users;*/
 CREATE TABLE HL_USERS(
 	userId BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
     FNAME VARCHAR(50) NOT NULL,
@@ -16,7 +16,7 @@ CREATE TABLE HL_USERS(
 	Age VARCHAR(5) NULL,
 	RESIDENCY_STATUS VARCHAR(20),
 	ABOUT_MYSELF VARCHAR(1000),
-	LOOKING_FOR VARCHAR(1000),
+	MY_FAV VARCHAR(1000),
 	PUBLIC_PHOTO VARCHAR(50),
 	LastLogin TIMESTAMP,
 	ProfilePostedBy VARCHAR(10),
@@ -36,6 +36,10 @@ CREATE TABLE HL_USERS(
 	Profession VARCHAR (30),
 	HighestQual VARCHAR(10)
 );
+
+ALTER TABLE HL_USERS RENAME COLUMN LOOKING_FOR TO MY_FAV;
+ALTER TABLE HL_USERS MODIFY COLUMN beard VARCHAR(2000) NULL;
+ALTER TABLE HL_USERS RENAME COLUMN beard TO NOTIFICATIONS;
 
 select * from hl_users;
 /*
@@ -70,6 +74,21 @@ CREATE TABLE LOOKING_FOR(
 	LOOKING_FOR VARCHAR(1000)
 );
 
+ALTER TABLE LOOKING_FOR MODIFY COLUMN AgeL VARCHAR(5) NULL;
+ALTER TABLE LOOKING_FOR MODIFY COLUMN AgeH VARCHAR(5) NULL;
+ALTER TABLE LOOKING_FOR MODIFY COLUMN EthnicOrigin VARCHAR(50) NULL;
+ALTER TABLE LOOKING_FOR MODIFY COLUMN HasChildren VARCHAR(10) NULL;
+ALTER TABLE LOOKING_FOR MODIFY COLUMN LikeToHaveChildren VARCHAR(10) NULL;
+ALTER TABLE LOOKING_FOR MODIFY COLUMN Pray VARCHAR(15) NULL;
+ALTER TABLE LOOKING_FOR MODIFY COLUMN WILLING_TO_RELOCATE VARCHAR(10) NULL;
+
+ALTER TABLE LOOKING_FOR MODIFY COLUMN Living_With_InLaws VARCHAR(25) NULL;
+ALTER TABLE LOOKING_FOR MODIFY COLUMN MaritalStatus VARCHAR(12) NULL;
+ALTER TABLE LOOKING_FOR MODIFY COLUMN ReligiousHistory VARCHAR(15) NULL;
+ALTER TABLE LOOKING_FOR MODIFY COLUMN Sect VARCHAR(10)  NULL;
+ALTER TABLE LOOKING_FOR MODIFY COLUMN LOOKINGIN VARCHAR(100)  NULL;
+
+
 CREATE TABLE Messages(
 	msgId BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
 	senderId BIGINT NOT NULL,
@@ -89,6 +108,16 @@ CREATE TABLE viewed(
     user1inviteduser2 boolean,
     user2inviteduser1 boolean
 );
+/*DROP TABLE RESET_PASS;*/
+CREATE TABLE RESET_PASS(
+	EMAIL VARCHAR(50) NOT NULL PRIMARY KEY,
+    token VARCHAR(50) 
+);
+
+ALTER TABLE viewed ADD user1Notes VARCHAR(500);
+ALTER TABLE viewed ADD user2Notes VARCHAR(500);
+use spring;
+select * from viewed;
 
 UPDATE `spring`.`HL_USERS` SET `Sect` = 'SS', `MaritalStatus` = 'NM', `Profession` = 'itprofessional' WHERE (`userId` = '2');
 UPDATE `spring`.`HL_USERS` SET `Sect` = 'SS', `MaritalStatus` = 'NM', `Profession` = 'Teacher' WHERE (`userId` = '3');
@@ -260,20 +289,33 @@ select * from hl_users where (lookingin='Sudan' or lookingin='dontmind') and (et
 select userId from looking_for where (lookingin='Sudan' or lookingin='dontmind') and (ethnicorigin='Arab' or ethnicorigin='dontmind') and (bodytype='Average' or bodytype='dontmind') and (hijab_beard='Always' or hijab_beard='dontmind') and (pray>='5' or pray='dontmind') and (sect='SS' or sect='dontmind') and (maritalstatus='NM' or maritalstatus='dontmind') and (profession='Other' or profession='dontmind' or profession='Other');
 
 
-create schema test;
-use test;
-create table NewLineDemo ( CountryName varchar(10) );
-insert into NewLineDemo values('US');
-insert into NewLineDemo values('UK');
-insert into NewLineDemo values('AUS');
-
-select *from NewLineDemo;
-select concat_ws('\n',CountryName) as CountryList from NewLineDemo;
-
 use spring;
 select * from viewed;
+select * from RESET_PASS;
+select * from looking_for;
 select * from hl_users;
-truncate table viewed;
+/*truncate table viewed;*/
+truncate table RESET_PASS;
+insert into RESET_PASS (email,token) values ('elafmirghany@gmail.com','0f6ed546-d685-4647-8141-49251a0559a4');
+insert into RESET_PASS (email,token) values('mohammedsulaiman22@gmail.com','5491bc55-fc9f-46f4-a1a1-ea91cf1ee44c');
+insert into RESET_PASS (email,token) values('Sumayyah@gmail.com','f528f90c-cf38-45e6-95b6-d4b30d1e0daa');
+insert into RESET_PASS (email,token) values('asma.mirghany@gmail.com','f5b6041d-0e6f-4136-b7b2-a778e35815a8');
+insert into RESET_PASS (email,token) values('saim@gmail.com','f5b68a1d-0e6f-4136-b7b2-a778e35815a8');
+insert into RESET_PASS (email,token) values('qibati@gmail.com','0f6de546-d685-4647-8141-49251a0559a4');
+insert into RESET_PASS (email,token) values('inaas@gmail.com','f5b604sz-0e6f-4136-b7b2-a778e35815a8');
+insert into RESET_PASS (email,token) values('hassan_kassala@gmail.com','f5b604d1-0e6f-4136-b7cc-a778e35815a8');
+insert into RESET_PASS (email,token) values('yafee@gmail.com','f5b6041d-0e6f-4156-b7b2-a778e38715a8');
+insert into RESET_PASS (email,token) values('wdyahia36@gmail.com','f5b6041d-0e6f-5536-b7b2-a7782w5815a8');
+insert into RESET_PASS (email,token) values('safa2020@yahoo.com','f5b6041d-0e6f-4896-b7b2-a778eas815a8');
+insert into RESET_PASS (email,token) values('khizer@gmail.com','f5b6041d-0e6f-4136-b8b2-a778e35813p8');
+insert into RESET_PASS (email,token) values('mubarakali.ali2@gmail.com','f5b6041d-0e6f-4136-b7b2-a7aae35815a8');
+insert into RESET_PASS (email,token) values('sunasayyed@gmail.com','f5b6041d-0e6f-4136-b7b2-a778e3dfs5a8');
+insert into RESET_PASS (email,token) values('sir.fartak@gmail.com','f5b6041d-0e6f-5626-b7b2-a773r35815a8');
+insert into RESET_PASS (email,token) values('aboubakarissa111@gmail.com','f5b6416d-0e6f-4136-b8j2-a778e35815a8');
+insert into RESET_PASS (email,token) values('t.alhaj.sa@gmail.com','f5b6041d-e96f-4696-b7b2-a778e35815a8');
+
+
+
 UPDATE `spring`.`viewed` SET `historyContent` = 'Asma viewed Hassan\'s profile, Hassan viewed Asma\'s profile' 
 	WHERE (`id` = '1');
 update viewed set historyContent='' where uid1='' and uid2='';
@@ -282,3 +324,15 @@ SELECT CONCAT(c.historyContent, ' Hassan viewed Asma profile') AS historyContent
 
 
 select * from viewed where uid2='1' and user1vieweduser2=true;
+
+
+
+create schema test;
+use test;
+create table NewLineDemo ( CountryName varchar(10) );
+insert into NewLineDemo values('US');
+insert into NewLineDemo values('UK');
+insert into NewLineDemo values('AUS');
+
+select * from NewLineDemo;
+select concat_ws('\n',CountryName) as CountryList from NewLineDemo;

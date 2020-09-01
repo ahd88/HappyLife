@@ -4,14 +4,16 @@
 <%@page import="javax.imageio.ImageIO"%>
 <%@page import="java.io.*"%>
 <%@page import="com.happylife.pojo.User, java.util.*" %>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-	<title>My Profile</title>
-
+	<meta content="text/html; charset=UTF-8" http-equiv="content-type"/>
+	<title>زواج - حسابي</title>
+	
+	<link href="${pageContext.request.contextPath}/css/arabic2.css" rel="stylesheet">
+	
 	<!-- Bootstrap core CSS -->
 	<!--link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet"-->
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap337.min.css">
@@ -56,8 +58,8 @@
 				</div>
 				<div id="navbar" class="navbar-collapse collapse">
 					<ul class="nav navbar-nav navbar-right">
-						<li><a>welcome ${username}</a></li>
-						<li class="active"><a href="${pageContext.request.contextPath}/logout">Logout</a></li>
+						<li><a>مرحباً ${username}</a></li>
+						<li class="active"><a href="${pageContext.request.contextPath}/logout">تسجيل الخروج</a></li>
 					</ul>
 				</div>
 				<!--/.nav-collapse -->
@@ -76,15 +78,15 @@
 	<br>
 		
 	<br><br>
-	<div class="container">
-		<ul class="nav nav-tabs">
-			<li class="active"><a href="/HappyLife/myprofile">Home</a></li>
-			<li><a href="/HappyLife/pinfo">My Profile</a></li>
-			<li><a href="/HappyLife/search">Search</a></li>
-			<li><a href="#menu3">Marriage Advice</a></li>
+	<div class="container" >
+		<ul class="nav nav-tabs navbar-right">
+			<li><a href="#menu3">كيف تبحث عن </a></li>
+			<li><a href="/HappyLife/search">البحث</a></li>
+			<li><a href="/HappyLife/pinfo">حسابي الشخصي</a></li>
+			<li class="active"><a href="/HappyLife/myprofile">الرئيسية</a></li>
 		</ul>
 		
-		<div class="tab-content">
+		<div class="tab-content navbar-right">
 			<div id="home" class="tab-pane fade in active">
 				<div id="user-block" class="grid-container container">
 					<div class="row">
@@ -153,12 +155,12 @@
 						</div>
 						<div class="item4 col-xs-12 col-md-5">
 							<ul class="primary">
-								<li id="updateli"><a href="/HappyLife/aboutme&lookingfor">Edit my profile</a></li>
-								<li id="findexactli"><a href="/HappyLife/search?select=idealcb">Find my exact </a></li>
-								<li id="findli"><a href="/HappyLife/search?lfselect=ilookfcb">Members I am looking for</a></li>
-								<li id="lookformeli"><a href="/HappyLife/search?lfmselect=lookformecb">Members looking for me</a></li>
-								<li id="myfavli"><a href="/HappyLife/fav">My Favourites</a></li>
-								<li id="youtubeli"><a href="" target="_blank">Watch our Quick Start video</a></li>
+								<li id="updateli"><a href="/HappyLife/aboutme&lookingfor">تعديل حسابي</a></li>
+								<li id="findexactli"><a href="/HappyLife/search?select=idealcb">شريكي المثالي </a></li>
+								<li id="findli"><a href="/HappyLife/search?lfselect=ilookfcb">الأعضاء الذبن أبحث عنهم</a></li>
+								<li id="lookformeli"><a href="/HappyLife/search?lfmselect=lookformecb">الأعضاء الذين ييحثون عني</a></li>
+								<li id="myfavli"><a href="/HappyLife/fav">قائمة مفضلاتي</a></li>
+								<li id="youtubeli"><a href="" target="_blank"></a></li>
 							</ul>
 						</div>
 					</div>
@@ -167,12 +169,12 @@
 				<!-- user-block -->
 				<br>
 				<div id="myIdeal" class="grid-container">
-					<h3>My Ideal Matches..</h3>
+					<h3 style="text-align:right;">الشريك المثالي</h3>
 				</div>
 
 				<br>
 				<div id="lastViewers" class="grid-container">
-					<h3 class="">Members who've recently viewed me ...</h3>
+					<h3 class="" style="text-align:right;">الأعضاء الذين رأوا حسابي</h3>
 					<table class="table table-dark">
 						
 						<tbody>
@@ -200,7 +202,7 @@
 
 				<br>
 				<div id="newMembers" class="grid-container">
-					<h3 class="">New members of Happy Life ...</h3>
+					<h3 class="" style="text-align:right;">الأعضاء الجدد في موقع زواج</h3>
 				</div>
 
 				<br>

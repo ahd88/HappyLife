@@ -40,7 +40,7 @@ public class AuthFilter implements Filter {
 		System.out.println("uri="+uri);
 		System.out.println(session ==null?"session is  null":"session is not null");
 		System.out.println("Hello Login Authentication Filter");
-		if(session == null && (!(uri.indexOf("/login.html")!=-1 ||uri.indexOf("/login")!=-1 || uri.indexOf("/signup.jsp")!=-1 || uri.indexOf("/search")!=-1 || uri.indexOf("/aboutme&lookingfor")!=-1 ||uri.indexOf("/js")!=-1 || uri.indexOf("/css")!=-1|| uri.indexOf("/fonts")!=-1 || uri.indexOf("/images")!=-1  || uri.indexOf("/color-switcher")!=-1))) {
+		if(session == null && (!(uri.indexOf("/login.html")!=-1 ||uri.indexOf("/login")!=-1 || uri.indexOf("/signup.jsp")!=-1 || uri.indexOf("/reset")!=-1 || uri.indexOf("/js")!=-1 || uri.indexOf("/css")!=-1|| uri.indexOf("/fonts")!=-1 || uri.indexOf("/images")!=-1  || uri.indexOf("/color-switcher")!=-1))) {
 			System.out.println("hello inside the if");
 			res.sendRedirect("http://localhost:8080/HappyLife/login.html");
 			return;

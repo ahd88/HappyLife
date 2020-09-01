@@ -37,9 +37,8 @@ public class SendMessageServlet extends HttpServlet {
 			User sessionUser = (User)request.getSession().getAttribute("sessionUser");
 			System.out.println("Session User name in SendMessageServlet = " + sessionUser.getUsername());
 			try {
-				
 				User candidate = RegistryDAO.getUserDAO().getUserByUserId(candidId);
-				System.out.println("Candiate Id in SendMessageServlet fetched from database = " + candidate.getUserId());
+				System.out.println("Candidate Id in SendMessageServlet fetched from database = " + candidate.getUserId());
 				request.setAttribute("candidName", candidate.getUsername());
 				request.setAttribute("candidId", candidate.getUserId());
 				System.out.println("Candidate name in SendMessageServlet is " + candidate.getUsername());
@@ -86,8 +85,11 @@ public class SendMessageServlet extends HttpServlet {
 			
 			try {
 				RegistryDAO.getMessageDAO().doSendMessage(message);
+				// saving notification to hl_users table, adding the ',' seperator is taken care of in updateNotifications()
+				String notes = RegistryDAO.userDAO.updateNotifications(candidId, sessionUser.getUsername()+ " sent you a message");
+				System.out.println("'" + sessionUser.getUsername() + " with Id " + sessionUser.getUserId() + " sent a message to " +candidId+ "' saving to database status: " + notes);
 				
-			} catch (MessageDAOException e) {
+			} catch (MessageDAOException | UserDAOException e) {
 				e.printStackTrace();
 			}
 			doGet(request, response);

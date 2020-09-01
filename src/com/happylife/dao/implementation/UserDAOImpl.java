@@ -155,7 +155,7 @@ public class UserDAOImpl implements UserDAO {
 			pstmt.setString(20,null);
 			pstmt.setString(21,null);
 			pstmt.setString(22,null);
-			pstmt.setString(23,null);
+			pstmt.setString(23,"");
 			pstmt.setString(24,null);
 			pstmt.setString(25,null);
 			pstmt.setString(26,null);
@@ -380,6 +380,7 @@ public class UserDAOImpl implements UserDAO {
 			LookingFor lf = lfDao2.getLookingForById(sessionUser.getUserId());
 			// dummy user to hold the data got from looking_for table
 			User ilookforUser = new User();
+			// all these values in lookingfor table should never be equal to null
 			if(lf.getLookingIn().equalsIgnoreCase("dontmind")) ilookforUser.setLookingIn(null); else ilookforUser.setLookingIn(lf.getLookingIn());
 			if(lf.getEthnicOrigin().equalsIgnoreCase("dontmind")) ilookforUser.setEthnicOrigin(null); else ilookforUser.setEthnicOrigin(lf.getEthnicOrigin());
 			if(lf.getBodyType().equalsIgnoreCase("dontmind"))ilookforUser.setBodyType(null);	else ilookforUser.setBodyType(lf.getBodyType());
@@ -396,9 +397,10 @@ public class UserDAOImpl implements UserDAO {
 			
 			DoMath doM = new DoMath();
 			String query = doM.constructQuery(ilookforUser, "select * from hl_users where ");
-			query = query + " and gender='" +matchGender+ "'";
+			if(query.equalsIgnoreCase("select * from hl_users where "))	query = query + "gender='" +matchGender+ "'";
+			else query = query + " and gender='" +matchGender+ "'";
 			pstmt = conn.prepareStatement(query);
-			System.out.println("Inside getIamLookingFor(): I_am_looking_for, constructed Query from DoMath is: " + query);
+			System.out.println("Inside getIamLookingFor(): constructed Query from DoMath is: " + query);
 			rs = pstmt.executeQuery();
 			while (rs.next()){
 				long userId  = rs.getLong(1);					
@@ -997,12 +999,20 @@ public class UserDAOImpl implements UserDAO {
 			conn = DatabaseConnectivity.doDBConnection();
 			for(int i=0 ; i< v.length; i+=2) {
 				switch(v[i]) {
+				case "password":
+					pstmt = conn.prepareStatement("update HL_USERS set passwd=? where userId=?");
+					pstmt.setString(1,v[i+1]);
+					pstmt.setLong(2,userId);
+					pstmt.executeUpdate();
+					msg = msg + "\nLPassword Updated Successfully";
+					System.out.println(msg);
+					break;
 				case "Age":
 					pstmt = conn.prepareStatement("update HL_USERS set age=? where userId=?");
 					pstmt.setString(1,v[i+1]);
 					pstmt.setLong(2,userId);
 					pstmt.executeUpdate();
-					msg = msg + "\nLanguages Updated Successfully";
+					msg = msg + "\nAge Updated Successfully";
 					System.out.println(msg);
 					break;
 				case "AboutMe":
@@ -1010,7 +1020,7 @@ public class UserDAOImpl implements UserDAO {
 					pstmt.setString(1,v[i+1]);
 					pstmt.setLong(2,userId);
 					pstmt.executeUpdate();
-					msg = msg + "\nLanguages Updated Successfully";
+					msg = msg + "\nAboutMyself Updated Successfully";
 					System.out.println(msg);
 					break;
 				case "language":
@@ -1285,6 +1295,116 @@ public class UserDAOImpl implements UserDAO {
 				if(rs != null)		rs.close();
 			} catch(Exception e){}
 		}
+	}
+	
+	@Override
+	public String add2MyFavorites(long userId, String ids) throws UserDAOException {
+		String status = "";
+		try { 
+			conn = DatabaseConnectivity.doDBConnection(); 
+			pstmt = conn.prepareStatement("update HL_USERS set MY_FAV=? where userId=?");
+			pstmt.setLong(2,userId); 
+			pstmt.setString(1,ids); 
+			pstmt.executeUpdate();
+			status = "success";
+		}catch(Exception e) { 
+			status = "failed";
+			e.printStackTrace(); 
+		}finally { 
+			try { 
+				if(conn != null) conn.close(); 
+				if(pstmt != null) pstmt.close(); 
+				if(rs != null) rs.close(); }
+		 catch(Exception e){}
+		}
+		return status;
+	}
+	
+	@Override
+	public String removeFromMyFavorites(long userId, long candidId) throws UserDAOException {
+		System.out.println("Inside removeFromMyFavorites, removing " + candidId + "....");
+		String status = "";
+		String myFav = getMyFavorites(userId);
+		DoMath doM = new DoMath();
+		List<Long> ids = doM.string2List(myFav);
+		ids.remove(candidId);
+		myFav = ids.toString();
+		status = add2MyFavorites(userId,myFav);
+		return status;
+	}
+	
+	@Override
+	public String getMyFavorites(long userId)throws UserDAOException{
+		String myFavFetched = "";
+		try {
+			conn = DatabaseConnectivity.doDBConnection();
+			PreparedStatement pstmt = conn.prepareStatement("select my_fav from HL_USERS where userId=?");
+			pstmt.setLong(1,userId);
+			rs = pstmt.executeQuery();
+			while (rs.next()){
+				myFavFetched  = rs.getString(1);
+			}
+			System.out.println("inside getMyFavorites(), is " + myFavFetched);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				if(conn != null)	conn.close();
+				if(pstmt != null)	pstmt.close();
+				if(rs != null)		rs.close();
+			} catch(Exception e){}
+		}
+		return myFavFetched;
+	}
+	
+	@Override
+	public String updateNotifications(long userId, String content) throws UserDAOException {
+		String Notification = "";
+		Notification = getNotifications(userId);
+		if(!Notification.equals("") || Notification != null)	Notification = Notification + ", " + content;
+		String status = "";
+		try { 
+			conn = DatabaseConnectivity.doDBConnection();
+			pstmt = conn.prepareStatement("update HL_USERS set notifications=? where userId=?");
+			pstmt.setLong(2,userId); 
+			pstmt.setString(1,content); 
+			pstmt.executeUpdate();
+			status = "success";
+		}catch(Exception e) { 
+			status = "failed";
+			e.printStackTrace(); 
+		}finally { 
+			try { 
+				if(conn != null) conn.close(); 
+				if(pstmt != null) pstmt.close(); 
+				if(rs != null) rs.close(); }
+		 catch(Exception e){}
+		}
+		return status;
+	}
+	
+	@Override
+	public String getNotifications(long userId)throws UserDAOException{
+		String myNotification = "";
+		try {
+			conn = DatabaseConnectivity.doDBConnection();
+			PreparedStatement pstmt = conn.prepareStatement("select notifications from HL_USERS where userId=?");
+			pstmt.setLong(1,userId);
+			rs = pstmt.executeQuery();
+			while (rs.next()){
+				myNotification  = rs.getString(1);
+			}
+			System.out.println("inside getNotifications(), is " + myNotification);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				if(conn != null)	conn.close();
+				if(pstmt != null)	pstmt.close();
+				if(rs != null)		rs.close();
+			} catch(Exception e){}
+		}
+		return myNotification;
 	}
 	
 	/*

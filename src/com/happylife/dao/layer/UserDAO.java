@@ -29,5 +29,10 @@ public interface UserDAO {
 	//public String getLookingForHibernate(long userId) throws UserDAOException;
 	public String updateUserPhoto(long userId, String photoName)throws UserDAOException;
 	//public String updateUserPhotoHibernate(long userId, String photoName)throws UserDAOException;
+	public String add2MyFavorites(long userId, String ids)throws UserDAOException;
+	public String removeFromMyFavorites(long userId, long candidId)throws UserDAOException;
+	public String getMyFavorites(long userId)throws UserDAOException;
+	public String getNotifications(long userId) throws UserDAOException;
+	public String updateNotifications(long userId, String content) throws UserDAOException;
 	
 }

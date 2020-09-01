@@ -2,8 +2,14 @@ package com.happylife;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.logging.Logger;
+import java.util.*;
+import javax.mail.*;
+import javax.mail.internet.*;
 
 import com.happylife.pojo.LookingFor;
 import com.happylife.pojo.User;
@@ -77,6 +83,20 @@ public class DoMath {
 		else if(hourDiff > 0) 	return hourDiff>1?   hourDiff + " hours": hourDiff + " hour";
 		else if(minuteDiff > 5) return minuteDiff + " minutes";
 		else return "Online";
+	}
+	
+	public List<Long> string2List(String ids){
+		List<Long> UIDsList = new ArrayList<Long>();
+		if(!ids.equals("")) {
+			String str[] = ids.split(",");
+			List<String> al = new ArrayList<String>();
+			al = Arrays.asList(str);
+			for(String s: al){
+				UIDsList.add(Long.parseLong(s));
+				System.out.println("my favorite id " + s);
+			}
+		}
+		return UIDsList;
 	}
 	
 	public String constructQuery(User user, String query) {
@@ -223,4 +243,82 @@ public class DoMath {
 		}
 		return query;
 	}
+	
+	// from javatpoint.com/example-of-sending-email-using-java-mail-api
+	public void sendEmail(String recepient, String msgkey, String messageContent) throws MessagingException {
+		System.out.println("Preparing Email.....");
+		//get the session object
+		Properties properties = new Properties();
+		//Enable authentication
+        properties.put("mail.smtp.auth", "true");
+        //Set TLS encryption enabled
+        properties.put("mail.smtp.starttls.enable", "true");
+        //Set SMTP host
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        //Set smtp port
+        properties.put("mail.smtp.port", "587");
+        // gmail address
+        final String myAccountEmail = "izawaj.sd@gmail.com";
+        // gmail password
+        final String password = "****";
+        
+        //Create a session with account credentials
+        Session session = Session.getInstance(properties, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(myAccountEmail, password);
+            }
+        });
+        
+        //Prepare email message
+        Message message = prepareMessage(session, myAccountEmail, recepient, msgkey, messageContent);
+		
+        //Send mail
+        
+			Transport.send(message);
+        System.out.println("Message sent successfully");
+	}
+	
+	private static Message prepareMessage(Session session, String myAccountEmail, String recepient, String messageKey, String messageContent) {
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(myAccountEmail));
+            String htmlCode;
+            switch(messageKey) {
+            case "sent":
+            	message.setRecipient(Message.RecipientType.TO, new InternetAddress(recepient));
+                message.setSubject("Your message is sent");
+                
+                message.setContent(messageContent, "text/html");
+            	break;
+            case "read":
+            	message.setRecipient(Message.RecipientType.TO, new InternetAddress(recepient));
+                message.setSubject("Your message have been viewed.");
+                
+                message.setContent(messageContent, "text/html");
+            	break;
+            case "reply":
+            	message.setRecipient(Message.RecipientType.TO, new InternetAddress(recepient));
+                message.setSubject("You have got a new reply to your message");
+                
+                message.setContent(messageContent, "text/html");
+            	break;
+            case "viewed":
+            	message.setRecipient(Message.RecipientType.TO, new InternetAddress(recepient));
+                message.setSubject("Your profile have been viewed.");
+                
+                message.setContent(messageContent, "text/html");
+            	break;
+            }
+            //message.setRecipient(Message.RecipientType.TO, new InternetAddress(recepient));
+            //message.setSubject("My First Email from Java App");
+            //String htmlCode = "<h1> WE LOVE JAVA </h1> <br/> <h2><b>Next Line </b></h2>";
+            //message.setContent(htmlCode, "text/html");
+            return message;
+        } catch (Exception ex) {
+        	System.out.println(ex);
+        	//Logger.getLogger(JavaMailUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 }

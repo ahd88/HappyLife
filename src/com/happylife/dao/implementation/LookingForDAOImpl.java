@@ -31,26 +31,26 @@ public class LookingForDAOImpl implements LookingForDAO{
 			pstmt = conn.prepareStatement("insert into Looking_For values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 			pstmt.setLong(1, lf.getId());
 			pstmt.setLong(2, lf.getUserId());
-			pstmt.setString(3, lf.getAgeL());
+			pstmt.setString(3, null);
 			pstmt.setString(4, null);
-			pstmt.setString(5, null);
-			pstmt.setString(6, null);
+			pstmt.setString(5, "dontmind");			// LookingIn, make it by default as "dontmind" 
+			pstmt.setString(6, "dontmind");			// ResidencyStatus
 			pstmt.setString(7, null);
-			pstmt.setString(8, null);
-			pstmt.setString(9, null);
+			pstmt.setString(8, "dontmind");			// Ethnic Origin
+			pstmt.setString(9, "dontmind");			// religious history
 			pstmt.setString(10, null);
-			pstmt.setString(11, null);
-			pstmt.setString(12, null);
-			pstmt.setString(13, null);
-			pstmt.setString(14, null);
+			pstmt.setString(11, "dontmind");		// Pray
+			pstmt.setString(12, "dontmind");		// sect
+			pstmt.setString(13, "dontmind");		// marital Status
+			pstmt.setString(14, "dontmind");		// Has Children
 			pstmt.setString(15, null);
 			pstmt.setString(16, null);
 			pstmt.setString(17, null);
-			pstmt.setString(18, null);
+			pstmt.setString(18, "dontmind");		// BodyType
 			pstmt.setString(19, null);
 			pstmt.setString(20, null);
-			pstmt.setString(21, null);
-			pstmt.setString(22, null);
+			pstmt.setString(21, "dontmind");		//HijabBeard
+			pstmt.setString(22, "dontmind");		// Profession
 			pstmt.setString(23, null);
 			pstmt.setString(24, null);
 			

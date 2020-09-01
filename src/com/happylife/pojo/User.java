@@ -64,8 +64,8 @@ public class User {
 	@Column(name="ABOUT_MYSELF", nullable = true)
 	private String aboutMe;
 	
-	@Column(name="LOOKING_FOR", nullable = true)
-	private String lookingFor;
+	@Column(name="MY_FAV", nullable = true)
+	private String myFavorites;
 	
 	@Column(name="PUBLIC_PHOTO", nullable = true)
 	private String publicPhoto;
@@ -87,6 +87,9 @@ public class User {
 	
 	@Column(name="BodyType", nullable=true)
 	private String bodyType;
+	
+	@Column(name="NOTIFICATIONS", nullable=true)
+	private String notifications;
 	
 	@Column(name="Hijab_Beard", nullable = true)
 	private String hijabBeard;
@@ -166,7 +169,7 @@ public class User {
 		this.dob = dob;
 		this.residencyStatus = residencyStatus;
 		this.aboutMe = aboutMyself;
-		this.lookingFor = lookingFor;
+		this.myFavorites = lookingFor;
 		this.publicPhoto = publicPhoto;
 		this.lastLogin = lastLogin;
 		this.profilePostedBy = profilePostedBy;
@@ -299,12 +302,12 @@ public class User {
 		this.aboutMe = aboutMe;
 	}
 
-	public String getLookingFor() {
-		return lookingFor;
+	public String getMyFavorites() {
+		return myFavorites;
 	}
 
-	public void setLookingFor(String lookingFor) {
-		this.lookingFor = lookingFor;
+	public void setMyFavorites(String myFav) {
+		this.myFavorites = myFav;
 	}
 
 	public String getPublicPhoto() {
@@ -361,6 +364,14 @@ public class User {
 
 	public void setBodyType(String bodyType) {
 		this.bodyType = bodyType;
+	}
+
+	public String getNotifications() {
+		return notifications;
+	}
+
+	public void setNotifications(String notifications) {
+		this.notifications = notifications;
 	}
 
 	public String getHijabBeard() {

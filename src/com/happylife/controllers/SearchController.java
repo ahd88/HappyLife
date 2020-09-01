@@ -114,7 +114,17 @@ public class SearchController extends HttpServlet {
 					System.out.println(user.getUsername());
 				}
 			}
-			req.getRequestDispatcher("/WEB-INF/jsp/search.jsp").forward(req, res);
+			
+			String loginArabicOrEnglish = (String) req.getSession().getAttribute("loginlang");
+			System.out.println("Inside UpdateProfileServlet, loginlang is: " + loginArabicOrEnglish);
+			if(loginArabicOrEnglish.equals("loginA")) {
+				RequestDispatcher rd = req.getRequestDispatcher("/WEB-INF/jsp/searcha.jsp");
+				rd.forward(req, res);
+			}else {
+				RequestDispatcher rd = req.getRequestDispatcher("/WEB-INF/jsp/search.jsp");
+				rd.forward(req, res);
+			}
+			
 		} catch (UserDAOException e) {
 			e.printStackTrace();
 			if(e.getMessage().equals("You Search Criteria is not met")) message = "You Search Criteria is not met";

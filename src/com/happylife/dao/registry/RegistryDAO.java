@@ -2,10 +2,12 @@ package com.happylife.dao.registry;
 
 import com.happylife.dao.implementation.LookingForDAOImpl;
 import com.happylife.dao.implementation.MessageDAOImpl;
+import com.happylife.dao.implementation.ResetDAOImpl;
 import com.happylife.dao.implementation.UserDAOImpl;
 import com.happylife.dao.implementation.ViewedDAOImpl;
 import com.happylife.dao.layer.LookingForDAO;
 import com.happylife.dao.layer.MessageDAO;
+import com.happylife.dao.layer.ResetDAO;
 import com.happylife.dao.layer.UserDAO;
 import com.happylife.dao.layer.ViewedDAO;
 import com.happylife.pojo.LookingFor;
@@ -15,6 +17,7 @@ public class RegistryDAO {
 	public static MessageDAO messageDAO;
 	public static LookingForDAO lookingForDAO;
 	public static ViewedDAO viewedDAO;
+	public static ResetDAO resetDAO;
 	
 	static{
 		userDAO = new UserDAOImpl();
@@ -62,5 +65,17 @@ public class RegistryDAO {
 	
 	public static void setViewedDAO(ViewedDAO viewedDAO) {
 		RegistryDAO.viewedDAO = viewedDAO;
+	}
+	
+	static{
+		resetDAO = new ResetDAOImpl();
+	}
+
+	public static ResetDAO getResetDAO() {
+		return resetDAO;
+	}
+	
+	public static void setResetDAO(ResetDAO resetDAO) {
+		RegistryDAO.resetDAO = resetDAO;
 	}
 }

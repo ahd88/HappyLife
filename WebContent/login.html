@@ -20,7 +20,8 @@
 <body>
     <form action="login" method="post"  class="form-signin" style="box-shadow: 0 0 black;">
       <div class="text-center mb-4">
-        <h1 class="h3 mb-3 font-weight-normal">Login Here</h1>
+        <h2 class="h3 mb-3 font-weight-normal">Login Here</h2>
+        <h4><a href="loginA.html">اضغط هنا لتسجيل الدخول بالعربي</a></h4>
       </div>
 
       <div class="form-label-group">
@@ -39,10 +40,12 @@
 
       <div class="checkbox mb-3">
         <label>
-          <input type="checkbox" value="remember-me"> Remember me
+          <!-- <input type="checkbox" value="remember-me"> Remember me -->
+          <a href="/HappyLife/reset"> Forgot password</a>
         </label>
       </div>
-      <button class="btn btn-lg btn-primary btn-block" type="submit" value="Login">Sign in</button>
+      <input type="hidden" name="login" value="login">
+      <button class="btn btn-lg btn-primary btn-block" type="submit" name="login" value="login">Sign in</button>
       <p class="mt-5 mb-3 text-muted text-center">© 2017-2018</p>
     </form>
 </body>

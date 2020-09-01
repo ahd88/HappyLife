@@ -1,7 +1,7 @@
 <%@page import="com.happylife.pojo.User"%>
 <%@page import="java.awt.image.BufferedImage"%>
 <%@page import="javax.imageio.ImageIO"%>
-<%@page import="java.io.*"%>
+<%@page import="java.io.*, java.util.*"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -30,14 +30,16 @@
 	<!-- for responsive tabs -->
 	<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
 	<script src="${pageContext.request.contextPath}/js/bootstrap337.min.js"></script>
-
+	
 	<script type="text/javascript" src="${pageContext.request.contextPath}/js/actions.js"></script>
-
+	
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/jquery-ui.css">
 	<script src="${pageContext.request.contextPath}/js/jquery-1.12.4.js"></script>
 	<script src="${pageContext.request.contextPath}/js/jquery-ui.js"></script>
 </head>
 <body>
+	<% response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); %>
+	<% if(session.getAttribute("username")==null) response.sendRedirect("/HappyLife");%>
 	<header>
 		<!-- Fixed navbar -->
 		<nav class="navbar navbar-inverse navbar-fixed-top">
@@ -79,84 +81,39 @@
 	<br>
 
 	<div class="container">
+		<ul class="nav nav-tabs">
+    		<li class="active"><a href="/HappyLife/myprofile">Home</a></li>
+    		<li><a href="/HappyLife/pinfo">My Profile</a></li>
+    		<li><a href="/HappyLife/search">Search</a></li>
+    		<li><a data-toggle="tab" href="#menu3">Marriage Advice</a></li>
+ 		</ul>
 		<div class="jumbotron font">
-			<div class="row">
-				<div class="col-xs-2 col-md-2">
-					<a href="publicphotos/1.JPG" class="thumbnail">
-						<img src="publicphotos/1.JPG" alt="...">
-					</a>
-				</div>
-				<div class="col-xs-4 col-md-4 move">
-				<h3>Noorah Ali
-					<span class="label label-default overrides">New</span>
-				</h3>
-				<p>Loving, Friendly Trustworthy</p>
-				<p>Age: 25 Years old</p>
-				<p>Location: Cardiff , United Kingdom</p>
-				<p>Message response rate : 80%</p>
-				</div>
-				<div class="col-xs-4 col-sm-4 moveleft">
-					<div class="list-group">
-						<a href="#" class="list-group-item active">Send message</a>
-						<a href="#" class="list-group-item">Remove her from my favourites</a>
-						<a href="#" class="list-group-item">invite her to view my profile</a>
-						<a href="#" class="list-group-item">Ask to exchange photos with her</a>
-						<a href="#" class="list-group-item">Your notes on her</a>
-					</div>
-				</div>		
-			</div>
-			<hr>
-			<div class="row">
-				<div class="col-xs-2 col-md-2">
-					<a href="publicphotos/1.JPG" class="thumbnail">
-						<img src="publicphotos/1.JPG" alt="...">
-					</a>
-				</div>
-				<div class="col-xs-4 col-md-4 move">
-				<h3>Noorah Ali
-					<span class="label label-default overrides">New</span>
-				</h3>
-				<p>Loving, Friendly Trustworthy</p>
-				<p>Age: 25 Years old</p>
-				<p>Location: Cardiff , United Kingdom</p>
-				<p>Message response rate : 80%</p>
-				</div>
-				<div class="col-xs-4 col-sm-4 moveleft">
-					<div class="list-group">
-						<a href="#" class="list-group-item active">Send message</a>
-						<a href="#" class="list-group-item">Remove her from my favourites</a>
-						<a href="#" class="list-group-item">invite her to view my profile</a>
-						<a href="#" class="list-group-item">Ask to exchange photos with her</a>
-						<a href="#" class="list-group-item">Your notes on her</a>
-					</div>
-				</div>		
-			</div>
-			<hr>
-			<div class="row">
-				<div class="col-xs-2 col-md-2">
-					<a href="publicphotos/1.JPG" class="thumbnail">
-						<img src="publicphotos/1.JPG" alt="...">
-					</a>
-				</div>
-				<div class="col-xs-4 col-md-4 move">
-				<h3>Noorah Ali
-					<span class="label label-default overrides">New</span>
-				</h3>
-				<p>Loving, Friendly Trustworthy</p>
-				<p>Age: 25 Years old</p>
-				<p>Location: Cardiff , United Kingdom</p>
-				<p>Message response rate : 80%</p>
-				</div>
-				<div class="col-xs-4 col-sm-4 moveleft">
-					<div class="list-group">
-						<a href="#" class="list-group-item active">Send message</a>
-						<a href="#" class="list-group-item">Remove her from my favourites</a>
-						<a href="#" class="list-group-item">invite her to view my profile</a>
-						<a href="#" class="list-group-item">Ask to exchange photos with her</a>
-						<a href="#" class="list-group-item">Your notes on her</a>
-					</div>
-				</div>		
-			</div>
+			<br>
+				<!-- <div id="lastViewers" class="grid-container"> -->
+					<h3 class="">My Favorites ...</h3>
+					<table class="table table-dark">
+						
+						<tbody>
+							<tr>
+								<%
+		  							List<User> favList = (List<User>)request.getAttribute("favoriteList");
+		  							for(User u:favList){
+		  						%>
+								<th scope="col" class="col-md-2">
+		  							<br>
+									<%=u.getUsername()%><br>
+	    							<a href="${pageContext.request.contextPath}/candid?=<%=u.getUserId()%>">
+	    								<img src="${pageContext.request.contextPath}/publicphotos/<%=u.getPublicPhoto() %>.JPG">
+	    							</a>
+								</th>
+								<% 
+			    					}
+			    				%>
+							</tr>
+						</tbody>
+						
+					</table>
+				<!-- </div> -->
 		</div>
 	</div>
 	

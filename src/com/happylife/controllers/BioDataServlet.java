@@ -37,17 +37,25 @@ public class BioDataServlet extends HttpServlet {
 		
 		try {
 			String aboutme = RegistryDAO.getUserDAO().getAboutMe(id);
-			String lookingfor = RegistryDAO.getUserDAO().getLookingFor(id);
+			String lookingfor = RegistryDAO.getLookingForDAO().getLookingForById(id).getLookingFor();
 			session.removeAttribute("aboutMeInfo");
 			session.removeAttribute("lookingForInfo");
 			
 			session.setAttribute("aboutMeInfo", aboutme);
 			session.setAttribute("lookingForInfo", lookingfor);
-		} catch (UserDAOException e) {
+		} catch (UserDAOException | LookingForDAOException e) {
 			e.printStackTrace();
 		}
-		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/aboutme.jsp");
-		rd.forward(request, response);
+		
+		String loginArabicOrEnglish = (String) request.getSession().getAttribute("loginlang");
+		System.out.println("Inside UpdateProfileServlet, loginlang is: " + loginArabicOrEnglish);
+		if(loginArabicOrEnglish.equals("loginA")) {
+			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/aboutmea.jsp");
+			rd.forward(request, response);
+		}else {
+			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/aboutme.jsp");
+			rd.forward(request, response);
+		}
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -123,8 +131,16 @@ public class BioDataServlet extends HttpServlet {
 			System.out.println("Looking for Message in BioDataServlet is: " + lookingForMessage);
 		}
 		
-		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/pinfo.jsp");
-		rd.forward(request, response);
+		String loginArabicOrEnglish = (String) request.getSession().getAttribute("loginlang");
+		System.out.println("Inside UpdateProfileServlet, loginlang is: " + loginArabicOrEnglish);
+		if(loginArabicOrEnglish.equals("loginA")) {
+			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/pinfoa.jsp");
+			rd.forward(request, response);
+		}else {
+			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/pinfo.jsp");
+			rd.forward(request, response);
+		}
+		
 	}
 
 }

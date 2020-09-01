@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.mail.MessagingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -45,9 +46,22 @@ public class ViewProfileServlet extends HttpServlet {
 				User sessionUser = (User) session.getAttribute("sessionUser");
 				User candidUser = RegistryDAO.getUserDAO().getUserByUserId(candidId);
 				LookingFor lFor = RegistryDAO.getLookingForDAO().getLookingForById(candidId);
-				DoMath doM = new DoMath();
+				
+				// saving notification to hl_users table, adding the ',' seperator is taken care of in updateNotifications()
+				String notes = RegistryDAO.userDAO.updateNotifications(candidId, "candidId "+ sessionUser.getUserId()+ " viewed your profile");
+				System.out.println("candidId '" + sessionUser.getUserId() + " viewed " + candidId + "' saving to database status: " + notes);
+				String fetched = RegistryDAO.getUserDAO().getMyFavorites(sessionUser.getUserId());
+				// to check whether or not candidUser is in myfavorite list or not
+				String foundInFav = "No";
+				
+				DoMath doM = new DoMath();	//
+				String htmlCode = "<h2>As-Salaamu Alaikum " + candidUser.getUsername()+ "<br/>" + sessionUser.getUsername() + " has viewed your profile</h2> <br/> <h3><b>click here to view their profile</b></h3>";
+				doM.sendEmail(candidUser.getEmail(), "viewed", htmlCode);
+				List<Long> myFavUIDs = doM.string2List(fetched);
+				if(myFavUIDs.contains(candidUser.getUserId())) foundInFav = "Yes";
 				//LookingFor candidlookingFor = RegistryDAO.getLookingForDAO().getLookingForById(candidUser.getUserId());
 				String recordMsg = RegistryDAO.getViewedDAO().checkIfRecordExists(sessionUser.getUserId(), candidUser.getUserId());
+				
 				System.out.println("record message before if : " + recordMsg);
 				if(recordMsg.equalsIgnoreCase("Not Found")) {
 					Viewed viewed = new Viewed();
@@ -76,12 +90,11 @@ public class ViewProfileServlet extends HttpServlet {
 					if(sessionUser.getGender().equals("M")) 
 						viewedUpdated = RegistryDAO.getViewedDAO().updateViewed(sessionUser.getUserId(), candidUser.getUserId(), 
 																					"u1vu2", "true", "record", recordMsg);
-					else 
+					else
 						viewedUpdated = RegistryDAO.getViewedDAO().updateViewed(sessionUser.getUserId(), candidUser.getUserId(), 
 																					"u2vu1", "true", "record", recordMsg);
 					System.out.println("viewed updated msg: " + viewedUpdated);
 				}
-				
 				
 				System.out.println("Candidate User is: " + candidUser.getEmail());
 				request.setAttribute("candidate", candidUser);
@@ -89,9 +102,12 @@ public class ViewProfileServlet extends HttpServlet {
 				//request.setAttribute("CandidateLookingfor", candidlookingFor);
 				String lastLogin = doM.getLastLogin(candidUser.getLastLogin());
 				request.setAttribute("candidLastLogin", lastLogin);
+				System.out.println("Candidate User: " + candidUser.getUsername() + " is in myFavorites? " + foundInFav);
+				request.setAttribute("foundInMyFavList",foundInFav);
+				
 				ServletContext ctx = getServletContext();
 				ctx.setAttribute("candidate", candidUser);
-			} catch (UserDAOException | LookingForDAOException | ViewedDAOException e) {
+			} catch (UserDAOException | LookingForDAOException | ViewedDAOException | MessagingException e) {
 				e.printStackTrace();
 			}
 		}
@@ -100,6 +116,4 @@ public class ViewProfileServlet extends HttpServlet {
 		rd.forward(request, response);
 	}
 	
-	
-
 }

@@ -2,16 +2,17 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type"/>
 <head>
 	<jsp:include page="/WEB-INF/jsp/header.jspf"></jsp:include>
-	<title>Welcome To Home</title>
+	<title>مرحبا بك في زواج</title>
 	
-	
+	<link href="${pageContext.request.contextPath}/css/arabic.css" rel="stylesheet">
 </head>
 <body>
 	<header>
 	      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-	      	<a class="navbar-brand" href="./login.html">Login</a>
+	      	<a class="navbar-brand" href="./loginA.html">تسجيل الدخول</a>
         	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           		<span class="navbar-toggler-icon"></span>
         	</button>
@@ -19,13 +20,13 @@
 	      	<div class="collapse navbar-collapse" id="navbarCollapse">
 	        	<ul class="navbar-nav mr-auto">
 	            	<li class="nav-item">
-	              		<a class="nav-link" href="indexA.jsp">العربية</a>
+	              		<a class="nav-link" href="index.jsp">English</a>
 	            	</li>
 	            	<li class="nav-item">
-	              		<a class="nav-link" href="#">Help</a>
+	              		<a class="nav-link" href="#">مساعدة</a>
 	            	</li>
 	             	<li class="nav-item">
-	              		<a class="nav-link" href="#">About us</a>
+	              		<a class="nav-link" href="#">عن زواج</a>
 	            	</li>
 	          	</ul>
 	        </div>
@@ -39,32 +40,33 @@
 	    
 	    <form action="signup.jsp" method="get">
 	    	<div class="container">
-				<h1>Grid</h1>
-			  	<p>Find with us your true happiness.</p>      
-			  	<p>Resize the browser window to see the effect.</p>      
+				<h2>موقع زواج  للزواج السعيد</h2>
+				<p>دليلك للبحث عن الشريك</p>
+			  	<p	id="">ستجدان معنا سعادتكما الحقيقية</p>            
 			  	<div class="row">
-			  		<div class="col-sm-3" style="background-color:yellow;">
-				    	<label for="form-first-name">First Name</label>
-				      	<input type="text" name="fname" id="inputFirstName" class="form-control" placeholder="First Name" required="" autofocus="">
-				    </div>
-				    
-				    <div class="col-sm-3" style="background-color:pink;">
-				    	<label for="form-last-name">Last Name</label>
-				    	<input type="text" name="lname" id="inputLastName" class="form-control" placeholder="Last Name" required="" autofocus="">
-				    </div>
-				    <div class="col-sm-3" style="background-color:yellow;">
-				    	<label for="form-email">Email</label>
-				      	<input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">  
-				    </div>
 				    <div class="col-sm-3" style="background-color:pink;">
 				      	<div>
-							<label for="form-r-sex">I am seeking a ...</label>
+							<label for="form-r-sex">أبحث عن ..</label>
 							<div class="custom-select">
-								<select name="sex" id="form-r-sex" class="has-custom-select has-tooltip" data-tooltip="Please tell us who you are." data-error="Please select if you are a man seeking a wife or a woman seeking a husband." data-validation="required"><option value="" selected="selected">Select here</option><option value="M">Wife</option><option value="F">Husband</option>
+								<select name="sex" id="form-r-sex" class="has-custom-select has-tooltip" data-tooltip="Please tell us who you are." data-error="Please select if you are a man seeking a wife or a woman seeking a husband." data-validation="required"><option value="" selected="selected">اختر هنا</option><option value="M">زوجة</option><option value="F">زوج</option>
 								</select> 
 							</div>
 						</div>    
 				    </div>
+				    <div class="col-sm-3" style="background-color:yellow;">
+				    	<label for="form-email">البريد الالكتروني</label>
+				      	<input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">  
+				    </div>
+				    
+				    <div class="col-sm-3" style="background-color:pink;">
+				    	<label for="form-last-name">الاسم الأخير</label>
+				    	<input type="text" name="lname" id="inputLastName" class="form-control" placeholder="Last Name" required="" autofocus="">
+				    </div>
+				    <div class="col-sm-3" style="background-color:yellow;">
+				    	<label for="form-first-name">الاسم الأول</label>
+				      	<input type="text" name="fname" id="inputFirstName" class="form-control" placeholder="First Name" required="" autofocus="">
+				    </div>
+				    
 				</div>
 				<div><br></div>
 				<div class="row">

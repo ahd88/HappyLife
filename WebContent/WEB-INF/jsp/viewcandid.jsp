@@ -30,6 +30,25 @@
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/jquery-ui.css">
 	<script src="${pageContext.request.contextPath}/js/jquery-1.12.4.js"></script>
 	<script src="${pageContext.request.contextPath}/js/jquery-ui.js"></script>
+	
+	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script>
+			function add2fav(id){
+				var boolAdded = false;
+				id =id.split("_")[1];
+				
+				$.ajax({
+					url : "${pageContext.request.contextPath}/add2fav",
+					type : "get",
+					data : "candid="+id,
+					
+					success: alert("Profile added to my favorites Successfully."),
+					error: function(error){
+						alert("Some issue");
+					}
+				});
+			}
+		</script>
 </head>
 <body>
 	<% response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");%>
@@ -110,7 +129,13 @@
 							<ul class="primary">
 								<li id="morelikeli"><a href="/HappyLife/morelike?=<%=candidate.getUserId()%>">More Like <%=candidate.getUsername() %></a></li>
 								<li id="messagetoli"><a href="/HappyLife/sendmessageto?=<%=candidate.getUserId()%>">Send a message </a></li>
-								<li id="deladdfavli"><a href="#bestmatch.php">Add to My Favourites</a></li>
+								<li id="deladdfavli"><a id="addfav_${candidate.userId}" onclick="add2fav(this.id)">
+									<c:choose>
+										<c:when test="${foundInMyFavList=='No'}">Add to My Favourites</c:when>
+										<c:when test="${foundInMyFavList=='Yes'}">Remove from My Favourites</c:when>
+										
+    								</c:choose>
+								</a></li>
 								<li id="photoli"><a href="#lookingforme.php">Ask to exchange Photos</a></li>
 								<li id="nudgeli"><a href="#favourites.php">Invite to view my Profile</a></li>
 								<li id="yournotesli"><a href="#favourites.php">Your notes on them</a></li>

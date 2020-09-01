@@ -36,6 +36,12 @@ public class Viewed {
 	@Column(name="user2inviteduser1")
 	private boolean user2inviteduser1;
 	
+	@Column(name="user1Notes")
+	private String user1notes;
+	
+	@Column(name="user2Notes")
+	private String user2notes;
+	
 	public Viewed() {
 		super();
 	}
@@ -117,6 +123,22 @@ public class Viewed {
 
 	public void setUser2inviteduser1(boolean user2inviteduser1) {
 		this.user2inviteduser1 = user2inviteduser1;
+	}
+
+	public String getUser1notes() {
+		return user1notes;
+	}
+
+	public void setUser1notes(String user1notes) {
+		this.user1notes = user1notes;
+	}
+
+	public String getUser2notes() {
+		return user2notes;
+	}
+
+	public void setUser2notes(String user2notes) {
+		this.user2notes = user2notes;
 	}
 	
 }

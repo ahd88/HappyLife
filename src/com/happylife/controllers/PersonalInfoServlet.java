@@ -13,29 +13,27 @@ import javax.servlet.http.HttpSession;
 import com.happylife.pojo.User;
 
 /**
- * Servlet implementation class UpdateProfileServlet
+ * Servlet implementation class PersonalInfoServlet
  */
 @WebServlet("/pinfo")
-public class UpdateProfileServlet extends HttpServlet {
+public class PersonalInfoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		User sessionUsr = (User) session.getAttribute("sessionUser");	// Attribute sessionUser set in LoginServlet
 		
-		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/pinfo.jsp");
-		rd.forward(request, response);
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		
+		String loginArabicOrEnglish = (String) request.getSession().getAttribute("loginlang");
+		System.out.println("Inside UpdateProfileServlet, loginlang is: " + loginArabicOrEnglish);
+		if(loginArabicOrEnglish.equals("loginA")) {
+			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/pinfoa.jsp");
+			rd.forward(request, response);
+		}else {
+			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/pinfo.jsp");
+			rd.forward(request, response);
+		}
 	}
 
 }

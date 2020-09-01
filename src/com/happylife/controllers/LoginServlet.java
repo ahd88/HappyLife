@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -40,7 +41,8 @@ public class LoginServlet extends HttpServlet{
 		
 		String email = req.getParameter("email");
 		String password = req.getParameter("password");
-		
+		String loginArabicOrEnglish = req.getParameter("login");
+		System.out.println("loginArabicOrEnglish = " + loginArabicOrEnglish);
 		System.out.println("Username and pasword are : "+email +"  "+ password);
 		//if(br.getAllErrors().size() > 0){
 			//System.out.println("Server side validation takes place....");	
@@ -89,13 +91,25 @@ public class LoginServlet extends HttpServlet{
 					session.setAttribute("personalPhoto", userFetched.getImage());
 					session.setAttribute("publicPhoto", userFetched.getPublicPhoto()+".JPG");
 					session.setAttribute("aboutMeInfo", userFetched.getAboutMe());
-					session.setAttribute("lookingForInfo", userFetched.getLookingFor());
+					session.setAttribute("lookingForInfo", userFetched.getMyFavorites());
 					session.setAttribute("myAge", doM.getAge(userFetched.getDob()));
 					System.out.println("Fetched Personal photo name is "+ userFetched.getImage());
 					System.out.println("Fetched Public photo name is "+ userFetched.getPublicPhoto());
 					session.setAttribute("photopath", "D:/tutorials/Github/HappyLife/WebContent/WEB-INF/usrphotos/"+userFetched.getImage());
-					RequestDispatcher rd = req.getRequestDispatcher("/WEB-INF/jsp/myprofile.jsp");
-					rd.forward(req, res);
+					
+					session.setAttribute("loginlang", loginArabicOrEnglish);
+					// this context never worked for me
+					ServletContext ctx = getServletContext();
+					//ctx.setInitParameter("loginlang",loginArabicOrEnglish);
+					
+					System.out.println("Inside LoginServlet, loginlang is: " + loginArabicOrEnglish);
+					if(loginArabicOrEnglish.equals("loginA")) {
+						RequestDispatcher rd = req.getRequestDispatcher("/WEB-INF/jsp/myprofilea.jsp");
+						rd.forward(req, res);
+					}else {
+						RequestDispatcher rd = req.getRequestDispatcher("/WEB-INF/jsp/myprofile.jsp");
+						rd.forward(req, res);
+					}
 					//res.sendRedirect("myprofile");
 				}else{
 					//md.addAttribute("error_msg", "please try again");
