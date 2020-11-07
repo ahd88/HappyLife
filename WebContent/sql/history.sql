@@ -88,7 +88,6 @@ ALTER TABLE LOOKING_FOR MODIFY COLUMN ReligiousHistory VARCHAR(15) NULL;
 ALTER TABLE LOOKING_FOR MODIFY COLUMN Sect VARCHAR(10)  NULL;
 ALTER TABLE LOOKING_FOR MODIFY COLUMN LOOKINGIN VARCHAR(100)  NULL;
 
-
 CREATE TABLE Messages(
 	msgId BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
 	senderId BIGINT NOT NULL,
@@ -97,6 +96,10 @@ CREATE TABLE Messages(
 	msgTime timestamp,
 	msgRead boolean
 );
+ALTER TABLE Messages ADD FOREIGN KEY (senderId) REFERENCES HL_USERS (userId);
+ALTER TABLE Messages ADD COLUMN msgApproved boolean NULL;
+use spring;
+select * from messages;
 
 CREATE TABLE viewed(
 	id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
@@ -108,16 +111,61 @@ CREATE TABLE viewed(
     user1inviteduser2 boolean,
     user2inviteduser1 boolean
 );
+ALTER TABLE viewed ADD user1Notes VARCHAR(500);
+ALTER TABLE viewed ADD user2Notes VARCHAR(500);
+
 /*DROP TABLE RESET_PASS;*/
 CREATE TABLE RESET_PASS(
 	EMAIL VARCHAR(50) NOT NULL PRIMARY KEY,
     token VARCHAR(50) 
 );
+select * from reset_pass;
 
-ALTER TABLE viewed ADD user1Notes VARCHAR(500);
-ALTER TABLE viewed ADD user2Notes VARCHAR(500);
+CREATE TABLE Admins(
+	AdminId INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+	EMAIL VARCHAR(50) NOT NULL,
+    FNAME VARCHAR(50) NOT NULL,
+	LNAME VARCHAR(20) NOT NULL,
+	USERNAME VARCHAR(15) NOT NULL,
+	PASSWD VARCHAR(10) NOT NULL,
+	GENDER VARCHAR(10) NOT NULL,
+    DOB DATE NOT NULL,
+    PHONE VARCHAR(20) NOT NULL
+);
+
+select * from Admins;
+Truncate table Admins;
+Drop table Admins;
+/* Foreign key msgId was added here to prevent insert of a new msg not recorded in Messages table*/
+CREATE TABLE Message_Approval(
+	msgId BIGINT NOT NULL, CONSTRAINT msg_fk FOREIGN KEY (msgId) REFERENCES Messages (msgId),
+    AdminId INT NOT NULL, CONSTRAINT admins_fk FOREIGN KEY (AdminId) REFERENCES Admins (AdminId),
+	msgApproved boolean
+);
+
+/*insert into Message_Approval (msgId) values ('2'); */	
+select * from Message_Approval;
+Truncate table Message_Approval;
+select * from messages;
+ALTER TABLE Message_Approval ADD FOREIGN KEY (msgId) REFERENCES Messages (msgId);
+
 use spring;
 select * from viewed;
+
+
+UPDATE `spring`.`messages` SET `msgApproved` = false WHERE (`msgId` = '1');
+UPDATE `spring`.`messages` SET `msgApproved` = false WHERE (`msgId` = '2');
+UPDATE `spring`.`messages` SET `msgApproved` = true WHERE (`msgId` = '3');
+UPDATE `spring`.`messages` SET `msgApproved` = true WHERE (`msgId` = '4');
+UPDATE `spring`.`messages` SET `msgApproved` = false WHERE (`msgId` = '5');
+UPDATE `spring`.`messages` SET `msgApproved` = true WHERE (`msgId` = '6');
+UPDATE `spring`.`messages` SET `msgApproved` = false WHERE (`msgId` = '7');
+UPDATE `spring`.`messages` SET `msgApproved` = false WHERE (`msgId` = '8');
+UPDATE `spring`.`messages` SET `msgApproved` = false WHERE (`msgId` = '9');
+UPDATE `spring`.`messages` SET `msgApproved` = false WHERE (`msgId` = '11');
+UPDATE `spring`.`messages` SET `msgApproved` = false WHERE (`msgId` = '12');
+UPDATE `spring`.`messages` SET `msgApproved` = true WHERE (`msgId` = '13');
+select * from messages;
 
 UPDATE `spring`.`HL_USERS` SET `Sect` = 'SS', `MaritalStatus` = 'NM', `Profession` = 'itprofessional' WHERE (`userId` = '2');
 UPDATE `spring`.`HL_USERS` SET `Sect` = 'SS', `MaritalStatus` = 'NM', `Profession` = 'Teacher' WHERE (`userId` = '3');
@@ -275,11 +323,16 @@ UPDATE `spring`.`HL_USERS` SET `Pray` = '5' WHERE (`userId` = '8');
 UPDATE `spring`.`hl_users` SET `EthnicOrigin`='Arab' WHERE `userId`='4';
 /* for pure match hassan & asma */
 
-ALTER TABLE Messages ADD FOREIGN KEY (senderId) REFERENCES HL_USERS (userId);
+UPDATE `spring`.`messages` SET `msgApproved`=false WHERE `msgId`='15';
+UPDATE `spring`.`messages` SET `msgApproved`=false WHERE `msgId`='18';
+
 
 select * from hl_users;
 select * from looking_for;
+select * from messages;
 select * from Viewed;
+select * from Admins;
+select * from Message_Approval;
 
 select * from hl_users where (lookingin='Sudan' or lookingin='dontmind') and (ethnicorigin='Arab' or ethnicorigin='dontmind') and (bodytype='Average' or bodytype='dontmind') and (pray>='5' or pray='dontmind') and (sect='Sunni' or sect='dontmind') and (maritalstatus='NM' or maritalstatus='dontmind') and (profession='Pharmacist' or profession='dontmind' or profession='Other') and gender='M';
 select userId from looking_for where (lookingin='Sudan' or lookingin='dontmind') and (ethnicorigin='Arab' or ethnicorigin='dontmind') and (bodytype='Average' or bodytype='dontmind') and (hijab_beard='Always' or hijab_beard='dontmind') and (pray>='5' or pray='dontmind') and (sect='SS' or sect='dontmind') and (maritalstatus='NM' or maritalstatus='dontmind') and (profession='Other' or profession='dontmind' or profession='Other');
@@ -292,6 +345,8 @@ select userId from looking_for where (lookingin='Sudan' or lookingin='dontmind')
 use spring;
 select * from viewed;
 select * from RESET_PASS;
+select * from messages;
+select * from message_approval;
 select * from looking_for;
 select * from hl_users;
 /*truncate table viewed;*/
@@ -314,6 +369,26 @@ insert into RESET_PASS (email,token) values('sir.fartak@gmail.com','f5b6041d-0e6
 insert into RESET_PASS (email,token) values('aboubakarissa111@gmail.com','f5b6416d-0e6f-4136-b8j2-a778e35815a8');
 insert into RESET_PASS (email,token) values('t.alhaj.sa@gmail.com','f5b6041d-e96f-4696-b7b2-a778e35815a8');
 
+insert into Message_Approval values ('1','1',true);
+insert into Message_Approval values ('2','1',true);
+insert into Message_Approval values ('3','1',true);
+insert into Message_Approval values ('4','1',true);
+insert into Message_Approval values ('5','1',true);
+
+insert into Message_Approval values ('6','1',true);
+insert into Message_Approval values ('7','1',true);
+insert into Message_Approval values ('8','1',true);
+insert into Message_Approval values ('9','1',true);
+
+insert into Message_Approval values ('11','1',true);
+insert into Message_Approval values ('12','1',true);
+insert into Message_Approval values ('13','1',true);
+insert into Message_Approval values ('14','1',true);
+insert into Message_Approval values ('19','1',true);
+select * from message_approval;
+select * from messages;
+select msgId from Message_Approval where msgApproved=true;
+select msgId from Message_Approval where msgApproved=true and adminId='1';
 
 
 UPDATE `spring`.`viewed` SET `historyContent` = 'Asma viewed Hassan\'s profile, Hassan viewed Asma\'s profile' 

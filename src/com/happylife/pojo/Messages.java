@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name="ALL_MESSAGES")
+@Table(name="MESSAGES")
 public class Messages {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -34,11 +34,14 @@ public class Messages {
 	@Column(name="msgRead", nullable = false)
 	private boolean flag;
 	
+	@Column(name="msgApproved", nullable = false)
+	private boolean approved;
+	
 	public Messages(){
 		super();
 	}
 	
-	public Messages(long messageId, long senderId, long recipientId, String msg, Timestamp ts, boolean flag) {
+	public Messages(long messageId, long senderId, long recipientId, String msg, Timestamp ts, boolean flag, boolean approved) {
 		super();
 		this.messageId = messageId;
 		this.senderId = senderId;
@@ -46,6 +49,7 @@ public class Messages {
 		this.msgContent = msg;
 		this.time = ts;
 		this.flag = flag;
+		this.approved = approved;
 	}
 	
 	public long getMessageId() {

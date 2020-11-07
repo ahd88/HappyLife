@@ -22,7 +22,7 @@
       <div class="text-center mb-4">
         <h1 class="h3 mb-3 font-weight-normal">Login Here</h1>
       </div>
-		<p style="color:red; text-align: center;"> Sorry! username and password do not match. </p>
+		<!-- <p style="color:red; text-align: center;"> Sorry! username and password do not match. </p>  -->
       <div class="form-label-group">
         <label for="inputEmail">Email address</label>
         <input type="email" path="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus=""/>

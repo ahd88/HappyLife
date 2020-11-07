@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.happylife.DoMath;
+import com.happylife.cronjob.CheckingNewMessagesJob;
 import com.happylife.dao.implementation.ViewedDAOImpl;
 import com.happylife.dao.layer.LookingForDAOException;
 import com.happylife.dao.layer.UserDAOException;
@@ -22,6 +23,7 @@ import com.happylife.dao.layer.ViewedDAO;
 import com.happylife.dao.layer.ViewedDAOException;
 import com.happylife.dao.registry.RegistryDAO;
 import com.happylife.pojo.LookingFor;
+import com.happylife.pojo.Messages;
 import com.happylife.pojo.User;
 import com.happylife.pojo.Viewed;
 /*
@@ -46,6 +48,10 @@ public class ViewProfileServlet extends HttpServlet {
 				User sessionUser = (User) session.getAttribute("sessionUser");
 				User candidUser = RegistryDAO.getUserDAO().getUserByUserId(candidId);
 				LookingFor lFor = RegistryDAO.getLookingForDAO().getLookingForById(candidId);
+				
+				// checking inbox for new messages at fixed intervals..
+				CheckingNewMessagesJob c = new CheckingNewMessagesJob();
+				List<Messages> unReadList = c.checkInboxfor(sessionUser.getUserId());
 				
 				// saving notification to hl_users table, adding the ',' seperator is taken care of in updateNotifications()
 				String notes = RegistryDAO.userDAO.updateNotifications(candidId, "candidId "+ sessionUser.getUserId()+ " viewed your profile");

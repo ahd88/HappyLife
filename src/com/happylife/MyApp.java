@@ -2,9 +2,19 @@ package com.happylife;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.SchedulerFactory;
+import org.quartz.SimpleScheduleBuilder;
+import org.quartz.SimpleTrigger;
+import org.quartz.Trigger;
+import org.quartz.impl.StdSchedulerFactory;
 
 import com.happylife.dao.implementation.LookingForDAOImpl;
 import com.happylife.dao.implementation.MessageDAOImpl;
@@ -20,6 +30,7 @@ import com.happylife.pojo.LookingFor;
 import com.happylife.pojo.Messages;
 import com.happylife.pojo.User;
 import com.happylife.pojo.Viewed;
+
 
 public class MyApp {
 
@@ -75,8 +86,8 @@ public class MyApp {
 		 * to add only three to the myprofile page }
 		 */
 		
-		DoMath doM = new DoMath();
-		doM.sendEmail("ahdmirghany@gmail.com", "", "");
+		//DoMath doM = new DoMath();
+		//doM.sendEmail("ahdmirghany@gmail.com", "", "");
 		
 		
 		//String query = doM3.constructQueryL(lf, 25, "155");
@@ -87,6 +98,44 @@ public class MyApp {
 		 * doM3.constructQuery(arr, "F"); System.out.println("Constructed Query is: " +
 		 * query);
 		 */
+		
+		
+		
+		try {
+			SchedulerFactory sf = new StdSchedulerFactory();
+			Scheduler sched = sf.getScheduler();
+			
+			// define the job and tie it to our CheckingNewMessagesJob class, withIdentity("checkInboxJob", "group1")
+			JobDetail checkInboxJob = org.quartz.JobBuilder.newJob(com.happylife.cronjob.CheckingNewMessagesJob.class)
+			    .withIdentity("checkInboxJob", "session")
+			    .build();
+			
+			// run 300 seconds only infinite loop
+			SimpleTrigger simpletrigger = org.quartz.TriggerBuilder
+					.newTrigger()
+					.withIdentity("InfiniteTrigger", "session")
+					.startNow()
+					.withSchedule(SimpleScheduleBuilder.simpleSchedule()
+					.withIntervalInSeconds(10)
+					.withRepeatCount(SimpleTrigger.REPEAT_INDEFINITELY)).build();
+			
+			
+			// Tell quartz to schedule the job using our trigger
+			sched.scheduleJob(checkInboxJob, simpletrigger);
+			
+			sched.start();
+			
+		} catch (SchedulerException se) {
+			se.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+//		while(true) {
+//			int sessionCounter = OnlineUsersCounter.getActiveSessionNumber();
+//			
+//			System.out.println("The number of online user: " + sessionCounter);
+//			for(int i=0; i<65535*2; i++);
+//		}
 	}
-
 }

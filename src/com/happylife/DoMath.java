@@ -260,7 +260,7 @@ public class DoMath {
         // gmail address
         final String myAccountEmail = "izawaj.sd@gmail.com";
         // gmail password
-        final String password = "****";
+        final String password = "happyLife";
         
         //Create a session with account credentials
         Session session = Session.getInstance(properties, new Authenticator() {
@@ -285,6 +285,14 @@ public class DoMath {
             message.setFrom(new InternetAddress(myAccountEmail));
             String htmlCode;
             switch(messageKey) {
+            case "toapprove":
+            	String admin = "ahdmirghany@gmail.com";
+            	//String admin1 = "ahdmirghany@gmail.com";
+            	message.setRecipient(Message.RecipientType.TO, new InternetAddress(admin));
+                message.setSubject("One message to Approve");
+                
+                message.setContent(messageContent, "text/html");
+            	break;
             case "sent":
             	message.setRecipient(Message.RecipientType.TO, new InternetAddress(recepient));
                 message.setSubject("Your message is sent");

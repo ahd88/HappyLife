@@ -1,11 +1,15 @@
 package com.happylife.dao.registry;
 
+import com.happylife.dao.implementation.AdminDAOImpl;
 import com.happylife.dao.implementation.LookingForDAOImpl;
+import com.happylife.dao.implementation.MessageApprovalDAOImpl;
 import com.happylife.dao.implementation.MessageDAOImpl;
 import com.happylife.dao.implementation.ResetDAOImpl;
 import com.happylife.dao.implementation.UserDAOImpl;
 import com.happylife.dao.implementation.ViewedDAOImpl;
+import com.happylife.dao.layer.AdminDAO;
 import com.happylife.dao.layer.LookingForDAO;
+import com.happylife.dao.layer.MessageApprovalDAO;
 import com.happylife.dao.layer.MessageDAO;
 import com.happylife.dao.layer.ResetDAO;
 import com.happylife.dao.layer.UserDAO;
@@ -18,6 +22,8 @@ public class RegistryDAO {
 	public static LookingForDAO lookingForDAO;
 	public static ViewedDAO viewedDAO;
 	public static ResetDAO resetDAO;
+	public static AdminDAO adminDAO;
+	public static MessageApprovalDAO messageApprovalDAO;
 	
 	static{
 		userDAO = new UserDAOImpl();
@@ -33,6 +39,10 @@ public class RegistryDAO {
 	
 	static{
 		messageDAO = new MessageDAOImpl();
+	}
+	
+	static {
+		adminDAO = new AdminDAOImpl();
 	}
 
 	public static MessageDAO getMessageDAO() {
@@ -77,5 +87,29 @@ public class RegistryDAO {
 	
 	public static void setResetDAO(ResetDAO resetDAO) {
 		RegistryDAO.resetDAO = resetDAO;
+	}
+	
+	static{
+		adminDAO = new AdminDAOImpl();
+	}
+
+	public static AdminDAO getAdminDAO() {
+		return adminDAO;
+	}
+
+	public static void setAdminDAO(AdminDAO adminDAO) {
+		RegistryDAO.adminDAO = adminDAO;
+	}
+	
+	static{
+		messageApprovalDAO = new MessageApprovalDAOImpl();
+	}
+
+	public static MessageApprovalDAO getMessageApprovalDAO() {
+		return messageApprovalDAO;
+	}
+
+	public static void setMessageApprovalDAO(MessageApprovalDAO mssageApprovalDAO) {
+		RegistryDAO.messageApprovalDAO = mssageApprovalDAO;
 	}
 }

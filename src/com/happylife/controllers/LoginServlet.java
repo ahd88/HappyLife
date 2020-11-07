@@ -34,6 +34,13 @@ import com.happylife.pojo.Viewed;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet{
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		RequestDispatcher rd = req.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
+		rd.forward(req, resp);
+	}
+
 	public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
 		//BindingResult br = null;
 		//Model md = null;
