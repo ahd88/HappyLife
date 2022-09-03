@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.hibernate.jpa.criteria.expression.function.SubstringFunction;
+//import org.hibernate.jpa.criteria.expression.function.SubstringFunction;
 
 import com.happylife.dao.layer.MessageDAOException;
 import com.happylife.dao.layer.UserDAOException;
