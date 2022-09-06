@@ -1,4 +1,4 @@
-<%@page import="com.happylife.session.OnlineUsersCounter"%>
+
 <%@page import="java.io.*"%>
 <%@page import="com.happylife.pojo.Messages,java.util.*" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -102,7 +102,7 @@
   							</thead>
 							<tbody>
 								<tr>
-							    	<th scope="row"><%=OnlineUsersCounter.getActiveSessionNumber()%></th>
+							    	<th scope="row"></th>
 							    	<td></td>
 							     	<td></td>
 							    	<td></td>

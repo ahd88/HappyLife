@@ -3,6 +3,7 @@ package com.happylife.dao.implementation;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 
 import com.happylife.dao.layer.ResetDAO;
 import com.happylife.dao.layer.ResetDAOException;
@@ -17,9 +18,13 @@ public class ResetDAOImpl implements ResetDAO{
 		boolean status;
 		try {
 			conn = DatabaseConnectivity.doDBConnection();
-			pstmt = conn.prepareStatement("insert into RESET_PASS values (?,?) ");
-			pstmt.setString(1,emailId);
-			pstmt.setString(2,token);
+			pstmt = conn.prepareStatement("insert into RESET_PASS values (?,?,?) ");
+			pstmt.setString(1,token);
+			pstmt.setString(2,emailId);
+			java.util.Date date = new java.util.Date();
+			long time = date.getTime();
+			Timestamp ts = new Timestamp(time);
+			pstmt.setTimestamp(3,ts);
 			status = pstmt.execute();
 			
 			return Boolean.toString(status);

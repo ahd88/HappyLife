@@ -153,7 +153,7 @@ public class User {
 	public User(long userId, String fname, String lname, String email, String username, String gender,
 			String country, String phone, String image, Date dob, String residencyStatus, String aboutMyself, String lookingFor, 
 			String publicPhoto, Timestamp lastLogin, String profilePostedBy, String ethnicOrigin, String religiousHistory, 
-			String hairColor, String bodyType, String hijabBeard, String height, String pray, String sect, String maritalStatus, 
+			String hairColor, String bodyType, String notifications, String hijabBeard, String height, String pray, String sect, String maritalStatus, 
 			String children, String likeToHaveChildren, String languages, String profession, String highestQual) {
 		super();
 		this.userId = userId;
@@ -177,6 +177,7 @@ public class User {
 		this.religiousHistory = religiousHistory;
 		this.hairColor = hairColor;
 		this.bodyType = bodyType;
+		this.notifications = notifications;
 		this.hijabBeard = hijabBeard;
 		this.height = height;
 		this.pray = pray;

@@ -36,12 +36,6 @@ public class MyApp {
 
 	public static void main(String[] args) throws Exception {
 		
-		UserDAO userDAOTestingForTableInsertion = new UserDAOImpl();
-		Date dob = Date.valueOf("1989-04-20");
-		User user = new User(1, "Asma", "Mohammed", "asma.mirghany@gmail.com", "asma", "F", "Sudan", "00249912719496", null, dob, 
-								 null, null, null, "1", null, null, null, null, null, null, null, null, null, null, null, null,
-								 null, null, null, null);
-		userDAOTestingForTableInsertion.doSignUp(user);
 		/*
 		 * UserDAO userDAO = new UserDAOImpl(); List<User> list =
 		 * userDAO.searchByLocation("F", args); Iterator<User> itr = list.iterator();

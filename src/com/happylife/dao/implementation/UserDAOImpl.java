@@ -33,6 +33,50 @@ public class UserDAOImpl implements UserDAO {
 	static PreparedStatement pstmt;
 	static ResultSet rs;
 	
+	
+	User userWithFieldsAssigned() throws SQLException {
+		
+		long userId  = rs.getLong(1);					// rs.getLong("userId");
+		String fname  = rs.getString(2);				// rs.getString("FNAME");
+		String lname = rs.getString(3);					// rs.getString("LNAME");
+		String emailId  = rs.getString(4);				// rs.getString("EMAIL");
+		String uname  = rs.getString(5);				// rs.getString("username");
+		String pass  = rs.getString(6);					// rs.getString("PASSWD");
+		String gender  = rs.getString(7);				// rs.getString("GENDER");
+		String country  = rs.getString(8);				// rs.getString("COUNTRY");
+		String phone  = rs.getString(9);				// rs.getString("PHONE");
+		String image  = rs.getString(10);				// rs.getString("IMAGE");
+		Date dob = rs.getDate(11);
+		String residencyStatus = rs.getString(12);
+		String aboutMyself = rs.getString(13);
+		String lookingFor = rs.getString(14);
+		String publicPhoto  = rs.getString(15);			// rs.getString("PUBLIC_PHOTO");
+		Timestamp lastLogin = rs.getTimestamp(16);
+		String profilePostedBy  = rs.getString(17);
+		String origin  = rs.getString(18);
+		String religiousHistory  = rs.getString(19);
+		String hairColor  = rs.getString(20);
+		String bodyType  = rs.getString(21);
+		String notifications  = rs.getString(22);
+		String hijabBeard  = rs.getString(23);
+		String height = rs.getString(24);
+		String pray = rs.getString(25);
+		String sect = rs.getString(26);
+		String maritalStatus = rs.getString(27);
+		String children = rs.getString(28);
+		String likeToHaveChildren = rs.getString(29);
+		String langs = rs.getString(30);
+		String profession = rs.getString(31);
+		String highestQual = rs.getString(32);
+		
+		User user = new User(userId, fname, lname, emailId, uname, gender, country, phone, image, dob, residencyStatus, 
+				aboutMyself, lookingFor, publicPhoto, lastLogin, profilePostedBy, origin, religiousHistory, hairColor,
+				bodyType, notifications, hijabBeard, height, pray, sect, maritalStatus, children, likeToHaveChildren, langs, 
+				profession, highestQual );
+		
+		return user;
+	}
+	
 	@Override
 	public User doLogin(String email, String password) throws UserDAOException {
 		User userToFetch = null;
@@ -53,45 +97,12 @@ public class UserDAOImpl implements UserDAO {
 					  String name = rs.getMetaData().getColumnName(i);
 					  System.out.println("Column name: "+ name);
 					}
-				long userId  = rs.getLong(1);					//rs.getLong("userId");
-				String fname  = rs.getString(2);				//rs.getString("FNAME");
-				String lname = rs.getString(3);					//rs.getString("LNAME");
-				String emailId  = rs.getString(4);				//rs.getString("EMAIL");
-				String uname  = rs.getString(5);				//rs.getString("username");
-				String pass  = rs.getString(6);					//rs.getString("PASSWD");
-				String gender  = rs.getString(7);				//rs.getString("GENDER");
-				String country  = rs.getString(8);				//rs.getString("COUNTRY");
-				String phone  = rs.getString(9);				//rs.getString("PHONE");
-				String image  = rs.getString(10);				//rs.getString("IMAGE");
-				Date dob = rs.getDate(11);
-				String age = rs.getString(12);
-				String residencyStatus = rs.getString(13);
-				String aboutMyself = rs.getString(14);
-				String lookingFor = rs.getString(15);
-				String publicPhoto  = rs.getString(16);			//rs.getString("PUBLIC_PHOTO");
-				Timestamp lastLogin = rs.getTimestamp(17);
-				String profilePostedBy  = rs.getString(18);
-				String origin  = rs.getString(19);
-				String religiousHistory  = rs.getString(20);
-				String hairColor  = rs.getString(21);
-				String bodyType  = rs.getString(22);
-				String hijabBeard  = rs.getString(24);
-				String height = rs.getString(25);
-				String pray = rs.getString(26);
-				String sect = rs.getString(27);
-				String maritalStatus = rs.getString(28);
-				String children = rs.getString(29);
-				String likeToHaveChildren = rs.getString(30);
-				String langs = rs.getString(31);
-				String profession = rs.getString(32);
-				String highestQual = rs.getString(33);
 				
-				System.out.println("Height fetched from database inside UserDAOImpl.dologin: " + height);
-				User user = new User(userId, fname, lname, emailId, uname, gender, country, phone, image, dob, residencyStatus, 
-						aboutMyself, lookingFor, publicPhoto, lastLogin, profilePostedBy, origin, religiousHistory, hairColor,
-						bodyType, hijabBeard, height, pray, sect, maritalStatus, children, likeToHaveChildren, langs, 
-						profession, highestQual );
-				userToFetch = user;
+				userToFetch = userWithFieldsAssigned();
+				
+				System.out.println("Height fetched from database inside UserDAOImpl.dologin: " + userToFetch.getHeight());
+				
+				
 			}
 			
 			java.util.Date date = new java.util.Date();
@@ -128,7 +139,7 @@ public class UserDAOImpl implements UserDAO {
 		String signupStatus = "";
 		try {
 			conn = DatabaseConnectivity.doDBConnection();
-			pstmt = conn.prepareStatement("insert into HL_USERS values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ");
+			pstmt = conn.prepareStatement("insert into HL_USERS values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ");	// 32 total
 			
 			pstmt.setLong(1,user.getUserId());
 			pstmt.setString(2,user.getFname());
@@ -141,21 +152,21 @@ public class UserDAOImpl implements UserDAO {
 			pstmt.setString(9,user.getPhone());
 			pstmt.setString(10,user.getImage());
 			pstmt.setDate(11,user.getDob());
-			pstmt.setInt(12,user.getAge(user.getDob()));
+			pstmt.setString(12,null);
 			pstmt.setString(13,null);
 			pstmt.setString(14,null);
-			pstmt.setString(15,null);
-			pstmt.setString(16,user.getPublicPhoto());
+			pstmt.setString(15,user.getPublicPhoto());
 			java.util.Date date = new java.util.Date();
 			long time = date.getTime();
 			Timestamp ts = new Timestamp(time);
-			pstmt.setTimestamp(17,ts);
+			pstmt.setTimestamp(16,ts);
+			pstmt.setString(17,null);
 			pstmt.setString(18,null);
 			pstmt.setString(19,null);
 			pstmt.setString(20,null);
 			pstmt.setString(21,null);
-			pstmt.setString(22,null);
-			pstmt.setString(23,"");
+			pstmt.setString(22," ");		// Notification with null value gives an error
+			pstmt.setString(23,null);
 			pstmt.setString(24,null);
 			pstmt.setString(25,null);
 			pstmt.setString(26,null);
@@ -165,7 +176,6 @@ public class UserDAOImpl implements UserDAO {
 			pstmt.setString(30,null);
 			pstmt.setString(31,null);
 			pstmt.setString(32,null);
-			pstmt.setString(33,null);
 			status = pstmt.execute();
 						
 			//statment.executeQuery("INSERT INTO 'spring'.'HL_USERS' ('userId', 'FNAME', 'LNAME', 'EMAIL', 'USERNAME', 'PASSWD', 'GENDER', 'COUNTRY', 'PHONE', 'PUBLIC_PHOTO') VALUES ('"+user.getId()+"', '"+user.getFname()+"', '"+user.getLname()+"', '"+user.getEmail()+"', '"+user.getUsername()+"', '"+user.getPassword()+"', '"+user.getGender()+"', '"+user.getCountry()+"', '"+user.getPhone()+"', '"+user.getPublicPhoto()+"')");
@@ -324,42 +334,8 @@ public class UserDAOImpl implements UserDAO {
 				rs = pstmt.executeQuery();
 				
 				while (rs.next()){
-					long userId  = rs.getLong(1);					
-					String fname  = rs.getString(2);				
-					String lname = rs.getString(3);					
-					String emailId  = rs.getString(4);				
-					String uname  = rs.getString(5);				
-					String pass  = rs.getString(6);			// not taken		
-					String gender  = rs.getString(7);				
-					String country  = rs.getString(8);				
-					String phone  = rs.getString(9);				
-					String image  = rs.getString(10);	
-					Date dob = rs.getDate(11);
-					String residencyStatus = rs.getString(12);
-					String aboutMyself = rs.getString(14);
-					String lookingFor = rs.getString(15);
-					String publicPhoto = rs.getString(16);
-					Timestamp lastLogin = rs.getTimestamp(17);
-					String profilePostedBy  = rs.getString(18);
-					String origin  = rs.getString(19);
-					String religiousHistory  = rs.getString(20);
-					String hairColor  = rs.getString(21);
-					String bodyType  = rs.getString(22);
-					String hijabBeard  = rs.getString(24);
-					String height = rs.getString(25);
-					String pray = rs.getString(26);
-					String sect = rs.getString(27);
-					String maritalStatus = rs.getString(28);
-					String children = rs.getString(29);
-					String likeToHaveChildren = rs.getString(30);
-					String langs = rs.getString(31);
-					String profession = rs.getString(32);
-					String highestQual = rs.getString(33);
 					
-					User candidate = new User(userId, fname, lname, emailId, uname, gender, country, phone, image, dob, 
-							residencyStatus, aboutMyself, lookingFor, publicPhoto, lastLogin, profilePostedBy, origin, 
-							religiousHistory, hairColor, bodyType, hijabBeard, height, pray, sect, maritalStatus, children, 
-							likeToHaveChildren, langs, profession, highestQual);
+					User candidate = userWithFieldsAssigned();
 					candidateList.add(candidate);
 				}
 			}else System.out.println("You Search Criteria is not met");
@@ -403,42 +379,8 @@ public class UserDAOImpl implements UserDAO {
 			System.out.println("Inside getIamLookingFor(): constructed Query from DoMath is: " + query);
 			rs = pstmt.executeQuery();
 			while (rs.next()){
-				long userId  = rs.getLong(1);					
-				String fname  = rs.getString(2);				
-				String lname = rs.getString(3);					
-				String emailId  = rs.getString(4);				
-				String uname  = rs.getString(5);				
-				String pass  = rs.getString(6);			// not taken		
-				String gender  = rs.getString(7);				
-				String country  = rs.getString(8);				
-				String phone  = rs.getString(9);				
-				String image  = rs.getString(10);
-				Date dob = rs.getDate(11);
-				String residencyStatus = rs.getString(12);
-				String aboutMyself = rs.getString(14);
-				String lookingFor = rs.getString(15);
-				String publicPhoto = rs.getString(16);
-				Timestamp lastLogin = rs.getTimestamp(17);
-				String profilePostedBy  = rs.getString(18);
-				String origin  = rs.getString(19);
-				String religiousHistory  = rs.getString(20);
-				String hairColor  = rs.getString(21);
-				String bodyType  = rs.getString(22);
-				String hijabBeard  = rs.getString(24);
-				String height = rs.getString(25);
-				String pray = rs.getString(26);
-				String sect = rs.getString(27);
-				String maritalStatus = rs.getString(28);
-				String children = rs.getString(29);
-				String likeToHaveChildren = rs.getString(30);
-				String langs = rs.getString(31);
-				String profession = rs.getString(32);
-				String highestQual = rs.getString(33);
 				
-				User candidate = new User(userId, fname, lname, emailId, uname, gender, country, phone, image, dob, 
-						residencyStatus, aboutMyself, lookingFor, publicPhoto, lastLogin, profilePostedBy, origin, 
-						religiousHistory, hairColor, bodyType, hijabBeard, height, pray, sect, maritalStatus, children, 
-						likeToHaveChildren, langs, profession, highestQual);
+				User candidate = userWithFieldsAssigned();
 				/*
 				 * the candidate fetched from database user table is not checked against age criteria from looking_for table
 				 * here is the if condition for that.
@@ -520,42 +462,8 @@ public class UserDAOImpl implements UserDAO {
 			}
 			
 			while (rs.next()){
-				long userId  = rs.getLong(1);					
-				String fname  = rs.getString(2);				
-				String lname = rs.getString(3);					
-				String emailId  = rs.getString(4);				
-				String uname  = rs.getString(5);				
-				String pass  = rs.getString(6);			// not taken		
-				String gender  = rs.getString(7);				
-				String country  = rs.getString(8);				
-				String phone  = rs.getString(9);				
-				String image  = rs.getString(10);	
-				Date dob = rs.getDate(11);
-				String residencyStatus = rs.getString(12);
-				String aboutMyself = rs.getString(14);
-				String lookingFor = rs.getString(15);
-				String publicPhoto = rs.getString(16);
-				Timestamp lastLogin = rs.getTimestamp(17);
-				String profilePostedBy  = rs.getString(18);
-				String origin  = rs.getString(19);
-				String religiousHistory  = rs.getString(20);
-				String hairColor  = rs.getString(21);
-				String bodyType  = rs.getString(22);
-				String hijabBeard  = rs.getString(24);
-				String height = rs.getString(25);
-				String pray = rs.getString(26);
-				String sect = rs.getString(27);
-				String maritalStatus = rs.getString(28);
-				String children = rs.getString(29);
-				String likeToHaveChildren = rs.getString(30);
-				String langs = rs.getString(31);
-				String profession = rs.getString(32);
-				String highestQual = rs.getString(33);
 				
-				User candidate = new User(userId, fname, lname, emailId, uname, gender, country, phone, image, dob, 
-						residencyStatus, aboutMyself, lookingFor, publicPhoto, lastLogin, profilePostedBy, origin, 
-						religiousHistory, hairColor, bodyType, hijabBeard, height, pray, sect, maritalStatus, children, 
-						likeToHaveChildren, langs, profession, highestQual);
+				User candidate = userWithFieldsAssigned();
 				candidateList.add(candidate);
 			}
 		} catch (SQLException e) {
@@ -607,42 +515,8 @@ public class UserDAOImpl implements UserDAO {
 			rs = pstmt.executeQuery();
 			
 			while (rs.next()){
-				long userId  = rs.getLong(1);					
-				String fname  = rs.getString(2);				
-				String lname = rs.getString(3);					
-				String emailId  = rs.getString(4);				
-				String uname  = rs.getString(5);				
-				String pass  = rs.getString(6);			// not taken		
-				String gender  = rs.getString(7);				
-				String country  = rs.getString(8);				
-				String phone  = rs.getString(9);				
-				String image  = rs.getString(10);	
-				Date dob = rs.getDate(11);
-				String residencyStatus = rs.getString(12);
-				String aboutMyself = rs.getString(14);
-				String lookingFor = rs.getString(15);
-				String publicPhoto = rs.getString(16);
-				Timestamp lastLogin = rs.getTimestamp(17);
-				String profilePostedBy  = rs.getString(18);
-				String origin  = rs.getString(19);
-				String religiousHistory  = rs.getString(20);
-				String hairColor  = rs.getString(21);
-				String bodyType  = rs.getString(22);
-				String hijabBeard  = rs.getString(24);
-				String height = rs.getString(25);
-				String pray = rs.getString(26);
-				String sect = rs.getString(27);
-				String maritalStatus = rs.getString(28);
-				String children = rs.getString(29);
-				String likeToHaveChildren = rs.getString(30);
-				String langs = rs.getString(31);
-				String profession = rs.getString(32);
-				String highestQual = rs.getString(33);
 				
-				User candidate = new User(userId, fname, lname, emailId, uname, gender, country, phone, image, dob, 
-						residencyStatus, aboutMyself, lookingFor, publicPhoto, lastLogin, profilePostedBy, origin, 
-						religiousHistory, hairColor, bodyType, hijabBeard, height, pray, sect, maritalStatus, children, 
-						likeToHaveChildren, langs, profession, highestQual);
+				User candidate = userWithFieldsAssigned();
 				candidateList.add(candidate);
 			}
 		} catch (SQLException e) {
@@ -679,42 +553,8 @@ public class UserDAOImpl implements UserDAO {
 			rs = pstmt.executeQuery();
 			
 			while (rs.next()){
-				long userId  = rs.getLong(1);					
-				String fname  = rs.getString(2);				
-				String lname = rs.getString(3);					
-				String emailId  = rs.getString(4);				
-				String uname  = rs.getString(5);				
-				String pass  = rs.getString(6);			// not taken		
-				String gender  = rs.getString(7);				
-				String country  = rs.getString(8);				
-				String phone  = rs.getString(9);				
-				String image  = rs.getString(10);	
-				Date dob = rs.getDate(11);
-				String residencyStatus = rs.getString(12);
-				String aboutMyself = rs.getString(14);
-				String lookingFor = rs.getString(15);
-				String publicPhoto = rs.getString(16);
-				Timestamp lastLogin = rs.getTimestamp(17);
-				String profilePostedBy  = rs.getString(18);
-				String origin  = rs.getString(19);
-				String religiousHistory  = rs.getString(20);
-				String hairColor  = rs.getString(21);
-				String bodyType  = rs.getString(22);
-				String hijabBeard  = rs.getString(24);
-				String height = rs.getString(25);
-				String pray = rs.getString(26);
-				String sect = rs.getString(27);
-				String maritalStatus = rs.getString(28);
-				String children = rs.getString(29);
-				String likeToHaveChildren = rs.getString(30);
-				String langs = rs.getString(31);
-				String profession = rs.getString(32);
-				String highestQual = rs.getString(33);
 				
-				User candidate = new User(userId, fname, lname, emailId, uname, gender, country, phone, image, dob, 
-						residencyStatus, aboutMyself, lookingFor, publicPhoto, lastLogin, profilePostedBy, origin, 
-						religiousHistory, hairColor, bodyType, hijabBeard, height, pray, sect, maritalStatus, children, 
-						likeToHaveChildren, langs, profession, highestQual);
+				User candidate = userWithFieldsAssigned();
 				candidateList.add(candidate);
 			}
 		} catch (SQLException e) {
@@ -738,42 +578,8 @@ public class UserDAOImpl implements UserDAO {
 			rs = pstmt.executeQuery();
 			
 			while (rs.next()){
-				long userId  = rs.getLong(1);
-				String fname  = rs.getString(2);
-				String lname = rs.getString(3);
-				String emailId  = rs.getString(4);
-				String uname  = rs.getString(5);
-				String pass  = rs.getString(6);			// not taken		
-				String gender  = rs.getString(7);
-				String country  = rs.getString(8);
-				String phone  = rs.getString(9);
-				String image  = rs.getString(10);
-				Date dob = rs.getDate(11);
-				String residencyStatus = rs.getString(12);
-				String aboutMyself = rs.getString(14);
-				String lookingFor = rs.getString(15);
-				String publicPhoto = rs.getString(16);
-				Timestamp lastLogin = rs.getTimestamp(17);
-				String profilePostedBy  = rs.getString(18);
-				String origin  = rs.getString(19);
-				String religiousHistory  = rs.getString(20);
-				String hairColor  = rs.getString(21);
-				String bodyType  = rs.getString(22);
-				String hijabBeard  = rs.getString(24);
-				String height = rs.getString(25);
-				String pray = rs.getString(26);
-				String sect = rs.getString(27);
-				String maritalStatus = rs.getString(28);
-				String children = rs.getString(29);
-				String likeToHaveChildren = rs.getString(30);
-				String langs = rs.getString(31);
-				String profession = rs.getString(32);
-				String highestQual = rs.getString(33);
 				
-				User candidate = new User(userId, fname, lname, emailId, uname, gender, country, phone, image, dob, 
-						residencyStatus, aboutMyself, lookingFor, publicPhoto, lastLogin, profilePostedBy, origin, 
-						religiousHistory, hairColor, bodyType, hijabBeard, height, pray, sect, maritalStatus, children, 
-						likeToHaveChildren, langs, profession, highestQual);
+				User candidate = userWithFieldsAssigned();
 				candidateList.add(candidate);
 			}
 		} catch (SQLException e) {
@@ -829,42 +635,8 @@ public class UserDAOImpl implements UserDAO {
 			rs = pstmt.executeQuery();
 			
 			while (rs.next()){
-				long userId  = rs.getLong(1);
-				String fname  = rs.getString(2);
-				String lname = rs.getString(3);
-				String emailId  = rs.getString(4);
-				String uname  = rs.getString(5);
-				String pass  = rs.getString(6);			// not taken		
-				String gender  = rs.getString(7);
-				String country  = rs.getString(8);
-				String phone  = rs.getString(9);
-				String image  = rs.getString(10);
-				Date dob = rs.getDate(11);
-				String residencyStatus = rs.getString(12);
-				String aboutMyself = rs.getString(14);
-				String lookingFor = rs.getString(15);
-				String publicPhoto = rs.getString(16);
-				Timestamp lastLogin = rs.getTimestamp(17);
-				String profilePostedBy  = rs.getString(18);
-				String origin  = rs.getString(19);
-				String religiousHistory  = rs.getString(20);
-				String hairColor  = rs.getString(21);
-				String bodyType  = rs.getString(22);
-				String hijabBeard  = rs.getString(24);
-				String height = rs.getString(25);
-				String pray = rs.getString(26);
-				String sect = rs.getString(27);
-				String maritalStatus = rs.getString(28);
-				String children = rs.getString(29);
-				String likeToHaveChildren = rs.getString(30);
-				String langs = rs.getString(31);
-				String profession = rs.getString(32);
-				String highestQual = rs.getString(33);
 				
-				User candidate = new User(userId, fname, lname, emailId, uname, gender, country, phone, image, dob, 
-						residencyStatus, aboutMyself, lookingFor, publicPhoto, lastLogin, profilePostedBy, origin, 
-						religiousHistory, hairColor, bodyType, hijabBeard, height, pray, sect, maritalStatus, children, 
-						likeToHaveChildren, langs, profession, highestQual);
+				User candidate = userWithFieldsAssigned();
 				candidateList.add(candidate);
 			}
 		} catch (SQLException e) {
@@ -885,40 +657,8 @@ public class UserDAOImpl implements UserDAO {
 			rs = pstmt.executeQuery();
 			
 			while (rs.next()){
-				long userId  = rs.getLong(1);					
-				String fname  = rs.getString(2);				
-				String lname = rs.getString(3);					
-				String emailId  = rs.getString(4);				
-				String uname  = rs.getString(5);				
-				String pass  = rs.getString(6);					// not needed
-				String gender  = rs.getString(7);				
-				String country  = rs.getString(8);				
-				String phone  = rs.getString(9);				
-				String image  = rs.getString(10);				// I should take because I don't need it
-				Date dob  = rs.getDate(11);
-				String residencyStatus = rs.getString(12);
-				String aboutMe = rs.getString(14);
-				String lookingfor = rs.getString(15);
-				String publicPhoto  = rs.getString(16);
-				Timestamp lastLogin = rs.getTimestamp(17);
-				String profilePostedBy  = rs.getString(18);
-				String origin  = rs.getString(19);
-				String religiousHistory  = rs.getString(20);
-				String hairColor  = rs.getString(21);
-				String bodyType  = rs.getString(22);
-				String hijabBeard  = rs.getString(24);
-				String height = rs.getString(25);
-				String pray = rs.getString(26);
-				String sect = rs.getString(27);
-				String maritalStatus = rs.getString(28);
-				String children = rs.getString(29);
-				String likeToHaveChildren = rs.getString(30);
-				String langs = rs.getString(31);
-				String profession = rs.getString(32);
-				String highestQual = rs.getString(33);
-				candidate = new User(userId, fname, lname, emailId, uname, gender, country, phone, image, dob, residencyStatus, 
-						aboutMe, lookingfor, publicPhoto, lastLogin, profilePostedBy, origin, religiousHistory, hairColor, bodyType,
-						hijabBeard, height, pray, sect, maritalStatus, children, likeToHaveChildren, langs, profession, highestQual);
+				
+				candidate = userWithFieldsAssigned();
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -942,40 +682,8 @@ public class UserDAOImpl implements UserDAO {
 			rs = pstmt.executeQuery();
 			
 			while (rs.next()){
-				long userId  = rs.getLong(1);					
-				String fname  = rs.getString(2);				
-				String lname = rs.getString(3);					
-				String emailId  = rs.getString(4);				
-				String uname  = rs.getString(5);				
-				String pass  = rs.getString(6);					// not needed
-				String gender  = rs.getString(7);				
-				String country  = rs.getString(8);				
-				String phone  = rs.getString(9);				
-				String image  = rs.getString(10);				// I should take because I don't need it
-				Date dob  = rs.getDate(11);
-				String residencyStatus = rs.getString(12);
-				String aboutMe = rs.getString(14);
-				String lookingfor = rs.getString(15);
-				String publicPhoto  = rs.getString(16);
-				Timestamp lastLogin = rs.getTimestamp(17);
-				String profilePostedBy  = rs.getString(18);
-				String origin  = rs.getString(19);
-				String religiousHistory  = rs.getString(20);
-				String hairColor  = rs.getString(21);
-				String bodyType  = rs.getString(22);
-				String hijabBeard  = rs.getString(24);
-				String height = rs.getString(25);
-				String pray = rs.getString(26);
-				String sect = rs.getString(27);
-				String maritalStatus = rs.getString(28);
-				String children = rs.getString(29);
-				String likeToHaveChildren = rs.getString(30);
-				String langs = rs.getString(31);
-				String profession = rs.getString(32);
-				String highestQual = rs.getString(33);
-				candidate = new User(userId, fname, lname, emailId, uname, gender, country, phone, image, dob, residencyStatus, 
-						aboutMe, lookingfor, publicPhoto, lastLogin, profilePostedBy, origin, religiousHistory, hairColor, bodyType,
-						hijabBeard, height, pray, sect, maritalStatus, children, likeToHaveChildren, langs, profession, highestQual);
+				
+				candidate = userWithFieldsAssigned();
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -1007,14 +715,14 @@ public class UserDAOImpl implements UserDAO {
 					msg = msg + "\nLPassword Updated Successfully";
 					System.out.println(msg);
 					break;
-				case "Age":
+				/*case "Age":
 					pstmt = conn.prepareStatement("update HL_USERS set age=? where userId=?");
 					pstmt.setString(1,v[i+1]);
 					pstmt.setLong(2,userId);
 					pstmt.executeUpdate();
 					msg = msg + "\nAge Updated Successfully";
 					System.out.println(msg);
-					break;
+					break; */
 				case "AboutMe":
 					pstmt = conn.prepareStatement("update HL_USERS set About_Myself=? where userId=?");
 					pstmt.setString(1,v[i+1]);
@@ -1361,6 +1069,8 @@ public class UserDAOImpl implements UserDAO {
 	public String updateNotifications(long userId, String content) throws UserDAOException {
 		String Notification = "";
 		Notification = getNotifications(userId);
+		System.out.println("Inside UserDAOImpl.updateNotification()");
+		System.out.println("Notification from User with id = "+ userId + " is: " + Notification);
 		if(!Notification.equals("") || Notification != null)	Notification = Notification + ", " + content;
 		String status = "";
 		try { 

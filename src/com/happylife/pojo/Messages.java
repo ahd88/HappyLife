@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
 @Table(name="MESSAGES")
 public class Messages {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.SEQUENCE)
 	@Column(name="msgId", updatable = false, nullable = false)
 	private long messageId;
 	

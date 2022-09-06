@@ -14,7 +14,7 @@ public class HibernateConnection {
 	
 	public static SessionFactory doHibernateConnection(){
 		Properties database = new Properties();
-		database.setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver");
+		database.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
 		database.setProperty("hibernate.connection.username", "amgo85");
 		database.setProperty("hibernate.connection.password", "1234");
 		database.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/spring");
